@@ -1,66 +1,149 @@
-/* src/app/timing-table/timing-table.component.css */
+/* timing-table.component.scss */
 
-.timing-table {
-  width: 100%;
-  font-family: 'F1 Sans', sans-serif;
-  /* Usar una fuente temática si es posible */
+// Layout principal
+.timing-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 20px;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* 🎨 Estilos para destacar las vueltas rápidas */
+.left-section {
+  min-width: 0; // Prevenir overflow
+}
 
-/* Mejor vuelta de la sesión (Morado) */
+.right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  @media (max-width: 1024px) {
+    order: -1; // Mostrar arriba en móvil
+  }
+}
+
+// Estilos de la tabla
+.timing-table {
+  width: 100%;
+  font-family: 'F1 Sans', 'Roboto', sans-serif;
+  background-color: #ffffff;
+}
+
+// Estado sin datos
+.no-data {
+  padding: 40px;
+  text-align: center;
+  color: #666;
+  
+  p {
+    margin: 10px 0;
+    font-size: 1em;
+    
+    &.small {
+      font-size: 0.9em;
+      color: #999;
+    }
+  }
+}
+
+// Header del card
+mat-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  mat-card-header {
+    margin-bottom: 16px;
+  }
+  
+  mat-card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #e10600;
+  }
+  
+  mat-card-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    
+    span {
+      font-size: 0.9em;
+      color: #4caf50;
+      font-weight: 600;
+    }
+  }
+}
+
+// Estilos de las filas - destacar vueltas rápidas
 .row-session-best {
   background-color: #5d258b50;
-  /* Base color morado con transparencia */
   animation: flash-purple 1s ease-in-out;
 }
 
-/* Mejor vuelta personal (Verde) */
-
-
-/* Piloto en el Pit Lane (Amarillo/Naranja) */
-.row-pit {
-  background-color: #ffc10750;
-  /* Base color amarillo/naranja con transparencia */
+.row-personal-best {
+  background-color: #4caf5050;
+  animation: flash-green 1s ease-in-out;
 }
 
-/* --- Animaciones de Parpadeo (Flash) --- */
+.row-pit {
+  background-color: #ffc10750;
+}
 
-/* Animación para la vuelta más rápida de la sesión */
+// Animaciones de parpadeo
 @keyframes flash-purple {
   0% {
     background-color: #5d258b;
   }
-
-  /* Color sólido al inicio */
   100% {
     background-color: transparent;
   }
-
-  /* Transparente al final */
 }
 
-/* Asegurar que la fila sin animación no tenga color base */
-.mat-row {
+@keyframes flash-green {
+  0% {
+    background-color: #4caf50;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+// Transiciones suaves para las filas
+.mat-mdc-row,
+::ng-deep .mat-mdc-row {
   transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: #f5f5f5;
+  }
 }
 
-/* Ajustes de tipografía para la tabla */
-.mat-header-cell {
+// Ajustes de tipografía para la tabla
+.mat-mdc-header-cell,
+::ng-deep .mat-mdc-header-cell {
   font-weight: bold;
   color: #444;
+  font-size: 0.85em;
+  letter-spacing: 0.5px;
 }
 
-.mat-cell {
+.mat-mdc-cell,
+::ng-deep .mat-mdc-cell {
   font-size: 0.9em;
+  padding: 12px 8px;
 }
 
-/* Estilos para la columna de piloto */
+// Estilos para la columna de piloto
 .driver-info {
   display: flex;
   align-items: center;
   border-left: 4px solid transparent;
-  /* Borde para el color de equipo */
   padding-left: 8px;
   height: 100%;
 }
@@ -69,6 +152,7 @@
   font-weight: bold;
   margin-right: 8px;
   width: 35px;
+  font-size: 1em;
 }
 
 .driver-name {
@@ -80,24 +164,32 @@
   text-overflow: ellipsis;
   max-width: 120px;
   display: none;
-  /* Ocultar en pantallas pequeñas por defecto */
 }
 
-/* Mostrar nombre completo en pantallas más grandes */
 @media (min-width: 768px) {
   .driver-name {
     display: inline-block;
   }
 }
 
-/* Tyre Styles */
+// Estilos de neumáticos
 .tyre-history-container {
   display: flex;
   flex-direction: row;
   gap: 4px;
   align-items: center;
-  /* Permitir que se expanda para mostrar todos */
   flex-wrap: nowrap;
+  overflow-x: auto;
+  max-width: 150px;
+  
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 2px;
+  }
 }
 
 .tyre-info {
@@ -105,90 +197,59 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  flex-shrink: 0;
 }
 
 .tyre-badge {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20px;
-  /* Más pequeño para historial */
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   font-weight: bold;
-  font-size: 0.7em;
+  font-size: 0.75em;
   color: #000;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 .tyre-soft {
   background-color: #ff3b30;
-  /* Red */
   color: white;
-  border-color: #ff3b30;
+  border-color: #cc2e26;
 }
 
 .tyre-medium {
   background-color: #ffcc00;
-  /* Yellow */
   color: black;
   border-color: #b38f00;
 }
 
 .tyre-hard {
   background-color: #f0f0f0;
-  /* White/Light Gray */
   color: black;
   border-color: #999;
 }
 
 .tyre-intermediate {
   background-color: #34c759;
-  /* Green */
   color: white;
-  border-color: #34c759;
+  border-color: #28a745;
 }
 
 .tyre-wet {
   background-color: #007aff;
-  /* Blue */
   color: white;
-  border-color: #007aff;
+  border-color: #0056b3;
 }
 
 .tyre-laps {
-  font-size: 0.8em;
+  font-size: 0.7em;
   color: #666;
-}
-// Agregar al final de timing-table.component.scss
-
-.no-data {
-  padding: 40px;
-  text-align: center;
-  color: #666;
-  
-  p {
-    margin: 10px 0;
-    
-    &.small {
-      font-size: 0.9em;
-      color: #999;
-    }
-  }
+  font-weight: 600;
 }
 
-mat-card-subtitle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  
-  span {
-    font-size: 0.9em;
-    color: #4caf50;
-  }
-}
-
-// Estilos para tiempos destacados en la columna TIME
+// Estilos para tiempos destacados
 .session-best {
   color: #9c27b0;
   font-weight: bold;
@@ -197,4 +258,26 @@ mat-card-subtitle {
 .personal-best {
   color: #4caf50;
   font-weight: bold;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .timing-layout {
+    padding: 10px;
+    gap: 15px;
+  }
+  
+  .mat-mdc-cell,
+  ::ng-deep .mat-mdc-cell {
+    font-size: 0.8em;
+    padding: 8px 4px;
+  }
+  
+  .driver-code {
+    width: 30px;
+  }
+  
+  .tyre-history-container {
+    max-width: 100px;
+  }
 }

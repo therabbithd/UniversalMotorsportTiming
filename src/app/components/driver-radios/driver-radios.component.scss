@@ -1,0 +1,115 @@
+.radios-container {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 320px;
+  }
+  
+  .radios-title {
+    color: #ffffff;
+    font-family: 'F1 Sans', sans-serif;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+    text-transform: lowercase;
+  }
+  
+  .drivers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .driver-radio {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s ease;
+    
+    &.active {
+      .driver-headshot img {
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+      }
+    }
+  }
+  
+  .driver-headshot {
+    position: relative;
+    flex-shrink: 0;
+    
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid;
+      background-color: #2a2a2a;
+      transition: box-shadow 0.3s ease;
+    }
+    
+    .activity-indicator {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 12px;
+      height: 12px;
+      background-color: #00ff00;
+      border-radius: 50%;
+      border: 2px solid #1a1a1a;
+      animation: pulse 1.5s infinite;
+    }
+  }
+  
+  .volume-control {
+    flex: 1;
+    
+    mat-slider {
+      width: 100%;
+      
+      ::ng-deep {
+        .mdc-slider__track {
+          height: 4px;
+        }
+        
+        .mdc-slider__track--inactive {
+          background-color: #444;
+        }
+        
+        .mdc-slider__track--active {
+          background-color: #ffffff;
+        }
+        
+        .mdc-slider__thumb-knob {
+          background-color: #ffffff;
+          border: 2px solid #1a1a1a;
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.2);
+    }
+  }
+  
+  // Responsive
+  @media (max-width: 768px) {
+    .radios-container {
+      max-width: 100%;
+    }
+    
+    .driver-headshot img {
+      width: 50px;
+      height: 50px;
+    }
+  }
+  

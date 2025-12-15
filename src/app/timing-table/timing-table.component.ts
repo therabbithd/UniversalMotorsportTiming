@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { F1LiveTimingStreamService } from '../services/f1-livetiming.service';
 import { DriverTiming } from '../models/f1-livetiming.model';
 import { CircuitMapComponent } from '../components/circuit-map/circuit-map.component';
+import { DriverRadiosComponent } from "../components/driver-radios/driver-radios.component";
 
 @Component({
   selector: 'app-timing-table',
@@ -15,8 +16,9 @@ import { CircuitMapComponent } from '../components/circuit-map/circuit-map.compo
     CommonModule,
     MatCardModule,
     MatTableModule,
-    CircuitMapComponent
-  ],
+    CircuitMapComponent,
+    DriverRadiosComponent
+],
   templateUrl: './timing-table.component.html',
   styleUrls: ['./timing-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
