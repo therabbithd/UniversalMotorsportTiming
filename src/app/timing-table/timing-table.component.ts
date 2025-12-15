@@ -8,6 +8,7 @@ import { F1LiveTimingStreamService } from '../services/f1-livetiming.service';
 import { DriverTiming } from '../models/f1-livetiming.model';
 import { CircuitMapComponent } from '../components/circuit-map/circuit-map.component';
 import { DriverRadiosComponent } from "../components/driver-radios/driver-radios.component";
+import { DriverSectorsComponent } from '../components/driver-sector/driver-sectors.component';
 
 @Component({
   selector: 'app-timing-table',
@@ -17,7 +18,8 @@ import { DriverRadiosComponent } from "../components/driver-radios/driver-radios
     MatCardModule,
     MatTableModule,
     CircuitMapComponent,
-    DriverRadiosComponent
+    DriverRadiosComponent,
+    DriverSectorsComponent 
 ],
   templateUrl: './timing-table.component.html',
   styleUrls: ['./timing-table.component.scss'],
@@ -32,7 +34,8 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     'lapNumber',
     'lastLapTime',
     'gapToLeader',
-    'gapToAhead'
+    'gapToAhead',
+    'sectors'
   ];
 
   public circuitKey: string | number = '';
@@ -112,5 +115,21 @@ export class TimingTableComponent implements OnInit, OnDestroy {
   isArray(value: any): boolean {
     return Array.isArray(value);
   }
+  // Reemplaza el método actual por este
+getDriverSectorsData(position: string): any {
+  const state = this.streamService.getCurrentState();
+  const lines = state.TimingData?.Lines;
+  
+  if (!lines) return undefined;
+  
+  // Buscar el piloto por posición
+  const driverEntry = Object.entries(lines).find(
+    ([_, line]: [string, any]) => line.Position === position
+  );
+  
+  if (!driverEntry) return undefined;
+  
+  return driverEntry[1].Sectors;
+}
 
 }

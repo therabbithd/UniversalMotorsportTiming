@@ -11,6 +11,21 @@ export interface F1IndexResponse {
 
   Years: F1Year[];
 }
+/** Segmento individual dentro de un sector */
+export interface Segment {
+  Status?: number;
+}
+
+/** Sector de la vuelta con sus segmentos */
+export interface Sector {
+  Segments?: Segment[] | { [key: string]: Segment };
+  Value?: string; // Tiempo del sector
+}
+
+/** Datos completos de sectores de un piloto */
+export interface SectorData {
+  Sectors?: Sector[] | { [key: string]: Sector };
+}
 
 export interface F1Session {
 

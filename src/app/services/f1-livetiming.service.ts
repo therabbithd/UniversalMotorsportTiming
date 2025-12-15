@@ -37,9 +37,26 @@ interface LiveTimingState {
         IntervalToPositionAhead?: {
           Value?: string;
         };
+        // ← AÑADIR ESTAS LÍNEAS
+        Sectors?: Array<{
+          Segments?: Array<{ Status?: number }> | { [key: string]: { Status?: number } };
+          Value?: string;
+        }> | { 
+          [key: string]: {
+            Segments?: Array<{ Status?: number }> | { [key: string]: { Status?: number } };
+            Value?: string;
+          }
+        };
+        Stats?: {
+          [key: string]: {
+            TimeDifftoPositionAhead?: string;
+            TimeDiffToFastest?: string;
+          };
+        };
       };
     };
   };
+      
 
   DriverList?: {
     [driverNumber: string]: {
