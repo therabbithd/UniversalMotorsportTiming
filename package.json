@@ -27,6 +27,7 @@
     "@syncfusion/ej2-charts": "^31.2.12",
     "@syncfusion/ej2-grids": "^31.2.12",
     "@syncfusion/ej2-layouts": "^31.2.12",
+    "ably": "^2.15.0",
     "chart.js": "^4.5.1",
     "chartjs-plugin-datalabels": "^2.2.0",
     "pako": "^2.1.0",

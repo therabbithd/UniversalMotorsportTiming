@@ -109,6 +109,8 @@ export class F1LiveTimingStreamService {
   private readonly SIGNALR_HUB = 'Streaming';
   private readonly RETRY_FREQ = 10000;
 
+  private ably: any;
+  private channel: any;
   private ws: WebSocket | null = null;
   private liveState = new BehaviorSubject<LiveTimingState>({});
   private messageCount = 0;
@@ -120,7 +122,83 @@ export class F1LiveTimingStreamService {
   constructor() { }
 
   async connect(): Promise<void> {
-    console.log('[F1 Stream] Connecting to live timing stream via proxy');
+    console.log('[F1 Stream] Attempting to connect...');
+
+    // Try Ably first
+    try {
+      await this.connectAbly();
+    } catch (error) {
+      console.warn('[F1 Stream] Ably connection failed, falling back to direct WebSocket:', error);
+      this.connectDirectly();
+    }
+  }
+
+  private async connectAbly(): Promise<void> {
+    console.log('[F1 Stream] Connecting to Ably...');
+    const Ably = await import('ably');
+    const Realtime = Ably.Realtime || (Ably as any).default?.Realtime || Ably;
+
+    return new Promise((resolve, reject) => {
+      let timeoutId: any;
+
+      try {
+        this.ably = new Realtime({
+          authUrl: '/api/createTokenRequest',
+          autoConnect: false // We connect manually to handle errors
+        });
+
+        // Timeout to force fallback if Ably takes too long (e.g. 404 on authUrl might hang)
+        timeoutId = setTimeout(() => {
+          console.warn('[F1 Stream] Ably connection timed out');
+          if (this.ably) {
+            this.ably.close();
+          }
+          reject(new Error('Ably connection timed out'));
+        }, 5000);
+
+        this.ably.connection.on('connected', () => {
+          clearTimeout(timeoutId);
+          console.log('[F1 Stream] Connected to Ably');
+          this.setupAblyChannel();
+          resolve();
+        });
+
+        this.ably.connection.on('failed', (err: any) => {
+          clearTimeout(timeoutId);
+          console.error('[F1 Stream] Ably connection failed:', err);
+          reject(err);
+        });
+
+        this.ably.connection.on('disconnected', () => {
+          console.log('[F1 Stream] Ably disconnected');
+          // If disconnected, we rely on Ably's auto-reconnect or our own logic
+          // But for the initial connection promise, we only care about success/fail
+        });
+
+        this.ably.connect();
+
+      } catch (e) {
+        if (timeoutId) clearTimeout(timeoutId);
+        reject(e);
+      }
+    });
+  }
+
+  private setupAblyChannel(): void {
+    this.channel = this.ably.channels.get('f1-timing');
+
+    this.channel.subscribe('update', (message: any) => {
+      const data = typeof message.data === 'string' ? message.data : JSON.stringify(message.data);
+      this.updateState(data);
+    });
+
+    console.log('[F1 Stream] Subscribed to f1-timing channel');
+    this.resetState();
+  }
+
+  // Fallback: Direct SignalR/WebSocket connection (Original Logic)
+  private async connectDirectly(): Promise<void> {
+    console.log('[F1 Stream] Connecting to live timing stream via proxy (Fallback)');
 
     const hub = encodeURIComponent(JSON.stringify([{ name: this.SIGNALR_HUB }]));
 
@@ -129,6 +207,10 @@ export class F1LiveTimingStreamService {
         `/f1-api/signalr/negotiate?connectionData=${hub}&clientProtocol=1.5`
       );
 
+      if (!negotiation.ok) {
+        throw new Error(`Negotiation failed with status ${negotiation.status}`);
+      }
+
       const data = await negotiation.json();
       const connectionToken = data.ConnectionToken;
 
@@ -136,9 +218,7 @@ export class F1LiveTimingStreamService {
         console.log('[F1 Stream] HTTP negotiation complete');
         this.setupWebSocket(connectionToken, hub);
       } else {
-        console.log(
-          '[F1 Stream] HTTP negotiation failed. Is there a live session?'
-        );
+        console.log('[F1 Stream] HTTP negotiation failed. Is there a live session?');
         this.scheduleReconnect();
       }
     } catch (error) {
@@ -166,25 +246,11 @@ export class F1LiveTimingStreamService {
       const subscribeMessage = {
         H: this.SIGNALR_HUB,
         M: 'Subscribe',
-        A: [
-          [
-            'Heartbeat',
-            'CarData.z',
-            'Position.z',
-            'ExtrapolatedClock',
-            'TimingStats',
-            'TimingAppData',
-            'WeatherData',
-            'TrackStatus',
-            'DriverList',
-            'RaceControlMessages',
-            'SessionInfo',
-            'SessionData',
-            'LapCount',
-            'TimingData',
-            'TeamRadio'
-          ]
-        ],
+        A: [[
+          'Heartbeat', 'CarData.z', 'Position.z', 'ExtrapolatedClock', 'TimingStats',
+          'TimingAppData', 'WeatherData', 'TrackStatus', 'DriverList',
+          'RaceControlMessages', 'SessionInfo', 'SessionData', 'LapCount', 'TimingData', 'TeamRadio'
+        ]],
         I: 1
       };
 
@@ -202,7 +268,6 @@ export class F1LiveTimingStreamService {
 
     this.ws.onclose = () => {
       console.log('[F1 Stream] WebSocket closed');
-      // Do not reset state on close to persist data
       this.scheduleReconnect();
     };
   }
@@ -376,6 +441,16 @@ export class F1LiveTimingStreamService {
   disconnect(): void {
     if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout);
+    }
+
+    if (this.ably) {
+      this.ably.close();
+      this.ably = null;
+    }
+
+    if (this.channel) {
+      this.channel.unsubscribe();
+      this.channel = null;
     }
 
     if (this.ws) {
