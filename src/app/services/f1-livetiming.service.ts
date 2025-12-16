@@ -1,5 +1,3 @@
-// src/app/services/f1-livetiming-stream.service.ts
-
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as pako from 'pako';
@@ -37,11 +35,10 @@ interface LiveTimingState {
         IntervalToPositionAhead?: {
           Value?: string;
         };
-        // ← AÑADIR ESTAS LÍNEAS
         Sectors?: Array<{
           Segments?: Array<{ Status?: number }> | { [key: string]: { Status?: number } };
           Value?: string;
-        }> | { 
+        }> | {
           [key: string]: {
             Segments?: Array<{ Status?: number }> | { [key: string]: { Status?: number } };
             Value?: string;
@@ -56,7 +53,7 @@ interface LiveTimingState {
       };
     };
   };
-      
+
 
   DriverList?: {
     [driverNumber: string]: {
@@ -115,13 +112,12 @@ export class F1LiveTimingStreamService {
   private ws: WebSocket | null = null;
   private liveState = new BehaviorSubject<LiveTimingState>({});
   private messageCount = 0;
-  private emptyMessageCount = 0;
   private reconnectTimeout: any;
 
   // Observables públicos
   public state$: Observable<LiveTimingState> = this.liveState.asObservable();
 
-  constructor() {}
+  constructor() { }
 
   async connect(): Promise<void> {
     console.log('[F1 Stream] Connecting to live timing stream via proxy');
@@ -206,7 +202,7 @@ export class F1LiveTimingStreamService {
 
     this.ws.onclose = () => {
       console.log('[F1 Stream] WebSocket closed');
-      this.resetState();
+      // Do not reset state on close to persist data
       this.scheduleReconnect();
     };
   }
@@ -216,13 +212,7 @@ export class F1LiveTimingStreamService {
       const parsed: SignalRMessage = JSON.parse(data);
 
       if (!Object.keys(parsed).length) {
-        this.emptyMessageCount++;
-      } else {
-        this.emptyMessageCount = 0;
-      }
-
-      if (this.emptyMessageCount > 5) {
-        this.resetState();
+        // Empty message (keep-alive), ignore
         return;
       }
 
@@ -371,7 +361,6 @@ export class F1LiveTimingStreamService {
   private resetState(): void {
     this.liveState.next({});
     this.messageCount = 0;
-    this.emptyMessageCount = 0;
   }
 
   private scheduleReconnect(): void {
@@ -394,65 +383,62 @@ export class F1LiveTimingStreamService {
       this.ws = null;
     }
 
-    this.resetState();
+    // Do not reset state on disconnect to persist data
   }
 
   // ===== TeamRadio desde el WebSocket usando el modelo =====
 
-  // ===== TeamRadio desde el WebSocket usando el modelo =====
+  getTeamRadioCaptures(): TeamRadioCapture[] {
+    const state: LiveTimingState = this.liveState.value;
 
-getTeamRadioCaptures(): TeamRadioCapture[] {
-  const state: LiveTimingState = this.liveState.value;
-
-  if (!state.TeamRadio || !Array.isArray((state.TeamRadio as TeamRadioState).Captures)) {
-    return [];
-  }
-
-  const captures = (state.TeamRadio as TeamRadioState).Captures as TeamRadioCapture[];
-
-  return captures
-    .filter(c => !!c.RacingNumber && !!c.Path)
-    .sort(
-      (a, b) =>
-        new Date(b.Utc).getTime() - new Date(a.Utc).getTime()
-    );
-}
-
-getLatestRadioByDriver(): Map<string, TeamRadioCapture> {
-  const captures = this.getTeamRadioCaptures();
-  const latestByDriver = new Map<string, TeamRadioCapture>();
-
-  for (const capture of captures) {
-    if (!latestByDriver.has(capture.RacingNumber)) {
-      latestByDriver.set(capture.RacingNumber, capture);
+    if (!state.TeamRadio || !Array.isArray((state.TeamRadio as TeamRadioState).Captures)) {
+      return [];
     }
+
+    const captures = (state.TeamRadio as TeamRadioState).Captures as TeamRadioCapture[];
+
+    return captures
+      .filter(c => !!c.RacingNumber && !!c.Path)
+      .sort(
+        (a, b) =>
+          new Date(b.Utc).getTime() - new Date(a.Utc).getTime()
+      );
   }
 
-  return latestByDriver;
-}
+  getLatestRadioByDriver(): Map<string, TeamRadioCapture> {
+    const captures = this.getTeamRadioCaptures();
+    const latestByDriver = new Map<string, TeamRadioCapture>();
 
-/**
- * Base para construir URLs de audio e imágenes:
- * si el WebSocket se conecta a ws(s)://<host>/f1-api/signalr/...
- * la base HTTP será http(s)://<host>/f1-api
- */
-getWebSocketBaseUrl(): string {
-  const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-  const host = window.location.host; // localhost:4200 en dev
+    for (const capture of captures) {
+      if (!latestByDriver.has(capture.RacingNumber)) {
+        latestByDriver.set(capture.RacingNumber, capture);
+      }
+    }
 
-  return `${protocol}//${host}/f1-api`;
-}
-// Base del evento para construir URLs de assets (TeamRadio, etc.)
+    return latestByDriver;
+  }
 
-getEventPath(): string {
-  const state: any = this.liveState.value;
-  // En tu server.js usas SessionInfo.Path como base
-  // ej: "2025/2025-12-07_Abu_Dhabi_Grand_Prix/2025-12-07_Race/"
-  const sessionPath: string | undefined = state.SessionInfo?.Path;
-  if (!sessionPath) return '';
+  /**
+   * Base para construir URLs de audio e imágenes:
+   * si el WebSocket se conecta a ws(s)://<host>/f1-api/signalr/...
+   * la base HTTP será http(s)://<host>/f1-api
+   */
+  getWebSocketBaseUrl(): string {
+    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+    const host = window.location.host; // localhost:4200 en dev
 
-  const clean = sessionPath.replace(/\/$/, ''); // quita "/" final
-  return `https://livetiming.formula1.com/static/${clean}`;
+    return `${protocol}//${host}/f1-api`;
+  }
+  // Base del evento para construir URLs de assets (TeamRadio, etc.)
+
+  getEventPath(): string {
+    const state: any = this.liveState.value;
+    // En tu server.js usas SessionInfo.Path como base
+    // ej: "2025/2025-12-07_Abu_Dhabi_Grand_Prix/2025-12-07_Race/"
+    const sessionPath: string | undefined = state.SessionInfo?.Path;
+    if (!sessionPath) return '';
+
+    const clean = sessionPath.replace(/\/$/, ''); // quita "/" final
+    return `https://livetiming.formula1.com/static/${clean}`;
+  }
 }
-}
-// Base del evento para construir URLs de assets (TeamRadio, etc.)
