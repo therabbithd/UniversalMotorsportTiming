@@ -40,6 +40,9 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+.env
 
 # Local Netlify folder
 .netlify
+.vercel
+.env*.local

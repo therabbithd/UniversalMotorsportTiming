@@ -51,25 +51,29 @@ export class TimingTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    console.log('[Timing Table] Initializing component');
+    
     // Conectar al stream de F1
     this.streamService.connect();
     this.isConnected = true;
-
+  
     // Suscribirse a las actualizaciones de timing
-    this.subscription = this.streamService.state$.subscribe(() => {
-      this.timingData = this.streamService.getDriversTiming();
+    this.subscription = this.streamService.state$.subscribe((state) => {
+      console.log('[Timing Table] State updated:', state);
       
+      this.timingData = this.streamService.getDriversTiming();
+      console.log('[Timing Table] Timing data:', this.timingData);
+  
       // Obtener información de sesión si está disponible
-      const state = this.streamService.getCurrentState();
       if (state.SessionInfo) {
-        // Extraer información de la sesión actual si es necesaria
         this.updateSessionInfo(state.SessionInfo);
       }
-
-      // Marcar para detección de cambios
+  
+      // ⚠️ IMPORTANTE: Marcar para detección de cambios SIEMPRE
       this.cdr.markForCheck();
     });
   }
+  
 
   ngOnDestroy(): void {
     // Desconectar y limpiar
