@@ -5,6 +5,7 @@ export const API_CONFIG = {
       register: '/api/auth/register',
       login: '/api/auth/login',
     },
+    profile: '/api/profile',
   },
 };
 

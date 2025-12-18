@@ -86,12 +86,12 @@ export class RegisterComponent {
           // Guardar token en localStorage
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
-          
+
           this.successMessage.set('¡Cuenta creada exitosamente! Redirigiendo...');
-          
+
           // Redirigir después de 1.5 segundos
           setTimeout(() => {
-            this.router.navigate(['/']);
+            this.router.navigate(['/dashboard']);
           }, 1500);
         },
         error: (error) => {

@@ -1,0 +1,19 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <a routerLink="/" class="navbar-brand">
+      <span class="brand-text">Universal</span>
+      <span class="brand-accent">Timing</span>
+    </a>
+
+    <button class="navbar-toggle" (click)="toggleMenu()" aria-label="Toggle navigation">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <div class="navbar-links" [class.active]="isMenuOpen">
+      <a routerLink="/register" routerLinkActive="active-link" (click)="isMenuOpen = false">Registro</a>
+      <a routerLink="/dashboard" routerLinkActive="active-link" (click)="isMenuOpen = false">Dashboard</a>
+    </div>
+  </div>
+</nav>

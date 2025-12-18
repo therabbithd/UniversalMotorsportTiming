@@ -3,6 +3,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { TimingTableComponent } from './timing-table/timing-table.component';
 
+
 export const routes: Routes = [
   {
     path: '',
@@ -24,6 +25,7 @@ export const routes: Routes = [
     component: TimingTableComponent,
     title: 'F1 Dashboard | Universal Timing',
   },
+
   {
     path: '**',
     redirectTo: '',
