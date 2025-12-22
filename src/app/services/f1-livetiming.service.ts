@@ -244,7 +244,8 @@ export class F1LiveTimingStreamService {
       // Production: use external WebSocket proxy
       // TODO: Replace with your Railway/Render deployment URL
       // Example: 'wss://your-app.railway.app'
-      const PROXY_URL = 'wss://your-websocket-proxy.railway.app'; // ⚠️ CHANGE THIS
+      const PROXY_URL = 'https://universalmotorsporttiming-production.up.railway.app';
+      // ⚠️ CHANGE THIS
       wsUrl = `${PROXY_URL}/f1-api/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
         connectionToken
       )}&connectionData=${hub}`;
