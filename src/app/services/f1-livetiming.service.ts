@@ -124,13 +124,9 @@ export class F1LiveTimingStreamService {
   async connect(): Promise<void> {
     console.log('[F1 Stream] Attempting to connect...');
 
-    // Try Ably first
-    try {
-      await this.connectAbly();
-    } catch (error) {
-      console.warn('[F1 Stream] Ably connection failed, falling back to direct WebSocket:', error);
-      this.connectDirectly();
-    }
+    // Connect directly to F1 WebSocket (Vercel compatible)
+    // Ably requires a long-running publisher process which Vercel doesn't support
+    this.connectDirectly();
   }
 
   private async connectAbly(): Promise<void> {
@@ -230,10 +226,8 @@ export class F1LiveTimingStreamService {
   }
 
   private setupWebSocket(connectionToken: string, hub: string): void {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.host;
-
-    const wsUrl = `${protocol}//${host}/f1-api/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
+    // Connect directly to F1's WebSocket (Vercel can't proxy WebSockets)
+    const wsUrl = `wss://livetiming.formula1.com/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
       connectionToken
     )}&connectionData=${hub}`;
 
