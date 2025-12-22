@@ -226,10 +226,29 @@ export class F1LiveTimingStreamService {
   }
 
   private setupWebSocket(connectionToken: string, hub: string): void {
-    // Connect directly to F1's WebSocket (Vercel can't proxy WebSockets)
-    const wsUrl = `wss://livetiming.formula1.com/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
-      connectionToken
-    )}&connectionData=${hub}`;
+    // IMPORTANT: Vercel doesn't support WebSocket proxying
+    // For production, deploy the websocket-proxy to Railway/Render and set the URL here
+    // For development with ng serve, use the local proxy
+    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    let wsUrl: string;
+
+    if (isLocalDev) {
+      // Development: use local proxy
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      wsUrl = `${protocol}//${host}/f1-api/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
+        connectionToken
+      )}&connectionData=${hub}`;
+    } else {
+      // Production: use external WebSocket proxy
+      // TODO: Replace with your Railway/Render deployment URL
+      // Example: 'wss://your-app.railway.app'
+      const PROXY_URL = 'wss://your-websocket-proxy.railway.app'; // ⚠️ CHANGE THIS
+      wsUrl = `${PROXY_URL}/f1-api/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
+        connectionToken
+      )}&connectionData=${hub}`;
+    }
 
     console.log('[F1 Stream] Connecting to WebSocket:', wsUrl);
 
