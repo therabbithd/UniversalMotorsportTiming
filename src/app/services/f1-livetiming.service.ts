@@ -144,7 +144,9 @@ export class F1LiveTimingStreamService {
       try {
         this.ably = new Realtime({
           authUrl: '/api/createTokenRequest',
-          autoConnect: false // We connect manually to handle errors
+          autoConnect: false, // We connect manually to handle errors
+          transports: ['xhr_polling'], // Force HTTP long-polling instead of WebSockets for Vercel compatibility
+          closeOnUnload: true
         });
 
         // Timeout to force fallback if Ably takes too long (e.g. 404 on authUrl might hang)
