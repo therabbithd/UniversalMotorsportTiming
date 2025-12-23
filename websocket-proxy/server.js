@@ -8,113 +8,29 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
-// Health check
-app.get('/health', (req, res) => {
-    res.json({
-        status: 'ok',
-        f1Connected: !!f1Ws && f1Ws.readyState === WebSocket.OPEN,
-        clients: wss ? wss.clients.size : 0,
-        timestamp: new Date().toISOString()
-    });
-});
+// Global State
+let liveState = {};
+let brokerRunning = false;
 
-const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Railway Proxy] Running on port ${PORT}`);
-});
+// WebSocket Server for Clients (Angular App)
+const wss = new WebSocket.Server({ noServer: true });
 
-// WebSocket Server for the Angular frontend
-const wss = new WebSocket.Server({ server });
-
-wss.on('connection', (ws) => {
-    console.log('[Railway Proxy] Client connected');
-    ws.on('close', () => console.log('[Railway Proxy] Client disconnected'));
-});
-
-// --- F1 Connection Logic ---
-
-let f1Ws = null;
-
-async function connectToF1() {
-    console.log('[F1] Connecting to F1 Live Timing...');
-    const SIGNALR_HUB = 'Streaming';
-    const hub = encodeURIComponent(JSON.stringify([{ name: SIGNALR_HUB }]));
-
-    try {
-        const negotiateUrl = `https://livetiming.formula1.com/signalr/negotiate?connectionData=${hub}&clientProtocol=1.5`;
-        const response = await fetch(negotiateUrl, {
-            headers: { 'User-Agent': 'BestHTTP' }
-        });
-
-        const data = await response.json();
-        const connectionToken = data.ConnectionToken;
-
-        if (!connectionToken) {
-            console.log('[F1] No session active. Retrying in 30s...');
-            setTimeout(connectToF1, 30000);
-            return;
+// Helper: Deep Merge
+function deepObjectMerge(original = {}, modifier) {
+    if (!modifier) return original;
+    const copy = { ...original };
+    for (const [key, value] of Object.entries(modifier)) {
+        const valueIsObject = typeof value === 'object' && !Array.isArray(value) && value !== null;
+        if (valueIsObject && Object.keys(value).length) {
+            copy[key] = deepObjectMerge(copy[key], value);
+        } else {
+            copy[key] = value;
         }
-
-        const wsUrl = `wss://livetiming.formula1.com/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(connectionToken)}&connectionData=${hub}`;
-
-        f1Ws = new WebSocket(wsUrl, {
-            headers: { 'User-Agent': 'BestHTTP' }
-        });
-
-        f1Ws.on('open', () => {
-            console.log('[F1] Connected to F1 WebSocket');
-            const subscribeMessage = {
-                H: SIGNALR_HUB,
-                M: 'Subscribe',
-                A: [[
-                    'Heartbeat', 'CarData.z', 'Position.z', 'ExtrapolatedClock', 'TimingStats',
-                    'TimingAppData', 'WeatherData', 'TrackStatus', 'DriverList',
-                    'RaceControlMessages', 'SessionInfo', 'SessionData', 'LapCount', 'TimingData', 'TeamRadio'
-                ]],
-                I: 1
-            };
-            f1Ws.send(JSON.stringify(subscribeMessage));
-        });
-
-        f1Ws.on('message', (data) => {
-            processAndBroadcast(data.toString());
-        });
-
-        f1Ws.on('error', (err) => console.error('[F1] WS Error:', err));
-
-        f1Ws.on('close', () => {
-            console.log('[F1] Connection closed. Reconnecting in 10s...');
-            setTimeout(connectToF1, 10000);
-        });
-
-    } catch (err) {
-        console.error('[F1] Connection error:', err);
-        setTimeout(connectToF1, 30000);
     }
+    return copy;
 }
 
-function processAndBroadcast(rawData) {
-    try {
-        const parsed = JSON.parse(rawData);
-        if (!parsed.M || !Array.isArray(parsed.M)) return;
-
-        for (const message of parsed.M) {
-            if (message.M === 'feed') {
-                let [field, value] = message.A;
-
-                // Decompress on server (Railway)
-                if (field === 'CarData.z' || field === 'Position.z') {
-                    const cleanField = field.split('.')[0];
-                    const decompressedValue = decompress(value);
-                    broadcast({ [cleanField]: decompressedValue });
-                } else {
-                    broadcast({ [field]: value });
-                }
-            }
-        }
-    } catch (e) {
-    }
-}
-
+// Helper: Decompress
 function decompress(data) {
     try {
         const buffer = Buffer.from(data, 'base64');
@@ -125,13 +41,143 @@ function decompress(data) {
     }
 }
 
-function broadcast(data) {
-    const payload = JSON.stringify(data);
-    wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(payload);
+async function startF1Broker() {
+    const SIGNALR_HUB = 'Streaming';
+    const hub = encodeURIComponent(JSON.stringify([{ name: SIGNALR_HUB }]));
+
+    try {
+        console.log('[Broker] Negotiating with F1...');
+        const response = await fetch(`https://livetiming.formula1.com/signalr/negotiate?connectionData=${hub}&clientProtocol=1.5`, {
+            headers: { 'User-Agent': 'BestHTTP' }
+        });
+
+        const data = await response.json();
+        const connectionToken = data.ConnectionToken;
+
+        if (!connectionToken) {
+            console.log('[Broker] No session active. Retrying in 60s...');
+            setTimeout(startF1Broker, 60000);
+            return;
         }
-    });
+
+        const wsUrl = `wss://livetiming.formula1.com/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(connectionToken)}&connectionData=${hub}`;
+        const ws = new WebSocket(wsUrl, {
+            headers: { 'User-Agent': 'BestHTTP' }
+        });
+
+        ws.on('open', () => {
+            console.log('[Broker] F1 Connection established');
+            brokerRunning = true;
+            ws.send(JSON.stringify({
+                H: SIGNALR_HUB,
+                M: 'Subscribe',
+                A: [[
+                    'Heartbeat', 'CarData.z', 'Position.z', 'ExtrapolatedClock', 'TimingStats',
+                    'TimingAppData', 'WeatherData', 'TrackStatus', 'DriverList',
+                    'RaceControlMessages', 'SessionInfo', 'SessionData', 'LapCount', 'TimingData', 'TeamRadio'
+                ]],
+                I: 1
+            }));
+        });
+
+        ws.on('message', (data) => {
+            updateBrokerState(data.toString());
+        });
+
+        ws.on('close', () => {
+            console.log('[Broker] F1 Connection closed. Reconnecting...');
+            brokerRunning = false;
+            setTimeout(startF1Broker, 10000);
+        });
+
+        ws.on('error', (err) => {
+            console.error('[Broker] F1 WS Error:', err.message);
+        });
+
+    } catch (err) {
+        console.error('[Broker] Fatal Error:', err.message);
+        setTimeout(startF1Broker, 10000);
+    }
 }
 
-connectToF1();
+function updateBrokerState(rawData) {
+    try {
+        const parsed = JSON.parse(rawData);
+        let updates = [];
+
+        if (Array.isArray(parsed.M)) {
+            for (const message of parsed.M) {
+                if (message.M === 'feed') {
+                    let [field, value] = message.A;
+                    let update = {};
+
+                    if (field.endsWith('.z')) {
+                        const baseField = field.split('.')[0];
+                        value = decompress(value);
+                        update = { [baseField]: value };
+                    } else {
+                        update = { [field]: value };
+                    }
+
+                    liveState = deepObjectMerge(liveState, update);
+                    updates.push(update);
+                }
+            }
+        } else if (parsed.R && parsed.I === '1') {
+            const bulkUpdate = {};
+            for (let [field, value] of Object.entries(parsed.R)) {
+                if (field.endsWith('.z')) {
+                    const baseField = field.split('.')[0];
+                    bulkUpdate[baseField] = decompress(value);
+                } else {
+                    bulkUpdate[field] = value;
+                }
+            }
+            liveState = deepObjectMerge(liveState, bulkUpdate);
+            updates.push(bulkUpdate);
+        }
+
+        // Broadcast updates to all connected clients
+        if (updates.length > 0) {
+            const payload = JSON.stringify(updates.length === 1 ? updates[0] : updates);
+            wss.clients.forEach(client => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(payload);
+                }
+            });
+        }
+    } catch (e) {
+        // Ignore keep-alive errors
+    }
+}
+
+// Health Check API
+app.get('/health', (req, res) => {
+    res.json({
+        status: brokerRunning ? 'running' : 'starting',
+        clients: wss.clients.size,
+        timestamp: new Date().toISOString()
+    });
+});
+
+const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`[HTTP] Server listening on port ${PORT}`);
+    startF1Broker();
+});
+
+// Handle WebSocket upgrades for clients
+server.on('upgrade', (request, socket, head) => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+        wss.emit('connection', ws, request);
+    });
+});
+
+wss.on('connection', (ws) => {
+    console.log('[WSS] Client connected');
+    // Send current state on connection
+    if (Object.keys(liveState).length > 0) {
+        ws.send(JSON.stringify(liveState));
+    }
+
+    ws.on('close', () => console.log('[WSS] Client disconnected'));
+});

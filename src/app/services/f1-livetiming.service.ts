@@ -1,13 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import * as pako from 'pako';
 import { DriverTiming, DriverInfo, TyreStint, TeamRadioCapture, TeamRadioState } from '../models/f1-livetiming.model';
-
-interface SignalRMessage {
-  M?: Array<{ M: string; A: any[] }>;
-  R?: any;
-  I?: string;
-}
 
 interface LiveTimingState {
 
@@ -120,22 +113,24 @@ export class F1LiveTimingStreamService {
   constructor() { }
 
   async connect(): Promise<void> {
-    console.log('[F1 Stream] Connecting to Railway Data Broker...');
-    this.connectDirectly();
-  }
+    console.log('[F1 Stream] Attempting to connect to Railway Broker...');
 
-  // Direct Railway WebSocket connection (No SignalR negotiate needed on client)
-  private async connectDirectly(): Promise<void> {
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
     let wsUrl: string;
+
     if (isLocalDev) {
       wsUrl = 'ws://localhost:3000';
     } else {
       wsUrl = 'wss://universalmotorsporttiming-production.up.railway.app';
     }
 
-    console.log('[F1 Stream] Connecting to Railway Broker:', wsUrl);
+    this.setupWebSocket(wsUrl);
+  }
+
+  // Fallback: Direct SignalR/WebSocket connection (Original Logic)
+
+  private setupWebSocket(wsUrl: string): void {
+    console.log('[F1 Stream] Connecting to:', wsUrl);
 
     this.ws = new WebSocket(wsUrl);
 
@@ -149,79 +144,42 @@ export class F1LiveTimingStreamService {
     };
 
     this.ws.onerror = (error) => {
-      console.error('[F1 Stream] Broker error:', error);
+      console.error('[F1 Stream] WebSocket error:', error);
       this.ws?.close();
     };
 
     this.ws.onclose = () => {
-      console.log('[F1 Stream] Broker connection closed');
+      console.log('[F1 Stream] WebSocket closed');
       this.scheduleReconnect();
     };
   }
 
   private updateState(data: string): void {
     try {
-      const parsed = JSON.parse(data);
+      const updates = JSON.parse(data);
 
-      if (!Object.keys(parsed).length) return;
+      if (!updates || (Array.isArray(updates) && updates.length === 0)) return;
 
-      // Handle direct update from Railway Broker (already decompressed)
-      if (!parsed.M && !parsed.R) {
-        const currentState = this.liveState.value;
-        const newState = this.deepObjectMerge(currentState, parsed);
-        this.liveState.next(newState);
-        return;
+      const currentState = this.liveState.value;
+      let newState = { ...currentState };
+
+      if (Array.isArray(updates)) {
+        // Multi-message update
+        for (const update of updates) {
+          newState = this.deepObjectMerge(newState, update);
+        }
+      } else {
+        // Single message update (or full state)
+        newState = this.deepObjectMerge(newState, updates);
       }
 
-      // Handle raw SignalR messages (via proxy fallback)
-      if (Array.isArray(parsed.M)) {
-        for (const message of parsed.M) {
-          if (message.M === 'feed') {
-            this.messageCount++;
-
-            let [field, value] = message.A;
-
-            if (field === 'CarData.z' || field === 'Position.z') {
-              const [parsedField] = field.split('.');
-              field = parsedField;
-              value = this.parseCompressed(value);
-            }
-
-            const currentState = this.liveState.value;
-            const newState = this.deepObjectMerge(currentState, { [field]: value });
-            this.liveState.next(newState);
-          }
-        }
-      } else if (Object.keys(parsed.R ?? {}).length && parsed.I === '1') {
-        this.messageCount++;
-
-        if (parsed.R['CarData.z']) {
-          parsed.R['CarData'] = this.parseCompressed(parsed.R['CarData.z']);
-        }
-
-        if (parsed.R['Position.z']) {
-          parsed.R['Position'] = this.parseCompressed(parsed.R['Position.z']);
-        }
-
-        const currentState = this.liveState.value;
-        const newState = this.deepObjectMerge(currentState, parsed.R);
-        this.liveState.next(newState);
-      }
+      this.liveState.next(newState);
+      this.messageCount++;
     } catch (e) {
       console.error(`[F1 Stream] Could not update data: ${e}`);
     }
   }
 
-  private parseCompressed(data: string): any {
-    try {
-      const buffer = Uint8Array.from(atob(data), (c) => c.charCodeAt(0));
-      const inflated = pako.inflateRaw(buffer, { to: 'string' });
-      return JSON.parse(inflated);
-    } catch (e) {
-      console.error('[F1 Stream] Error decompressing data:', e);
-      return {};
-    }
-  }
 
   private deepObjectMerge(original: any = {}, modifier: any): any {
     if (!modifier) return original;
@@ -340,8 +298,6 @@ export class F1LiveTimingStreamService {
       this.ws.close();
       this.ws = null;
     }
-
-    // Do not reset state on disconnect to persist data
   }
 
   // ===== TeamRadio desde el WebSocket usando el modelo =====
