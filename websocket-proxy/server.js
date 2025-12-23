@@ -14,7 +14,7 @@ app.get('/health', (req, res) => {
 });
 
 // Proxy HTTP requests to F1 API
-app.use('/f1-api', createProxyMiddleware({
+const f1Proxy = createProxyMiddleware({
     target: 'https://livetiming.formula1.com',
     changeOrigin: true,
     pathRewrite: {
@@ -32,18 +32,29 @@ app.use('/f1-api', createProxyMiddleware({
         proxyReq.setHeader('User-Agent', 'BestHTTP');
         proxyReq.setHeader('Origin', 'https://livetiming.formula1.com');
     },
-    logLevel: 'debug'
-}));
-
-const server = app.listen(PORT, () => {
-    console.log(`[Proxy Server] Running on port ${PORT}`);
-    console.log(`[Proxy Server] Health check: http://localhost:${PORT}/health`);
-    console.log(`[Proxy Server] F1 API proxy: http://localhost:${PORT}/f1-api/*`);
+    logLevel: 'debug',
+    onError: (err, req, res) => {
+        console.error('[Proxy Error]', err);
+    }
 });
 
-// Enable WebSocket upgrade
+app.use('/f1-api', f1Proxy);
+
+// Change: Bind to 0.0.0.0 for Railway/external access
+const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`[Proxy Server] Running on port ${PORT}`);
+    console.log(`[Proxy Server] Health check: http://0.0.0.0:${PORT}/health`);
+    console.log(`[Proxy Server] F1 API proxy: http://0.0.0.0:${PORT}/f1-api/*`);
+});
+
+// Enable WebSocket upgrade explicitly
 server.on('upgrade', (req, socket, head) => {
     console.log('[Proxy Server] WebSocket upgrade request:', req.url);
+    if (req.url.startsWith('/f1-api')) {
+        f1Proxy.upgrade(req, socket, head);
+    } else {
+        socket.destroy();
+    }
 });
 
 // Graceful shutdown

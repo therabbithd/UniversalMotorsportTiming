@@ -199,10 +199,17 @@ export class F1LiveTimingStreamService {
     console.log('[F1 Stream] Connecting to live timing stream via proxy (Fallback)');
 
     const hub = encodeURIComponent(JSON.stringify([{ name: this.SIGNALR_HUB }]));
+    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    // In production, use the Railway proxy for negotiation too, because Vercel/F1 CORS might be tricky
+    // and we want everything to go through the same tunnel.
+    const PROXY_BASE_URL = isLocalDev
+      ? ''
+      : 'https://universalmotorsporttiming-production.up.railway.app';
 
     try {
       const negotiation = await fetch(
-        `/f1-api/signalr/negotiate?connectionData=${hub}&clientProtocol=1.5`
+        `${PROXY_BASE_URL}/f1-api/signalr/negotiate?connectionData=${hub}&clientProtocol=1.5`
       );
 
       if (!negotiation.ok) {
@@ -226,9 +233,6 @@ export class F1LiveTimingStreamService {
   }
 
   private setupWebSocket(connectionToken: string, hub: string): void {
-    // IMPORTANT: Vercel doesn't support WebSocket proxying
-    // For production, deploy the websocket-proxy to Railway/Render and set the URL here
-    // For development with ng serve, use the local proxy
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
     let wsUrl: string;
@@ -242,11 +246,8 @@ export class F1LiveTimingStreamService {
       )}&connectionData=${hub}`;
     } else {
       // Production: use external WebSocket proxy
-      // TODO: Replace with your Railway/Render deployment URL
-      // Example: 'wss://your-app.railway.app'
-      const PROXY_URL = 'https://universalmotorsporttiming-production.up.railway.app';
-      // ⚠️ CHANGE THIS
-      wsUrl = `${PROXY_URL}/f1-api/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
+      const PROXY_WS_URL = 'wss://universalmotorsporttiming-production.up.railway.app';
+      wsUrl = `${PROXY_WS_URL}/f1-api/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
         connectionToken
       )}&connectionData=${hub}`;
     }
