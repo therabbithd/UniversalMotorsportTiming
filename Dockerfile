@@ -2,18 +2,14 @@ FROM node:18-slim
 
 WORKDIR /app
 
-# Copiar archivos de dependencias de la raíz
+# Copiar archivos de dependencias
 COPY package*.json ./
 
-# Instalar dependencias esenciales
+# Instalar dependencias
 RUN npm install --omit=dev
 
-# Copiar el código del proxy
-COPY websocket-proxy ./websocket-proxy
+# Copiar el código
+COPY . .
 
-# Variable de entorno para el puerto (proporcionada por Railway)
-ENV PORT=3000
-EXPOSE 3000
-
-# Comando para arrancar el proxy
+# Railway inyecta el PORT, no lo definimos aquí para evitar conflictos
 CMD ["node", "websocket-proxy/server.js"]

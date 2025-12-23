@@ -152,6 +152,10 @@ function updateBrokerState(rawData) {
 }
 
 // Health Check API
+app.get('/', (req, res) => {
+    res.json({ status: 'up', message: 'F1 Broker is alive' });
+});
+
 app.get('/health', (req, res) => {
     res.json({
         status: brokerRunning ? 'running' : 'starting',
@@ -161,7 +165,8 @@ app.get('/health', (req, res) => {
 });
 
 const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[HTTP] Server listening on port ${PORT}`);
+    console.log(`[Broker] Server actively listening on 0.0.0.0:${PORT}`);
+    console.log(`[Broker] Detected environment PORT: ${process.env.PORT || 'not set (using 3000)'}`);
     startF1Broker();
 });
 
