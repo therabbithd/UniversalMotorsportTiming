@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const pako = require('pako');
 const WebSocket = require('ws');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -156,6 +157,23 @@ app.get('/', (req, res) => {
     res.json({ status: 'up', message: 'F1 Broker is alive' });
 });
 
+// HTTP/WS proxy for negotiate and static endpoints (fallback for clients hitting /f1-api/*)
+const f1Proxy = createProxyMiddleware({
+    target: 'https://livetiming.formula1.com',
+    changeOrigin: true,
+    ws: true,
+    pathRewrite: { '^/f1-api': '' },
+    headers: {
+        'User-Agent': 'BestHTTP'
+    },
+    onProxyReq: (proxyReq) => {
+        // Ensure the UA is set on upgrade-less requests too
+        proxyReq.setHeader('User-Agent', 'BestHTTP');
+    }
+});
+
+app.use('/f1-api', f1Proxy);
+
 app.get('/health', (req, res) => {
     res.json({
         status: brokerRunning ? 'running' : 'starting',
@@ -172,6 +190,12 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 
 // Handle WebSocket upgrades for clients
 server.on('upgrade', (request, socket, head) => {
+    // Proxy WS upgrades hitting /f1-api to the F1 origin
+    if (request.url.startsWith('/f1-api')) {
+        f1Proxy.upgrade(request, socket, head);
+        return;
+    }
+    // If the client asks for /f1-api/... upgrade, proxy it to F1 directly
     wss.handleUpgrade(request, socket, head, (ws) => {
         wss.emit('connection', ws, request);
     });
