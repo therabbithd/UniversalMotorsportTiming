@@ -109,8 +109,6 @@ export class F1LiveTimingStreamService {
   private readonly SIGNALR_HUB = 'Streaming';
   private readonly RETRY_FREQ = 10000;
 
-  private ably: any;
-  private channel: any;
   private ws: WebSocket | null = null;
   private liveState = new BehaviorSubject<LiveTimingState>({});
   private messageCount = 0;
@@ -122,156 +120,28 @@ export class F1LiveTimingStreamService {
   constructor() { }
 
   async connect(): Promise<void> {
-    console.log('[F1 Stream] Attempting to connect...');
-
-    // Connect directly to F1 WebSocket (Vercel compatible)
-    // Ably requires a long-running publisher process which Vercel doesn't support
+    console.log('[F1 Stream] Connecting to Railway Data Broker...');
     this.connectDirectly();
   }
 
-  private async connectAbly(): Promise<void> {
-    console.log('[F1 Stream] Connecting to Ably...');
-    const Ably = await import('ably');
-    const Realtime = Ably.Realtime || (Ably as any).default?.Realtime || Ably;
-
-    return new Promise((resolve, reject) => {
-      let timeoutId: any;
-
-      try {
-        this.ably = new Realtime({
-          authUrl: '/api/createTokenRequest',
-          autoConnect: false, // We connect manually to handle errors
-          transports: ['xhr_polling'], // Force HTTP long-polling instead of WebSockets for Vercel compatibility
-          closeOnUnload: true
-        });
-
-        // Timeout to force fallback if Ably takes too long (e.g. 404 on authUrl might hang)
-        timeoutId = setTimeout(() => {
-          console.warn('[F1 Stream] Ably connection timed out');
-          if (this.ably) {
-            this.ably.close();
-          }
-          reject(new Error('Ably connection timed out'));
-        }, 5000);
-
-        this.ably.connection.on('connected', () => {
-          clearTimeout(timeoutId);
-          console.log('[F1 Stream] Connected to Ably');
-          this.setupAblyChannel();
-          resolve();
-        });
-
-        this.ably.connection.on('failed', (err: any) => {
-          clearTimeout(timeoutId);
-          console.error('[F1 Stream] Ably connection failed:', err);
-          reject(err);
-        });
-
-        this.ably.connection.on('disconnected', () => {
-          console.log('[F1 Stream] Ably disconnected');
-          // If disconnected, we rely on Ably's auto-reconnect or our own logic
-          // But for the initial connection promise, we only care about success/fail
-        });
-
-        this.ably.connect();
-
-      } catch (e) {
-        if (timeoutId) clearTimeout(timeoutId);
-        reject(e);
-      }
-    });
-  }
-
-  private setupAblyChannel(): void {
-    this.channel = this.ably.channels.get('f1-timing');
-
-    this.channel.subscribe('update', (message: any) => {
-      const data = typeof message.data === 'string' ? message.data : JSON.stringify(message.data);
-      this.updateState(data);
-    });
-
-    console.log('[F1 Stream] Subscribed to f1-timing channel');
-    this.resetState();
-  }
-
-  // Fallback: Direct SignalR/WebSocket connection (Original Logic)
+  // Direct Railway WebSocket connection (No SignalR negotiate needed on client)
   private async connectDirectly(): Promise<void> {
-    console.log('[F1 Stream] Connecting to live timing stream via proxy (Fallback)');
-
-    const hub = encodeURIComponent(JSON.stringify([{ name: this.SIGNALR_HUB }]));
-    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
-    // In production, use the Railway proxy for negotiation too, because Vercel/F1 CORS might be tricky
-    // and we want everything to go through the same tunnel.
-    const PROXY_BASE_URL = isLocalDev
-      ? ''
-      : 'https://universalmotorsporttiming-production.up.railway.app';
-
-    try {
-      const negotiation = await fetch(
-        `${PROXY_BASE_URL}/f1-api/signalr/negotiate?connectionData=${hub}&clientProtocol=1.5`
-      );
-
-      if (!negotiation.ok) {
-        throw new Error(`Negotiation failed with status ${negotiation.status}`);
-      }
-
-      const data = await negotiation.json();
-      const connectionToken = data.ConnectionToken;
-
-      if (connectionToken) {
-        console.log('[F1 Stream] HTTP negotiation complete');
-        this.setupWebSocket(connectionToken, hub);
-      } else {
-        console.log('[F1 Stream] HTTP negotiation failed. Is there a live session?');
-        this.scheduleReconnect();
-      }
-    } catch (error) {
-      console.error('[F1 Stream] Negotiation error:', error);
-      this.scheduleReconnect();
-    }
-  }
-
-  private setupWebSocket(connectionToken: string, hub: string): void {
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
     let wsUrl: string;
-
     if (isLocalDev) {
-      // Development: use local proxy
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const host = window.location.host;
-      wsUrl = `${protocol}//${host}/f1-api/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
-        connectionToken
-      )}&connectionData=${hub}`;
+      wsUrl = 'ws://localhost:3000';
     } else {
-      // Production: use external WebSocket proxy
-      const PROXY_WS_URL = 'wss://universalmotorsporttiming-production.up.railway.app';
-      wsUrl = `${PROXY_WS_URL}/f1-api/signalr/connect?clientProtocol=1.5&transport=webSockets&connectionToken=${encodeURIComponent(
-        connectionToken
-      )}&connectionData=${hub}`;
+      wsUrl = 'wss://universalmotorsporttiming-production.up.railway.app';
     }
 
-    console.log('[F1 Stream] Connecting to WebSocket:', wsUrl);
+    console.log('[F1 Stream] Connecting to Railway Broker:', wsUrl);
 
     this.ws = new WebSocket(wsUrl);
 
     this.ws.onopen = () => {
-      console.log('[F1 Stream] WebSocket open');
+      console.log('[F1 Stream] Connected to Railway Broker');
       this.resetState();
-
-      const subscribeMessage = {
-        H: this.SIGNALR_HUB,
-        M: 'Subscribe',
-        A: [[
-          'Heartbeat', 'CarData.z', 'Position.z', 'ExtrapolatedClock', 'TimingStats',
-          'TimingAppData', 'WeatherData', 'TrackStatus', 'DriverList',
-          'RaceControlMessages', 'SessionInfo', 'SessionData', 'LapCount', 'TimingData', 'TeamRadio'
-        ]],
-        I: 1
-      };
-
-      this.ws?.send(JSON.stringify(subscribeMessage));
     };
 
     this.ws.onmessage = (event) => {
@@ -279,25 +149,31 @@ export class F1LiveTimingStreamService {
     };
 
     this.ws.onerror = (error) => {
-      console.error('[F1 Stream] WebSocket error:', error);
+      console.error('[F1 Stream] Broker error:', error);
       this.ws?.close();
     };
 
     this.ws.onclose = () => {
-      console.log('[F1 Stream] WebSocket closed');
+      console.log('[F1 Stream] Broker connection closed');
       this.scheduleReconnect();
     };
   }
 
   private updateState(data: string): void {
     try {
-      const parsed: SignalRMessage = JSON.parse(data);
+      const parsed = JSON.parse(data);
 
-      if (!Object.keys(parsed).length) {
-        // Empty message (keep-alive), ignore
+      if (!Object.keys(parsed).length) return;
+
+      // Handle direct update from Railway Broker (already decompressed)
+      if (!parsed.M && !parsed.R) {
+        const currentState = this.liveState.value;
+        const newState = this.deepObjectMerge(currentState, parsed);
+        this.liveState.next(newState);
         return;
       }
 
+      // Handle raw SignalR messages (via proxy fallback)
       if (Array.isArray(parsed.M)) {
         for (const message of parsed.M) {
           if (message.M === 'feed') {
@@ -458,16 +334,6 @@ export class F1LiveTimingStreamService {
   disconnect(): void {
     if (this.reconnectTimeout) {
       clearTimeout(this.reconnectTimeout);
-    }
-
-    if (this.ably) {
-      this.ably.close();
-      this.ably = null;
-    }
-
-    if (this.channel) {
-      this.channel.unsubscribe();
-      this.channel = null;
     }
 
     if (this.ws) {
