@@ -1,6 +1,10 @@
+console.log('[Proxy Debug] Initializing server.js...');
 const express = require('express');
+console.log('[Proxy Debug] express loaded');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+console.log('[Proxy Debug] http-proxy-middleware loaded');
 const cors = require('cors');
+console.log('[Proxy Debug] cors loaded');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
