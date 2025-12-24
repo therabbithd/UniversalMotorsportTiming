@@ -34,11 +34,6 @@ export class LanguageService {
             const savedLang = localStorage.getItem(this.STORAGE_KEY);
             if (savedLang && this.availableLanguages.some(l => l.code === savedLang)) {
                 langToUse = savedLang;
-            } else {
-                const browserLang = this.translate.getBrowserLang();
-                if (browserLang && this.availableLanguages.some(l => l.code === browserLang)) {
-                    langToUse = browserLang;
-                }
             }
         }
 
