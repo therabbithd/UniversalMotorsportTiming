@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { F1CalendarService, Race } from '../../services/f1-calendar.service';
 import { Observable } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
 })
 export class CalendarComponent implements OnInit {
   races$: Observable<Race[]> | undefined;
+  private translate = inject(TranslateService);
 
   constructor(private calendarService: F1CalendarService) { }
 
@@ -29,8 +31,9 @@ export class CalendarComponent implements OnInit {
 
     const startDay = startDate.getDate();
     const endDay = endDate.getDate();
-    const month = startDate.toLocaleString('es-ES', { month: 'short' });
-    const endMonth = endDate.toLocaleString('es-ES', { month: 'short' });
+    const currentLang = this.translate.currentLang || 'es';
+    const month = startDate.toLocaleString(currentLang, { month: 'short' });
+    const endMonth = endDate.toLocaleString(currentLang, { month: 'short' });
 
     if (month === endMonth) {
       return `${startDay} - ${endDay} ${month}`;

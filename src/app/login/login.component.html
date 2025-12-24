@@ -1,9 +1,9 @@
 <section class="login">
   <header class="login__header">
     <p class="login__eyebrow">Universal Timing</p>
-    <h1>Inicia sesión</h1>
+    <h1>{{ 'AUTH.LOGIN.TITLE' | translate }}</h1>
     <p class="login__subtitle">
-      Accede a tu cuenta para gestionar tus eventos deportivos y paneles personalizados.
+      {{ 'AUTH.LOGIN.SUBTITLE' | translate }}
     </p>
   </header>
 
@@ -19,39 +19,30 @@
     </div>
 
     <label class="field">
-      <span>Correo electrónico</span>
-      <input 
-        type="email" 
-        placeholder="correo@ejemplo.com" 
-        formControlName="email"
-        [disabled]="isLoading()" 
-      />
+      <span>{{ 'AUTH.LOGIN.EMAIL_LABEL' | translate }}</span>
+      <input type="email" [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate" formControlName="email"
+        [disabled]="isLoading()" />
       <small *ngIf="email?.invalid && (email?.touched || isSubmitted())">
-        Introduce un correo electrónico válido.
+        {{ 'AUTH.LOGIN.ERRORS.INVALID_EMAIL' | translate }}
       </small>
     </label>
 
     <label class="field">
-      <span>Contraseña</span>
-      <input 
-        type="password" 
-        placeholder="Tu contraseña" 
-        formControlName="password"
-        [disabled]="isLoading()" 
-      />
+      <span>{{ 'AUTH.LOGIN.PASSWORD_LABEL' | translate }}</span>
+      <input type="password" [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" formControlName="password"
+        [disabled]="isLoading()" />
       <small *ngIf="password?.invalid && (password?.touched || isSubmitted())">
-        La contraseña es requerida.
+        {{ 'AUTH.LOGIN.ERRORS.REQUIRED_PASSWORD' | translate }}
       </small>
     </label>
 
     <button type="submit" [disabled]="isLoading()">
-      <span *ngIf="!isLoading()">Iniciar sesión</span>
-      <span *ngIf="isLoading()">Iniciando sesión...</span>
+      <span *ngIf="!isLoading()">{{ 'AUTH.LOGIN.SUBMIT_BUTTON' | translate }}</span>
+      <span *ngIf="isLoading()">{{ 'AUTH.LOGIN.LOADING_BUTTON' | translate }}</span>
     </button>
   </form>
 
   <footer class="login__footer">
-    ¿No tienes una cuenta? <a routerLink="/register">Regístrate</a>
+    {{ 'AUTH.LOGIN.NO_ACCOUNT' | translate }} <a routerLink="/register">{{ 'AUTH.LOGIN.REGISTER_LINK' | translate }}</a>
   </footer>
 </section>
-

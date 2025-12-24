@@ -1,11 +1,12 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { Sector, Segment } from '../../models/f1-livetiming.model';
 
 @Component({
   selector: 'app-driver-sectors',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './driver-sectors.component.html',
   styleUrls: ['./driver-sectors.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -15,24 +16,24 @@ export class DriverSectorsComponent {
 
   getSectorsArray(): Sector[] {
     if (!this.sectors) return [];
-    
-    const sectorsArray = Array.isArray(this.sectors) 
-      ? this.sectors 
+
+    const sectorsArray = Array.isArray(this.sectors)
+      ? this.sectors
       : Object.values(this.sectors);
-    
+
     // Filtrar sectores válidos que tengan segmentos
-    return sectorsArray.filter(s => 
+    return sectorsArray.filter(s =>
       s && (s.Segments || s.Value)
     );
   }
 
   getSegmentsArray(sector: Sector): Segment[] {
     if (!sector || !sector.Segments) return [];
-    
-    const segments = Array.isArray(sector.Segments) 
-      ? sector.Segments 
+
+    const segments = Array.isArray(sector.Segments)
+      ? sector.Segments
       : Object.values(sector.Segments);
-    
+
     // Filtrar segmentos válidos
     return segments.filter(seg => seg && seg.Status !== undefined);
   }

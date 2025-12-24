@@ -1,0 +1,142 @@
+{
+    "NAV": {
+        "DASHBOARD": "Panel de Control",
+        "LOGIN": "Iniciar Sesión",
+        "REGISTER": "Registrarse",
+        "PROFILE": "Mi Perfil",
+        "LOGOUT": "Cerrar Sesión",
+        "LIVE_TIMING": "Live Timing",
+        "CALENDAR": "Calendario"
+    },
+    "COMMON": {
+        "LANGUAGE": "Idioma",
+        "WELCOME": "Bienvenido",
+        "SUBMIT": "Enviar",
+        "CANCEL": "Cancelar",
+        "SAVE": "Guardar",
+        "LOADING": "Cargando...",
+        "ERROR": "Error"
+    },
+    "AUTH": {
+        "LOGIN": {
+            "TITLE": "Inicia sesión",
+            "SUBTITLE": "Accede a tu cuenta para gestionar tus eventos deportivos y paneles personalizados.",
+            "EMAIL_LABEL": "Correo electrónico",
+            "EMAIL_PLACEHOLDER": "correo@ejemplo.com",
+            "PASSWORD_LABEL": "Contraseña",
+            "PASSWORD_PLACEHOLDER": "Tu contraseña",
+            "SUBMIT_BUTTON": "Iniciar sesión",
+            "LOADING_BUTTON": "Iniciando sesión...",
+            "NO_ACCOUNT": "¿No tienes una cuenta?",
+            "REGISTER_LINK": "Regístrate",
+            "ERRORS": {
+                "INVALID_EMAIL": "Introduce un correo electrónico válido.",
+                "REQUIRED_PASSWORD": "La contraseña es requerida."
+            }
+        },
+        "REGISTER": {
+            "TITLE": "Crea tu cuenta",
+            "FULLNAME_LABEL": "Nombre completo",
+            "FULLNAME_PLACEHOLDER": "Ej. María López",
+            "EMAIL_LABEL": "Correo electrónico",
+            "EMAIL_PLACEHOLDER": "correo@ejemplo.com",
+            "PASSWORD_LABEL": "Contraseña",
+            "PASSWORD_PLACEHOLDER": "Mínimo 8 caracteres",
+            "CONFIRM_PASSWORD_LABEL": "Confirmar contraseña",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "Repite la contraseña",
+            "TERMS": "Acepto los términos y condiciones.",
+            "SUBMIT_BUTTON": "Crear cuenta",
+            "LOADING_BUTTON": "Creando cuenta...",
+            "ALREADY_ACCOUNT": "¿Ya tienes una cuenta?",
+            "LOGIN_LINK": "Inicia sesión",
+            "ERRORS": {
+                "NAME_LENGTH": "El nombre debe tener al menos 3 caracteres.",
+                "INVALID_EMAIL": "Introduce un correo electrónico válido.",
+                "PASSWORD_LENGTH": "La contraseña debe tener al menos 8 caracteres.",
+                "PASSWORD_MISMATCH": "Las contraseñas no coinciden.",
+                "TERMS_REQUIRED": "Debes aceptar los términos para continuar."
+            }
+        },
+        "PROFILE": {
+            "SETUP": {
+                "TITLE": "Completa tu perfil",
+                "SUBTITLE": "Cuéntanos un poco más sobre ti para personalizar tu experiencia.",
+                "AVATAR_LABEL": "URL del Avatar",
+                "BIO_LABEL": "Biografía",
+                "BIO_PLACEHOLDER": "Escribe algo sobre ti...",
+                "PHONE_LABEL": "Teléfono",
+                "ADDRESS_LABEL": "Dirección",
+                "SKIP_BUTTON": "Saltar por ahora",
+                "SAVE_BUTTON": "Guardar Perfil",
+                "SAVING_BUTTON": "Guardando...",
+                "ERRORS": {
+                    "BIO_LENGTH": "La biografía no puede exceder los 500 caracteres."
+                }
+            },
+            "VIEW": {
+                "MEMBER_SINCE": "Miembro desde {{date}}",
+                "LOADING": "Cargando información del perfil...",
+                "ABOUT_ME": "Sobre mí",
+                "NO_BIO": "No has añadido una biografía todavía.",
+                "PHONE_LABEL": "Teléfono",
+                "ADDRESS_LABEL": "Dirección",
+                "NOT_SPECIFIED": "No especificado",
+                "NO_PROFILE_MSG": "Aún no has configurado tu perfil detallado.",
+                "SETUP_BUTTON": "Configurar mi perfil",
+                "EDIT_BUTTON": "Editar Perfil",
+                "LOGOUT_BUTTON": "Cerrar Sesión",
+                "NOT_LOGGED_IN": {
+                    "TITLE": "Inicia sesión para ver tu perfil",
+                    "MSG": "Debes estar autenticado para acceder a esta página.",
+                    "BUTTON": "Ir al Login"
+                }
+            }
+        },
+        "RACE": {
+            "LIVE_TIMING": {
+                "TITLE": "Tiempos en vivo F1",
+                "STATUS": "Estado",
+                "NO_DATA": "No hay datos de timing disponibles",
+                "WAITING": "Esperando conexión con la sesión en vivo...",
+                "COLUMNS": {
+                    "POS": "POS",
+                    "DRIVER": "PILOTO",
+                    "TYRE": "NEU",
+                    "LAP": "VUEL",
+                    "TIME": "TIEMPO",
+                    "GAP": "GAP",
+                    "INT": "INT",
+                    "SECTORS": "SECTORES"
+                }
+            },
+            "MAP": {
+                "LOADING": "Cargando mapa del circuito..."
+            },
+            "RADIOS": {
+                "TITLE": "Radios",
+                "NO_MESSAGES": "No hay mensajes de radio disponibles"
+            },
+            "SECTORS": {
+                "STATUS_PREFIX": "Estado: "
+            }
+        },
+        "CALENDAR": {
+            "TITLE": "Temporada F1 2026",
+            "SUBTITLE": "Calendario Oficial de Carreras",
+            "ROUND": "Ronda",
+            "VIEW_SCHEDULE": "Ver Horario",
+            "BACK": "Volver al Calendario",
+            "FULL_SCHEDULE": "Horario Completo del Fin de Semana",
+            "TIMEZONE_INFO": "Las horas se muestran en tu hora local ({{timezone}})",
+            "SESSIONS": {
+                "P1": "Práctica 1",
+                "P2": "Práctica 2",
+                "P3": "Práctica 3",
+                "QUALIFYING": "Clasificación",
+                "SPRINT": "Sprint",
+                "RACE": "Carrera"
+            },
+            "LOADING": "Cargando detalles de la carrera..."
+        }
+    }
+}

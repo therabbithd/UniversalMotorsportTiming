@@ -183,3 +183,34 @@
     }
   }
 }
+
+.language-selector {
+  select {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+
+    &:focus {
+      border-color: #e10600;
+    }
+
+    option {
+      background: #121212;
+      color: #fff;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+
+    select {
+      width: 100%;
+      padding: 0.8rem;
+    }
+  }
+}

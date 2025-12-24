@@ -1,16 +1,12 @@
 <div class="radios-container">
-  <h3 class="radios-title">radios</h3>
+  <h3 class="radios-title">{{ 'RACE.RADIOS.TITLE' | translate }}</h3>
 
   <div *ngIf="drivers.length === 0" class="no-radios">
-    <p>No hay mensajes de radio disponibles</p>
+    <p>{{ 'RACE.RADIOS.NO_MESSAGES' | translate }}</p>
   </div>
 
   <div class="drivers-list" *ngIf="drivers.length > 0">
-    <div
-      *ngFor="let driver of drivers"
-      class="driver-radio"
-      [class.playing]="driver.playing"
-    >
+    <div *ngFor="let driver of drivers" class="driver-radio" [class.playing]="driver.playing">
       <!-- cabecera con piloto y hora -->
       <div class="radio-header">
         <div class="driver-badge" [style.border-color]="driver.teamColor">
@@ -25,21 +21,12 @@
       </div>
 
       <!-- audio nativo -->
-      <audio
-        #audioRef
-        [src]="driver.audioUrl"
-        (loadedmetadata)="onLoadedMetadata(driver, audioRef)"
-        (timeupdate)="onTimeUpdate(driver, audioRef)"
-        (ended)="onEnded(driver)"
-      ></audio>
+      <audio #audioRef [src]="driver.audioUrl" (loadedmetadata)="onLoadedMetadata(driver, audioRef)"
+        (timeupdate)="onTimeUpdate(driver, audioRef)" (ended)="onEnded(driver)"></audio>
 
       <!-- controles como el React Radio -->
       <div class="audio-row">
-        <button
-          mat-icon-button
-          class="play-button"
-          (click)="togglePlay(driver, audioRef)"
-        >
+        <button mat-icon-button class="play-button" (click)="togglePlay(driver, audioRef)">
           <mat-icon>{{ driver.playing ? 'pause' : 'play_arrow' }}</mat-icon>
         </button>
 
@@ -48,17 +35,8 @@
             {{ formatTime(driver.progress) }}
           </span>
 
-          <mat-slider
-            [min]="0"
-            [max]="driver.duration || 1"
-            [step]="0.1"
-            class="progress-slider"
-          >
-            <input
-              matSliderThumb
-              [value]="driver.progress"
-              (valueChange)="onSeek(driver, audioRef, $event)"
-            />
+          <mat-slider [min]="0" [max]="driver.duration || 1" [step]="0.1" class="progress-slider">
+            <input matSliderThumb [value]="driver.progress" (valueChange)="onSeek(driver, audioRef, $event)" />
           </mat-slider>
 
           <span class="time-display">

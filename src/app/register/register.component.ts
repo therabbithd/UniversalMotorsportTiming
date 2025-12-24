@@ -10,6 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 const passwordMatchValidator: ValidatorFn = (
   control: AbstractControl,
@@ -27,7 +28,7 @@ const passwordMatchValidator: ValidatorFn = (
 @Component({
   selector: 'app-register-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })

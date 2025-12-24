@@ -7,6 +7,7 @@ import { catchError, of, Subscription } from 'rxjs';
 import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { F1LiveTimingStreamService } from '../../services/f1-livetiming.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface DriverPosition {
   racingNumber: string;
@@ -20,7 +21,7 @@ interface DriverPosition {
 @Component({
   selector: 'app-circuit-map',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './circuit-map.component.html',
   styleUrls: ['./circuit-map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

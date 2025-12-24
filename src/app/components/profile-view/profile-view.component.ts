@@ -4,11 +4,12 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { Profile } from '../../models/profile.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-profile-view',
     standalone: true,
-    imports: [CommonModule, RouterLink],
+    imports: [CommonModule, RouterLink, TranslateModule],
     templateUrl: './profile-view.component.html',
     styleUrl: './profile-view.component.scss'
 })

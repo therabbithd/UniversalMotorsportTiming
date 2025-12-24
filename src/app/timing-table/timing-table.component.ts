@@ -9,6 +9,7 @@ import { DriverTiming } from '../models/f1-livetiming.model';
 import { CircuitMapComponent } from '../components/circuit-map/circuit-map.component';
 import { DriverRadiosComponent } from "../components/driver-radios/driver-radios.component";
 import { DriverSectorsComponent } from '../components/driver-sector/driver-sectors.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-timing-table',
@@ -19,8 +20,9 @@ import { DriverSectorsComponent } from '../components/driver-sector/driver-secto
     MatTableModule,
     CircuitMapComponent,
     DriverRadiosComponent,
-    DriverSectorsComponent 
-],
+    DriverSectorsComponent,
+    TranslateModule
+  ],
   templateUrl: './timing-table.component.html',
   styleUrls: ['./timing-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -48,32 +50,32 @@ export class TimingTableComponent implements OnInit, OnDestroy {
   constructor(
     private streamService: F1LiveTimingStreamService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     console.log('[Timing Table] Initializing component');
-    
+
     // Conectar al stream de F1
     this.streamService.connect();
     this.isConnected = true;
-  
+
     // Suscribirse a las actualizaciones de timing
     this.subscription = this.streamService.state$.subscribe((state) => {
       console.log('[Timing Table] State updated:', state);
-      
+
       this.timingData = this.streamService.getDriversTiming();
       console.log('[Timing Table] Timing data:', this.timingData);
-  
+
       // Obtener información de sesión si está disponible
       if (state.SessionInfo) {
         this.updateSessionInfo(state.SessionInfo);
       }
-  
+
       // ⚠️ IMPORTANTE: Marcar para detección de cambios SIEMPRE
       this.cdr.markForCheck();
     });
   }
-  
+
 
   ngOnDestroy(): void {
     // Desconectar y limpiar
@@ -94,7 +96,7 @@ export class TimingTableComponent implements OnInit, OnDestroy {
 
   getRowClass(driver: DriverTiming): string {
     if (driver.isPit) return 'row-pit';
-    
+
     switch (driver.statusColor) {
       case 'session-best':
         return 'row-session-best';
@@ -120,20 +122,20 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     return Array.isArray(value);
   }
   // Reemplaza el método actual por este
-getDriverSectorsData(position: string): any {
-  const state = this.streamService.getCurrentState();
-  const lines = state.TimingData?.Lines;
-  
-  if (!lines) return undefined;
-  
-  // Buscar el piloto por posición
-  const driverEntry = Object.entries(lines).find(
-    ([_, line]: [string, any]) => line.Position === position
-  );
-  
-  if (!driverEntry) return undefined;
-  
-  return driverEntry[1].Sectors;
-}
+  getDriverSectorsData(position: string): any {
+    const state = this.streamService.getCurrentState();
+    const lines = state.TimingData?.Lines;
+
+    if (!lines) return undefined;
+
+    // Buscar el piloto por posición
+    const driverEntry = Object.entries(lines).find(
+      ([_, line]: [string, any]) => line.Position === position
+    );
+
+    if (!driverEntry) return undefined;
+
+    return driverEntry[1].Sectors;
+  }
 
 }

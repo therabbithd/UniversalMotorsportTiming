@@ -1,0 +1,142 @@
+{
+    "NAV": {
+        "DASHBOARD": "Dashboard",
+        "LOGIN": "Login",
+        "REGISTER": "Register",
+        "PROFILE": "My Profile",
+        "LOGOUT": "Log Out",
+        "LIVE_TIMING": "Live Timing",
+        "CALENDAR": "Calendar"
+    },
+    "COMMON": {
+        "LANGUAGE": "Language",
+        "WELCOME": "Welcome",
+        "SUBMIT": "Submit",
+        "CANCEL": "Cancel",
+        "SAVE": "Save",
+        "LOADING": "Loading...",
+        "ERROR": "Error"
+    },
+    "AUTH": {
+        "LOGIN": {
+            "TITLE": "Log In",
+            "SUBTITLE": "Access your account to manage your sporting events and custom dashboards.",
+            "EMAIL_LABEL": "Email",
+            "EMAIL_PLACEHOLDER": "email@example.com",
+            "PASSWORD_LABEL": "Password",
+            "PASSWORD_PLACEHOLDER": "Your password",
+            "SUBMIT_BUTTON": "Log In",
+            "LOADING_BUTTON": "Logging In...",
+            "NO_ACCOUNT": "Don't have an account?",
+            "REGISTER_LINK": "Register",
+            "ERRORS": {
+                "INVALID_EMAIL": "Please enter a valid email.",
+                "REQUIRED_PASSWORD": "Password is required."
+            }
+        },
+        "REGISTER": {
+            "TITLE": "Create Account",
+            "FULLNAME_LABEL": "Full Name",
+            "FULLNAME_PLACEHOLDER": "Ex. John Doe",
+            "EMAIL_LABEL": "Email",
+            "EMAIL_PLACEHOLDER": "email@example.com",
+            "PASSWORD_LABEL": "Password",
+            "PASSWORD_PLACEHOLDER": "Minimum 8 characters",
+            "CONFIRM_PASSWORD_LABEL": "Confirm Password",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "Repeat password",
+            "TERMS": "I accept the terms and conditions.",
+            "SUBMIT_BUTTON": "Create Account",
+            "LOADING_BUTTON": "Creating Account...",
+            "ALREADY_ACCOUNT": "Already have an account?",
+            "LOGIN_LINK": "Log In",
+            "ERRORS": {
+                "NAME_LENGTH": "Name must be at least 3 characters.",
+                "INVALID_EMAIL": "Please enter a valid email.",
+                "PASSWORD_LENGTH": "Password must be at least 8 characters.",
+                "PASSWORD_MISMATCH": "Passwords do not match.",
+                "TERMS_REQUIRED": "You must accept the terms to continue."
+            }
+        },
+        "PROFILE": {
+            "SETUP": {
+                "TITLE": "Complete your profile",
+                "SUBTITLE": "Tell us a bit more about yourself to personalize your experience.",
+                "AVATAR_LABEL": "Avatar URL",
+                "BIO_LABEL": "Bio",
+                "BIO_PLACEHOLDER": "Write something about yourself...",
+                "PHONE_LABEL": "Phone",
+                "ADDRESS_LABEL": "Address",
+                "SKIP_BUTTON": "Skip for now",
+                "SAVE_BUTTON": "Save Profile",
+                "SAVING_BUTTON": "Saving...",
+                "ERRORS": {
+                    "BIO_LENGTH": "Bio cannot exceed 500 characters."
+                }
+            },
+            "VIEW": {
+                "MEMBER_SINCE": "Member since {{date}}",
+                "LOADING": "Loading profile information...",
+                "ABOUT_ME": "About Me",
+                "NO_BIO": "You haven't added a bio yet.",
+                "PHONE_LABEL": "Phone",
+                "ADDRESS_LABEL": "Address",
+                "NOT_SPECIFIED": "Not specified",
+                "NO_PROFILE_MSG": "You haven't set up your detailed profile yet.",
+                "SETUP_BUTTON": "Set up my profile",
+                "EDIT_BUTTON": "Edit Profile",
+                "LOGOUT_BUTTON": "Logout",
+                "NOT_LOGGED_IN": {
+                    "TITLE": "Log in to view your profile",
+                    "MSG": "You must be authenticated to access this page.",
+                    "BUTTON": "Go to Login"
+                }
+            }
+        },
+        "RACE": {
+            "LIVE_TIMING": {
+                "TITLE": "F1 Live Timing",
+                "STATUS": "Status",
+                "NO_DATA": "No timing data available",
+                "WAITING": "Waiting for live session connection...",
+                "COLUMNS": {
+                    "POS": "POS",
+                    "DRIVER": "DRIVER",
+                    "TYRE": "TYRE",
+                    "LAP": "LAP",
+                    "TIME": "TIME",
+                    "GAP": "GAP",
+                    "INT": "INT",
+                    "SECTORS": "SECTORS"
+                }
+            },
+            "MAP": {
+                "LOADING": "Loading Track Map..."
+            },
+            "RADIOS": {
+                "TITLE": "Radios",
+                "NO_MESSAGES": "No radio messages available"
+            },
+            "SECTORS": {
+                "STATUS_PREFIX": "Status: "
+            }
+        },
+        "CALENDAR": {
+            "TITLE": "F1 Season 2026",
+            "SUBTITLE": "Official Race Calendar",
+            "ROUND": "Round",
+            "VIEW_SCHEDULE": "View Schedule",
+            "BACK": "Back to Calendar",
+            "FULL_SCHEDULE": "Full Weekend Schedule",
+            "TIMEZONE_INFO": "Times are shown in your local time ({{timezone}})",
+            "SESSIONS": {
+                "P1": "Practice 1",
+                "P2": "Practice 2",
+                "P3": "Practice 3",
+                "QUALIFYING": "Qualifying",
+                "SPRINT": "Sprint",
+                "RACE": "Race"
+            },
+            "LOADING": "Loading race details..."
+        }
+    }
+}

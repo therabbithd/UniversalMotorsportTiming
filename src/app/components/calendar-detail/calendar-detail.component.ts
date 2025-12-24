@@ -1,24 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { F1CalendarService, Race, Session } from '../../services/f1-calendar.service';
 import { Observable, map, switchMap } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-calendar-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './calendar-detail.component.html',
   styleUrl: './calendar-detail.component.scss'
 })
 export class CalendarDetailComponent implements OnInit {
   race$: Observable<Race | undefined> | undefined;
   userTimezone: string = '';
+  private translate = inject(TranslateService);
 
   constructor(
     private route: ActivatedRoute,
     private calendarService: F1CalendarService
   ) { }
+
+  get currentLang(): string {
+    return this.translate.currentLang;
+  }
 
   ngOnInit(): void {
     this.userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;

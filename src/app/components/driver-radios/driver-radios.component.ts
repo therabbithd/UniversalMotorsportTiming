@@ -7,6 +7,7 @@ import { Subscription, interval } from 'rxjs';
 
 import { F1LiveTimingStreamService } from '../../services/f1-livetiming.service';
 import { DriverInfo, TeamRadioCapture } from '../../models/f1-livetiming.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface DriverRadio {
   racingNumber: string;
@@ -26,7 +27,7 @@ interface DriverRadio {
 @Component({
   selector: 'app-driver-radios',
   standalone: true,
-  imports: [CommonModule, MatSliderModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatSliderModule, MatIconModule, MatButtonModule, TranslateModule],
   templateUrl: './driver-radios.component.html',
   styleUrls: ['./driver-radios.component.scss']
 })
@@ -38,7 +39,7 @@ export class DriverRadiosComponent implements OnInit, OnDestroy {
   constructor(
     private streamService: F1LiveTimingStreamService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subscription = this.streamService.state$.subscribe(() => {

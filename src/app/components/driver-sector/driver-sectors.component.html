@@ -1,23 +1,20 @@
 <div class="sectors-container">
-    @if (getSectorsArray().length > 0) {
-      @for (sector of getSectorsArray(); track $index) {
-        <div class="sector">
-          <div class="segments">
-            @for (segment of getSegmentsArray(sector); track $index) {
-              <span 
-                class="segment" 
-                [style.background-color]="getSegmentColor(segment.Status)"
-                [title]="'Status: ' + segment.Status">
-              </span>
-            }
-          </div>
-          @if (sector.Value) {
-            <span class="sector-time">{{ sector.Value }}</span>
-          }
-        </div>
+  @if (getSectorsArray().length > 0) {
+  @for (sector of getSectorsArray(); track $index) {
+  <div class="sector">
+    <div class="segments">
+      @for (segment of getSegmentsArray(sector); track $index) {
+      <span class="segment" [style.background-color]="getSegmentColor(segment.Status)"
+        [title]="('RACE.SECTORS.STATUS_PREFIX' | translate) + segment.Status">
+      </span>
       }
-    } @else {
-      <span class="no-sectors">—</span>
+    </div>
+    @if (sector.Value) {
+    <span class="sector-time">{{ sector.Value }}</span>
     }
   </div>
-  
+  }
+  } @else {
+  <span class="no-sectors">—</span>
+  }
+</div>

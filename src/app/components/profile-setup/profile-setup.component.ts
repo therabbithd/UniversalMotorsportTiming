@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProfileService } from '../../services/profile.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-profile-setup',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [CommonModule, ReactiveFormsModule, TranslateModule],
     templateUrl: './profile-setup.component.html',
     styleUrl: './profile-setup.component.scss'
 })

@@ -2,8 +2,8 @@
   <div class="setup-card">
     <div class="setup-header">
       <div class="logo-text">Universal<span>Motorsport</span></div>
-      <h1>Completa tu perfil</h1>
-      <p>Cuéntanos un poco más sobre ti para personalizar tu experiencia.</p>
+      <h1>{{ 'AUTH.PROFILE.SETUP.TITLE' | translate }}</h1>
+      <p>{{ 'AUTH.PROFILE.SETUP.SUBTITLE' | translate }}</p>
     </div>
 
     <form [formGroup]="setupForm" (ngSubmit)="submit()" class="setup-form">
@@ -14,34 +14,36 @@
             <i class="fas fa-user"></i>
           </div>
           <div class="avatar-input">
-            <label for="avatar">URL del Avatar</label>
+            <label for="avatar">{{ 'AUTH.PROFILE.SETUP.AVATAR_LABEL' | translate }}</label>
             <input type="text" id="avatar" formControlName="avatar" placeholder="https://ejemplo.com/foto.jpg">
           </div>
         </div>
 
         <div class="form-group full-width">
-          <label for="bio">Biografía</label>
-          <textarea id="bio" formControlName="bio" placeholder="Escribe algo sobre ti..."></textarea>
+          <label for="bio">{{ 'AUTH.PROFILE.SETUP.BIO_LABEL' | translate }}</label>
+          <textarea id="bio" formControlName="bio"
+            [placeholder]="'AUTH.PROFILE.SETUP.BIO_PLACEHOLDER' | translate"></textarea>
           <div *ngIf="setupForm.get('bio')?.errors?.['maxlength']" class="error-msg">
-            La biografía no puede exceder los 500 caracteres.
+            {{ 'AUTH.PROFILE.SETUP.ERRORS.BIO_LENGTH' | translate }}
           </div>
         </div>
 
         <div class="form-group">
-          <label for="phone">Teléfono</label>
+          <label for="phone">{{ 'AUTH.PROFILE.SETUP.PHONE_LABEL' | translate }}</label>
           <input type="text" id="phone" formControlName="phone" placeholder="+34 600 000 000">
         </div>
 
         <div class="form-group">
-          <label for="address">Dirección</label>
+          <label for="address">{{ 'AUTH.PROFILE.SETUP.ADDRESS_LABEL' | translate }}</label>
           <input type="text" id="address" formControlName="address" placeholder="Calle, Ciudad, País">
         </div>
       </div>
 
       <div class="action-buttons">
-        <button type="button" class="btn-skip" (click)="skip()" [disabled]="isLoading()">Saltar por ahora</button>
+        <button type="button" class="btn-skip" (click)="skip()" [disabled]="isLoading()">{{
+          'AUTH.PROFILE.SETUP.SKIP_BUTTON' | translate }}</button>
         <button type="submit" class="btn-submit" [disabled]="isLoading()">
-          <span *ngIf="!isLoading()">Guardar Perfil</span>
+          <span *ngIf="!isLoading()">{{ 'AUTH.PROFILE.SETUP.SAVE_BUTTON' | translate }}</span>
           <span *ngIf="isLoading()" class="loader"></span>
         </button>
       </div>

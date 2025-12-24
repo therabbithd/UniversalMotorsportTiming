@@ -8,38 +8,40 @@
             <div class="user-main-info">
                 <h1>{{ userData.name }}</h1>
                 <p class="email">{{ userData.email }}</p>
-                <span class="member-since">Miembro desde {{ userData.createdAt | date:'mediumDate' }}</span>
+                <span class="member-since">{{ 'AUTH.PROFILE.VIEW.MEMBER_SINCE' | translate:{date: (userData.createdAt |
+                    date:'mediumDate')} }}</span>
             </div>
         </div>
 
         <div class="profile-content">
             <div *ngIf="isLoading()" class="loading-state">
                 <div class="loader"></div>
-                <p>Cargando información del perfil...</p>
+                <p>{{ 'AUTH.PROFILE.VIEW.LOADING' | translate }}</p>
             </div>
 
             <div *ngIf="!isLoading() && profile() as p" class="profile-details">
                 <div class="detail-section">
-                    <h3>Sobre mí</h3>
+                    <h3>{{ 'AUTH.PROFILE.VIEW.ABOUT_ME' | translate }}</h3>
                     <p class="bio" *ngIf="p.bio">{{ p.bio }}</p>
-                    <p class="empty-msg" *ngIf="!p.bio">No has añadido una biografía todavía.</p>
+                    <p class="empty-msg" *ngIf="!p.bio">{{ 'AUTH.PROFILE.VIEW.NO_BIO' | translate }}</p>
                 </div>
 
                 <div class="info-grid">
                     <div class="info-item">
-                        <span class="label">Teléfono</span>
-                        <span class="value">{{ p.phone || 'No especificado' }}</span>
+                        <span class="label">{{ 'AUTH.PROFILE.VIEW.PHONE_LABEL' | translate }}</span>
+                        <span class="value">{{ p.phone || ('AUTH.PROFILE.VIEW.NOT_SPECIFIED' | translate) }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="label">Dirección</span>
-                        <span class="value">{{ p.address || 'No especificada' }}</span>
+                        <span class="label">{{ 'AUTH.PROFILE.VIEW.ADDRESS_LABEL' | translate }}</span>
+                        <span class="value">{{ p.address || ('AUTH.PROFILE.VIEW.NOT_SPECIFIED' | translate) }}</span>
                     </div>
                 </div>
             </div>
 
             <div *ngIf="!isLoading() && !profile() && !errorMessage()" class="no-profile">
-                <p>Aún no has configurado tu perfil detallado.</p>
-                <button routerLink="/setup-profile" class="btn-setup">Configurar mi perfil</button>
+                <p>{{ 'AUTH.PROFILE.VIEW.NO_PROFILE_MSG' | translate }}</p>
+                <button routerLink="/setup-profile" class="btn-setup">{{ 'AUTH.PROFILE.VIEW.SETUP_BUTTON' | translate
+                    }}</button>
             </div>
 
             <div *ngIf="errorMessage()" class="error-alert">
@@ -49,19 +51,20 @@
 
         <div class="profile-actions">
             <button routerLink="/setup-profile" class="btn-edit">
-                <i class="fas fa-edit"></i> Editar Perfil
+                <i class="fas fa-edit"></i> {{ 'AUTH.PROFILE.VIEW.EDIT_BUTTON' | translate }}
             </button>
             <button (click)="logout()" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                <i class="fas fa-sign-out-alt"></i> {{ 'AUTH.PROFILE.VIEW.LOGOUT_BUTTON' | translate }}
             </button>
         </div>
     </div>
 
     <div class="not-logged-in" *ngIf="!user()">
         <div class="setup-card">
-            <h2>Inicia sesión para ver tu perfil</h2>
-            <p>Debes estar autenticado para acceder a esta página.</p>
-            <button routerLink="/login" class="btn-submit">Ir al Login</button>
+            <h2>{{ 'AUTH.PROFILE.VIEW.NOT_LOGGED_IN.TITLE' | translate }}</h2>
+            <p>{{ 'AUTH.PROFILE.VIEW.NOT_LOGGED_IN.MSG' | translate }}</p>
+            <button routerLink="/login" class="btn-submit">{{ 'AUTH.PROFILE.VIEW.NOT_LOGGED_IN.BUTTON' | translate
+                }}</button>
         </div>
     </div>
 </div>

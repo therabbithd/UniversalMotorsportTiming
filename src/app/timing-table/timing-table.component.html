@@ -4,38 +4,30 @@
   <div class="left-section">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>F1 Live Timing</mat-card-title>
+        <mat-card-title>{{ 'RACE.LIVE_TIMING.TITLE' | translate }}</mat-card-title>
         <mat-card-subtitle>
-          Estado: <span>{{ getConnectionStatus() }}</span>
+          {{ 'RACE.LIVE_TIMING.STATUS' | translate }}: <span>{{ getConnectionStatus() }}</span>
         </mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
         <div *ngIf="timingData.length === 0" class="no-data">
-          <p>No hay datos de timing disponibles</p>
-          <p class="small">Esperando conexión con la sesión en vivo...</p>
+          <p>{{ 'RACE.LIVE_TIMING.NO_DATA' | translate }}</p>
+          <p class="small">{{ 'RACE.LIVE_TIMING.WAITING' | translate }}</p>
         </div>
 
-        <table 
-          *ngIf="timingData.length > 0" 
-          mat-table 
-          [dataSource]="timingData" 
-          class="timing-table"
-        >
+        <table *ngIf="timingData.length > 0" mat-table [dataSource]="timingData" class="timing-table">
           <!-- Columna de Posición -->
           <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef>POS</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.POS' | translate }}</th>
             <td mat-cell *matCellDef="let driver">{{ driver.position }}</td>
           </ng-container>
 
           <!-- Columna de Piloto -->
           <ng-container matColumnDef="driverCode">
-            <th mat-header-cell *matHeaderCellDef>DRIVER</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.DRIVER' | translate }}</th>
             <td mat-cell *matCellDef="let driver">
-              <div 
-                class="driver-info" 
-                [style.border-left-color]="driver.teamColor"
-              >
+              <div class="driver-info" [style.border-left-color]="driver.teamColor">
                 <span class="driver-code">{{ driver.driverCode }}</span>
                 <span class="driver-name">{{ driver.driverName }}</span>
               </div>
@@ -44,17 +36,11 @@
 
           <!-- Columna de Neumáticos -->
           <ng-container matColumnDef="tyre">
-            <th mat-header-cell *matHeaderCellDef>TYRE</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.TYRE' | translate }}</th>
             <td mat-cell *matCellDef="let driver">
               <div class="tyre-history-container">
-                <div 
-                  *ngFor="let stint of (isArray(driver.tyreHistory) ? driver.tyreHistory : [])" 
-                  class="tyre-info"
-                >
-                  <div 
-                    class="tyre-badge" 
-                    [ngClass]="getTyreClass(stint.Compound)"
-                  >
+                <div *ngFor="let stint of (isArray(driver.tyreHistory) ? driver.tyreHistory : [])" class="tyre-info">
+                  <div class="tyre-badge" [ngClass]="getTyreClass(stint.Compound)">
                     {{ stint.Compound?.charAt(0).toUpperCase() }}
                   </div>
                   <span class="tyre-laps">{{ stint.TotalLaps || 0 }}</span>
@@ -65,13 +51,13 @@
 
           <!-- Columna de Número de Vuelta -->
           <ng-container matColumnDef="lapNumber">
-            <th mat-header-cell *matHeaderCellDef>LAP</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.LAP' | translate }}</th>
             <td mat-cell *matCellDef="let driver">{{ driver.lapNumber }}</td>
           </ng-container>
 
           <!-- Columna de Último Tiempo de Vuelta -->
           <ng-container matColumnDef="lastLapTime">
-            <th mat-header-cell *matHeaderCellDef>TIME</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.TIME' | translate }}</th>
             <td mat-cell *matCellDef="let driver">
               <span [ngClass]="{
                 'session-best': driver.statusColor === 'session-best',
@@ -84,33 +70,28 @@
 
           <!-- Columna de Gap al Líder -->
           <ng-container matColumnDef="gapToLeader">
-            <th mat-header-cell *matHeaderCellDef>GAP</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.GAP' | translate }}</th>
             <td mat-cell *matCellDef="let driver">{{ driver.gapToLeader }}</td>
           </ng-container>
 
           <!-- Columna de Intervalo -->
           <ng-container matColumnDef="gapToAhead">
-            <th mat-header-cell *matHeaderCellDef>INT</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.INT' | translate }}</th>
             <td mat-cell *matCellDef="let driver">{{ driver.gapToAhead }}</td>
           </ng-container>
 
           <!-- NUEVA COLUMNA: Sectores -->
           <ng-container matColumnDef="sectors">
-            <th mat-header-cell *matHeaderCellDef>SECTORES</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.SECTORS' | translate }}</th>
             <td mat-cell *matCellDef="let driver">
-              <app-driver-sectors 
-                [sectors]="getDriverSectorsData(driver.position)">
+              <app-driver-sectors [sectors]="getDriverSectorsData(driver.position)">
               </app-driver-sectors>
             </td>
           </ng-container>
 
           <!-- Definición de filas -->
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr 
-            mat-row 
-            *matRowDef="let row; columns: displayedColumns"
-            [ngClass]="getRowClass(row)"
-          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="getRowClass(row)"></tr>
         </table>
       </mat-card-content>
     </mat-card>
@@ -118,11 +99,8 @@
 
   <!-- Sección derecha: Mapa y Radios -->
   <div class="right-section">
-    <app-circuit-map 
-      [circuitKey]="circuitKey" 
-      [year]="year"
-    ></app-circuit-map>
-    
+    <app-circuit-map [circuitKey]="circuitKey" [year]="year"></app-circuit-map>
+
     <app-driver-radios></app-driver-radios>
   </div>
 </div>

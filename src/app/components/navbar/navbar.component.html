@@ -13,13 +13,26 @@
 
     <div class="navbar-links" [class.active]="isMenuOpen">
       <!-- Public Links -->
-      <a routerLink="/calendar" routerLinkActive="active-link" (click)="isMenuOpen = false">Calendario</a>
-      <a *ngIf="!user()" routerLink="/register" routerLinkActive="active-link" (click)="isMenuOpen = false">Registro</a>
-      <a *ngIf="!user()" routerLink="/login" routerLinkActive="active-link" (click)="isMenuOpen = false">Iniciar
-        Sesión</a>
+      <a routerLink="/calendar" routerLinkActive="active-link" (click)="isMenuOpen = false">{{ 'NAV.CALENDAR' |
+        translate }}</a>
+      <a *ngIf="!user()" routerLink="/register" routerLinkActive="active-link" (click)="isMenuOpen = false">{{
+        'NAV.REGISTER' | translate }}</a>
+      <a *ngIf="!user()" routerLink="/login" routerLinkActive="active-link" (click)="isMenuOpen = false">{{ 'NAV.LOGIN'
+        | translate }}</a>
 
       <!-- Protected Links -->
-      <a routerLink="/dashboard" routerLinkActive="active-link" (click)="isMenuOpen = false">Dashboard</a>
+      <a routerLink="/dashboard" routerLinkActive="active-link" (click)="isMenuOpen = false">{{ 'NAV.DASHBOARD' |
+        translate }}</a>
+
+      <!-- Language Selector -->
+      <div class="language-selector">
+        <select #langSelect (change)="languageService.setLanguage(langSelect.value)"
+          [value]="languageService.currentLang()">
+          <option *ngFor="let lang of languageService.availableLanguages" [value]="lang.code">
+            {{ lang.flag }} {{ lang.label }}
+          </option>
+        </select>
+      </div>
 
       <!-- User Profile Link -->
       <div *ngIf="user() as userData" class="user-control-group">
@@ -29,7 +42,7 @@
         </a>
         <button (click)="logout()" class="logout-button">
           <i class="fas fa-sign-out-alt"></i>
-          <span class="desktop-only">Salir</span>
+          <span class="desktop-only">{{ 'NAV.LOGOUT' | translate }}</span>
         </button>
       </div>
     </div>

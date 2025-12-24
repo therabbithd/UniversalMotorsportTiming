@@ -1,69 +1,75 @@
 <div class="detail-container" *ngIf="race$ | async as race; else loading">
     <div class="back-link">
-        <a routerLink="/calendar">← Back to Calendar</a>
+        <a routerLink="/calendar">← {{ 'CALENDAR.BACK' | translate }}</a>
     </div>
 
     <header class="detail-header">
-        <div class="round-badge">Round {{ race.round }}</div>
+        <div class="round-badge">{{ 'CALENDAR.ROUND' | translate }} {{ race.round }}</div>
         <h1>{{ race.raceName }}</h1>
         <p class="circuit">{{ race.Circuit.circuitName }}</p>
         <p class="location">{{ race.Circuit.Location.locality }}, {{ race.Circuit.Location.country }}</p>
     </header>
 
     <div class="schedule-card">
-        <h2>Full Weekend Schedule</h2>
+        <h2>{{ 'CALENDAR.FULL_SCHEDULE' | translate }}</h2>
         <p class="timezone-info">
             <i class="fas fa-clock"></i>
-            Times are shown in your local time ({{ userTimezone }})
+            {{ 'CALENDAR.TIMEZONE_INFO' | translate:{timezone: userTimezone} }}
         </p>
 
         <div class="sessions-list">
 
             <div class="session-row" *ngIf="race.FirstPractice">
-                <div class="session-name">Practice 1</div>
+                <div class="session-name">{{ 'CALENDAR.SESSIONS.P1' | translate }}</div>
                 <div class="session-time">
-                    <span class="date">{{ getSessionDate(race.FirstPractice) | date:'EEEE, d MMMM' }}</span>
+                    <span class="date">{{ getSessionDate(race.FirstPractice) | date:'EEEE, d MMMM':undefined:currentLang
+                        | titlecase }}</span>
                     <span class="time">{{ getSessionDate(race.FirstPractice) | date:'HH:mm' }}</span>
                 </div>
             </div>
 
             <div class="session-row" *ngIf="race.SecondPractice">
-                <div class="session-name">Practice 2</div>
+                <div class="session-name">{{ 'CALENDAR.SESSIONS.P2' | translate }}</div>
                 <div class="session-time">
-                    <span class="date">{{ getSessionDate(race.SecondPractice) | date:'EEEE, d MMMM' }}</span>
+                    <span class="date">{{ getSessionDate(race.SecondPractice) | date:'EEEE, d
+                        MMMM':undefined:currentLang | titlecase }}</span>
                     <span class="time">{{ getSessionDate(race.SecondPractice) | date:'HH:mm' }}</span>
                 </div>
             </div>
 
             <div class="session-row" *ngIf="race.ThirdPractice">
-                <div class="session-name">Practice 3</div>
+                <div class="session-name">{{ 'CALENDAR.SESSIONS.P3' | translate }}</div>
                 <div class="session-time">
-                    <span class="date">{{ getSessionDate(race.ThirdPractice) | date:'EEEE, d MMMM' }}</span>
+                    <span class="date">{{ getSessionDate(race.ThirdPractice) | date:'EEEE, d MMMM':undefined:currentLang
+                        | titlecase }}</span>
                     <span class="time">{{ getSessionDate(race.ThirdPractice) | date:'HH:mm' }}</span>
                 </div>
             </div>
 
             <div class="session-row" *ngIf="race.Qualifying">
-                <div class="session-name">Qualifying</div>
+                <div class="session-name">{{ 'CALENDAR.SESSIONS.QUALIFYING' | translate }}</div>
                 <div class="session-time">
-                    <span class="date">{{ getSessionDate(race.Qualifying) | date:'EEEE, d MMMM' }}</span>
+                    <span class="date">{{ getSessionDate(race.Qualifying) | date:'EEEE, d MMMM':undefined:currentLang |
+                        titlecase }}</span>
                     <span class="time">{{ getSessionDate(race.Qualifying) | date:'HH:mm' }}</span>
                 </div>
             </div>
 
             <!-- Handle Sprint if it exists -->
             <div class="session-row" *ngIf="race.Sprint">
-                <div class="session-name">Sprint</div>
+                <div class="session-name">{{ 'CALENDAR.SESSIONS.SPRINT' | translate }}</div>
                 <div class="session-time">
-                    <span class="date">{{ getSessionDate(race.Sprint) | date:'EEEE, d MMMM' }}</span>
+                    <span class="date">{{ getSessionDate(race.Sprint) | date:'EEEE, d MMMM':undefined:currentLang |
+                        titlecase }}</span>
                     <span class="time">{{ getSessionDate(race.Sprint) | date:'HH:mm' }}</span>
                 </div>
             </div>
 
             <div class="session-row race-row">
-                <div class="session-name">Race</div>
+                <div class="session-name">{{ 'CALENDAR.SESSIONS.RACE' | translate }}</div>
                 <div class="session-time">
-                    <span class="date">{{ getSessionDate({date: race.date, time: race.time}) | date:'EEEE, d MMMM'
+                    <span class="date">{{ getSessionDate({date: race.date, time: race.time}) | date:'EEEE, d
+                        MMMM':undefined:currentLang | titlecase
                         }}</span>
                     <span class="time">{{ getSessionDate({date: race.date, time: race.time}) | date:'HH:mm' }}</span>
                 </div>
@@ -75,6 +81,6 @@
 
 <ng-template #loading>
     <div class="loading-container">
-        <p>Loading race details...</p>
+        <p>{{ 'CALENDAR.LOADING' | translate }}</p>
     </div>
 </ng-template>
