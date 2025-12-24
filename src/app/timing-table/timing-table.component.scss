@@ -137,6 +137,11 @@ mat-card {
 ::ng-deep .mat-mdc-cell {
   font-size: 0.9em;
   padding: 12px 8px;
+
+  @media (max-width: 480px) {
+    font-size: 0.75em;
+    padding: 8px 4px;
+  }
 }
 
 // Estilos para la columna de piloto
@@ -166,7 +171,7 @@ mat-card {
   display: none;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   .driver-name {
     display: inline-block;
   }
@@ -266,10 +271,18 @@ mat-card {
     padding: 10px;
     gap: 15px;
   }
+
+  // Ocultar columnas no esenciales
+  ::ng-deep {
+    .mat-column-gapToLeader,
+    .mat-column-gapToAhead,
+    .mat-column-sectors {
+      display: none !important;
+    }
+  }
   
   .mat-mdc-cell,
   ::ng-deep .mat-mdc-cell {
-    font-size: 0.8em;
     padding: 8px 4px;
   }
   
@@ -279,5 +292,33 @@ mat-card {
   
   .tyre-history-container {
     max-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  ::ng-deep {
+    .mat-column-lapNumber {
+      display: none !important;
+    }
+  }
+
+  .driver-info {
+    padding-left: 4px;
+  }
+
+  .driver-code {
+    font-size: 0.85em;
+    width: 25px;
+    margin-right: 4px;
+  }
+
+  .tyre-badge {
+    width: 20px;
+    height: 20px;
+    font-size: 0.65em;
+  }
+
+  .tyre-laps {
+    font-size: 0.6em;
   }
 }

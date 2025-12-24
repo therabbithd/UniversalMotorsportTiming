@@ -1,0 +1,54 @@
+<div class="profile-setup-container">
+  <div class="setup-card">
+    <div class="setup-header">
+      <div class="logo-text">Universal<span>Motorsport</span></div>
+      <h1>Completa tu perfil</h1>
+      <p>Cuéntanos un poco más sobre ti para personalizar tu experiencia.</p>
+    </div>
+
+    <form [formGroup]="setupForm" (ngSubmit)="submit()" class="setup-form">
+      <div class="form-grid">
+        <!-- Avatar Preview/Upload Placeholder -->
+        <div class="avatar-section">
+          <div class="avatar-circle">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="avatar-input">
+            <label for="avatar">URL del Avatar</label>
+            <input type="text" id="avatar" formControlName="avatar" placeholder="https://ejemplo.com/foto.jpg">
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="bio">Biografía</label>
+          <textarea id="bio" formControlName="bio" placeholder="Escribe algo sobre ti..."></textarea>
+          <div *ngIf="setupForm.get('bio')?.errors?.['maxlength']" class="error-msg">
+            La biografía no puede exceder los 500 caracteres.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input type="text" id="phone" formControlName="phone" placeholder="+34 600 000 000">
+        </div>
+
+        <div class="form-group">
+          <label for="address">Dirección</label>
+          <input type="text" id="address" formControlName="address" placeholder="Calle, Ciudad, País">
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button type="button" class="btn-skip" (click)="skip()" [disabled]="isLoading()">Saltar por ahora</button>
+        <button type="submit" class="btn-submit" [disabled]="isLoading()">
+          <span *ngIf="!isLoading()">Guardar Perfil</span>
+          <span *ngIf="isLoading()" class="loader"></span>
+        </button>
+      </div>
+
+      <div *ngIf="errorMessage()" class="alert alert-error">
+        {{ errorMessage() }}
+      </div>
+    </form>
+  </div>
+</div>

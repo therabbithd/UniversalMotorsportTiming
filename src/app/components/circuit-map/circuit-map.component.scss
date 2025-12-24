@@ -11,6 +11,14 @@
     position: relative;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+    @media (max-width: 768px) {
+        height: 300px;
+    }
+
+    @media (max-width: 480px) {
+        height: 250px;
+    }
 }
 
 .loading-map,
@@ -36,10 +44,12 @@
         opacity: 0;
         pointer-events: none;
     }
+
     canvas {
-        width: 100% !important; 
-        height: 100% !important; 
-        display: block; /* Ayuda a eliminar cualquier espacio en blanco */
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+        /* Ayuda a eliminar cualquier espacio en blanco */
     }
 }
 
@@ -62,9 +72,17 @@
     font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+
+    @media (max-width: 480px) {
+        font-size: 0.9rem;
+    }
 }
 
 .location {
     color: #ccc;
     font-size: 0.9rem;
+
+    @media (max-width: 480px) {
+        font-size: 0.75rem;
+    }
 }

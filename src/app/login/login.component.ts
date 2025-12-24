@@ -52,12 +52,9 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           this.isLoading.set(false);
-          // Guardar token en localStorage
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          
+
           this.successMessage.set('¡Inicio de sesión exitoso! Redirigiendo...');
-          
+
           // Redirigir después de 1.5 segundos
           setTimeout(() => {
             this.router.navigate(['/']);

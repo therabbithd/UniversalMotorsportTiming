@@ -119,7 +119,7 @@ export class F1LiveTimingStreamService {
     let wsUrl: string;
 
     if (isLocalDev) {
-      wsUrl = 'ws://localhost:3000';
+      wsUrl = 'ws://localhost:3001';
     } else {
       wsUrl = 'wss://universalmotorsporttiming-production.up.railway.app';
     }

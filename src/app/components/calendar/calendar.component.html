@@ -1,0 +1,25 @@
+<div class="calendar-container">
+    <header class="page-header">
+        <h1>F1 Season 2026</h1>
+        <p class="subtitle">Official Race Calendar</p>
+    </header>
+
+    <div class="races-grid">
+        <a *ngFor="let race of races$ | async" [routerLink]="['/calendar', race.round]" class="race-card">
+            <div class="card-content">
+                <div class="round-badge">Round {{ race.round }}</div>
+                <div class="race-dates">{{ getRaceDateRange(race) | titlecase }}</div>
+                <h2 class="race-name">{{ race.raceName }}</h2>
+                <div class="circuit-info">
+                    <span class="circuit-name">{{ race.Circuit.circuitName }}</span>
+                    <span class="location">{{ race.Circuit.Location.locality }}, {{ race.Circuit.Location.country
+                        }}</span>
+                </div>
+            </div>
+            <div class="card-actions">
+                <span>View Schedule</span>
+                <i class="arrow-icon">→</i>
+            </div>
+        </a>
+    </div>
+</div>

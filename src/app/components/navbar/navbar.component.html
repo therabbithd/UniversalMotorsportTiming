@@ -12,8 +12,26 @@
     </button>
 
     <div class="navbar-links" [class.active]="isMenuOpen">
-      <a routerLink="/register" routerLinkActive="active-link" (click)="isMenuOpen = false">Registro</a>
+      <!-- Public Links -->
+      <a routerLink="/calendar" routerLinkActive="active-link" (click)="isMenuOpen = false">Calendario</a>
+      <a *ngIf="!user()" routerLink="/register" routerLinkActive="active-link" (click)="isMenuOpen = false">Registro</a>
+      <a *ngIf="!user()" routerLink="/login" routerLinkActive="active-link" (click)="isMenuOpen = false">Iniciar
+        Sesión</a>
+
+      <!-- Protected Links -->
       <a routerLink="/dashboard" routerLinkActive="active-link" (click)="isMenuOpen = false">Dashboard</a>
+
+      <!-- User Profile Link -->
+      <div *ngIf="user() as userData" class="user-control-group">
+        <a routerLink="/profile" class="profile-link" routerLinkActive="active-link" (click)="isMenuOpen = false">
+          <i class="fas fa-user-circle"></i>
+          <span>{{ userData.name }}</span>
+        </a>
+        <button (click)="logout()" class="logout-button">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="desktop-only">Salir</span>
+        </button>
+      </div>
     </div>
   </div>
 </nav>

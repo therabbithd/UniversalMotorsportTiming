@@ -1,0 +1,67 @@
+<div class="profile-view-container">
+    <div class="profile-card" *ngIf="user() as userData">
+        <div class="profile-header">
+            <div class="avatar-container">
+                <img [src]="profile()?.avatar || 'https://ui-avatars.com/api/?name=' + userData.name + '&background=38bdf8&color=fff'"
+                    alt="Avatar" class="avatar-large">
+            </div>
+            <div class="user-main-info">
+                <h1>{{ userData.name }}</h1>
+                <p class="email">{{ userData.email }}</p>
+                <span class="member-since">Miembro desde {{ userData.createdAt | date:'mediumDate' }}</span>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div *ngIf="isLoading()" class="loading-state">
+                <div class="loader"></div>
+                <p>Cargando información del perfil...</p>
+            </div>
+
+            <div *ngIf="!isLoading() && profile() as p" class="profile-details">
+                <div class="detail-section">
+                    <h3>Sobre mí</h3>
+                    <p class="bio" *ngIf="p.bio">{{ p.bio }}</p>
+                    <p class="empty-msg" *ngIf="!p.bio">No has añadido una biografía todavía.</p>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Teléfono</span>
+                        <span class="value">{{ p.phone || 'No especificado' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Dirección</span>
+                        <span class="value">{{ p.address || 'No especificada' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="!isLoading() && !profile() && !errorMessage()" class="no-profile">
+                <p>Aún no has configurado tu perfil detallado.</p>
+                <button routerLink="/setup-profile" class="btn-setup">Configurar mi perfil</button>
+            </div>
+
+            <div *ngIf="errorMessage()" class="error-alert">
+                {{ errorMessage() }}
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <button routerLink="/setup-profile" class="btn-edit">
+                <i class="fas fa-edit"></i> Editar Perfil
+            </button>
+            <button (click)="logout()" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
+
+    <div class="not-logged-in" *ngIf="!user()">
+        <div class="setup-card">
+            <h2>Inicia sesión para ver tu perfil</h2>
+            <p>Debes estar autenticado para acceder a esta página.</p>
+            <button routerLink="/login" class="btn-submit">Ir al Login</button>
+        </div>
+    </div>
+</div>
