@@ -91,52 +91,52 @@
                     "BUTTON": "Ir al Login"
                 }
             }
-        },
-        "RACE": {
-            "LIVE_TIMING": {
-                "TITLE": "Tiempos en vivo F1",
-                "STATUS": "Estado",
-                "NO_DATA": "No hay datos de timing disponibles",
-                "WAITING": "Esperando conexión con la sesión en vivo...",
-                "COLUMNS": {
-                    "POS": "POS",
-                    "DRIVER": "PILOTO",
-                    "TYRE": "NEU",
-                    "LAP": "VUEL",
-                    "TIME": "TIEMPO",
-                    "GAP": "GAP",
-                    "INT": "INT",
-                    "SECTORS": "SECTORES"
-                }
-            },
-            "MAP": {
-                "LOADING": "Cargando mapa del circuito..."
-            },
-            "RADIOS": {
-                "TITLE": "Radios",
-                "NO_MESSAGES": "No hay mensajes de radio disponibles"
-            },
-            "SECTORS": {
-                "STATUS_PREFIX": "Estado: "
+        }
+    },
+    "RACE": {
+        "LIVE_TIMING": {
+            "TITLE": "Tiempos en vivo F1",
+            "STATUS": "Estado",
+            "NO_DATA": "No hay datos de timing disponibles",
+            "WAITING": "Esperando conexión con la sesión en vivo...",
+            "COLUMNS": {
+                "POS": "POS",
+                "DRIVER": "PILOTO",
+                "TYRE": "NEU",
+                "LAP": "VUEL",
+                "TIME": "TIEMPO",
+                "GAP": "GAP",
+                "INT": "INT",
+                "SECTORS": "SECTORES"
             }
         },
-        "CALENDAR": {
-            "TITLE": "Temporada F1 2026",
-            "SUBTITLE": "Calendario Oficial de Carreras",
-            "ROUND": "Ronda",
-            "VIEW_SCHEDULE": "Ver Horario",
-            "BACK": "Volver al Calendario",
-            "FULL_SCHEDULE": "Horario Completo del Fin de Semana",
-            "TIMEZONE_INFO": "Las horas se muestran en tu hora local ({{timezone}})",
-            "SESSIONS": {
-                "P1": "Práctica 1",
-                "P2": "Práctica 2",
-                "P3": "Práctica 3",
-                "QUALIFYING": "Clasificación",
-                "SPRINT": "Sprint",
-                "RACE": "Carrera"
-            },
-            "LOADING": "Cargando detalles de la carrera..."
+        "MAP": {
+            "LOADING": "Cargando mapa del circuito..."
+        },
+        "RADIOS": {
+            "TITLE": "Radios",
+            "NO_MESSAGES": "No hay mensajes de radio disponibles"
+        },
+        "SECTORS": {
+            "STATUS_PREFIX": "Estado: "
         }
+    },
+    "CALENDAR": {
+        "TITLE": "Temporada F1 2026",
+        "SUBTITLE": "Calendario Oficial de Carreras",
+        "ROUND": "Ronda",
+        "VIEW_SCHEDULE": "Ver Horario",
+        "BACK": "Volver al Calendario",
+        "FULL_SCHEDULE": "Horario Completo del Fin de Semana",
+        "TIMEZONE_INFO": "Las horas se muestran en tu hora local ({{timezone}})",
+        "SESSIONS": {
+            "P1": "Práctica 1",
+            "P2": "Práctica 2",
+            "P3": "Práctica 3",
+            "QUALIFYING": "Clasificación",
+            "SPRINT": "Sprint",
+            "RACE": "Carrera"
+        },
+        "LOADING": "Cargando detalles de la carrera..."
     }
 }
