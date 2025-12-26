@@ -112,12 +112,6 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     return `tyre-${compoundLower}`;
   }
 
-  // Método auxiliar para mostrar el estado de conexión
-  getConnectionStatus(): string {
-    return this.isConnected ? 'Conectado' : 'Desconectado';
-  }
-  // timing-table.component.ts
-
   isArray(value: any): boolean {
     return Array.isArray(value);
   }

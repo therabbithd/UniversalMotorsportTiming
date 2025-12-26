@@ -97,6 +97,8 @@
         "LIVE_TIMING": {
             "TITLE": "Tiempos en vivo F1",
             "STATUS": "Estado",
+            "CONNECTED": "Conectado",
+            "DISCONNECTED": "Desconectado",
             "NO_DATA": "No hay datos de timing disponibles",
             "WAITING": "Esperando conexión con la sesión en vivo...",
             "COLUMNS": {

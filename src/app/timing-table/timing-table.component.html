@@ -6,7 +6,8 @@
       <mat-card-header>
         <mat-card-title>{{ 'RACE.LIVE_TIMING.TITLE' | translate }}</mat-card-title>
         <mat-card-subtitle>
-          {{ 'RACE.LIVE_TIMING.STATUS' | translate }}: <span>{{ getConnectionStatus() }}</span>
+          {{ 'RACE.LIVE_TIMING.STATUS' | translate }}: <span>{{ (isConnected ? 'RACE.LIVE_TIMING.CONNECTED' :
+            'RACE.LIVE_TIMING.DISCONNECTED') | translate }}</span>
         </mat-card-subtitle>
       </mat-card-header>
 
