@@ -10,6 +10,8 @@ import { CircuitMapComponent } from '../components/circuit-map/circuit-map.compo
 import { DriverRadiosComponent } from "../components/driver-radios/driver-radios.component";
 import { DriverSectorsComponent } from '../components/driver-sector/driver-sectors.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProfileService } from '../services/profile.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-timing-table',
@@ -44,11 +46,14 @@ export class TimingTableComponent implements OnInit, OnDestroy {
   public year: number = 2025;
   public sessionPath: string = '';
   public isConnected: boolean = false;
+  public favoriteDriverCode: string | null = null;
 
   private subscription?: Subscription;
 
   constructor(
     private streamService: F1LiveTimingStreamService,
+    private profileService: ProfileService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -58,6 +63,19 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     // Conectar al stream de F1
     this.streamService.connect();
     this.isConnected = true;
+
+    // Obtener piloto favorito si el usuario está autenticado
+    if (this.authService.isLoggedIn()) {
+      this.profileService.getProfile().subscribe({
+        next: (profile) => {
+          this.favoriteDriverCode = profile.favoritos || null;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          console.warn('[Timing Table] Could not fetch profile for favorite driver highlighting');
+        }
+      });
+    }
 
     // Suscribirse a las actualizaciones de timing
     this.subscription = this.streamService.state$.subscribe((state) => {
@@ -95,16 +113,24 @@ export class TimingTableComponent implements OnInit, OnDestroy {
   }
 
   getRowClass(driver: DriverTiming): string {
-    if (driver.isPit) return 'row-pit';
+    let classes = '';
+
+    if (driver.isPit) classes += 'row-pit ';
+
+    if (this.favoriteDriverCode && driver.driverCode === this.favoriteDriverCode) {
+      classes += 'row-favorite ';
+    }
 
     switch (driver.statusColor) {
       case 'session-best':
-        return 'row-session-best';
+        classes += 'row-session-best';
+        break;
       case 'personal-best':
-        return 'row-personal-best';
-      default:
-        return '';
+        classes += 'row-personal-best';
+        break;
     }
+
+    return classes.trim();
   }
 
   getTyreClass(compound: string): string {

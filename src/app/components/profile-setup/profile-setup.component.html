@@ -37,6 +37,11 @@
           <label for="address">{{ 'AUTH.PROFILE.SETUP.ADDRESS_LABEL' | translate }}</label>
           <input type="text" id="address" formControlName="address" placeholder="Calle, Ciudad, País">
         </div>
+
+        <div class="form-group">
+          <label for="favoritos">{{ 'AUTH.PROFILE.SETUP.FAVORITE_DRIVER_LABEL' | translate }}</label>
+          <app-driver-selector id="favoritos" formControlName="favoritos"></app-driver-selector>
+        </div>
       </div>
 
       <div class="action-buttons">

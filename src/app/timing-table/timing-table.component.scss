@@ -8,7 +8,7 @@
   padding: 20px;
   min-height: 100vh;
   background-color: #f5f5f5;
-  
+
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
   }
@@ -22,7 +22,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  
+
   @media (max-width: 1024px) {
     order: -1; // Mostrar arriba en móvil
   }
@@ -40,11 +40,11 @@
   padding: 40px;
   text-align: center;
   color: #666;
-  
+
   p {
     margin: 10px 0;
     font-size: 1em;
-    
+
     &.small {
       font-size: 0.9em;
       color: #999;
@@ -55,23 +55,23 @@
 // Header del card
 mat-card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  
+
   mat-card-header {
     margin-bottom: 16px;
   }
-  
+
   mat-card-title {
     font-size: 1.5em;
     font-weight: bold;
     color: #e10600;
   }
-  
+
   mat-card-subtitle {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-top: 8px;
-    
+
     span {
       font-size: 0.9em;
       color: #4caf50;
@@ -95,11 +95,33 @@ mat-card {
   background-color: #ffc10750;
 }
 
+.row-favorite {
+  background-color: rgba(225, 6, 0, 0.15) !important;
+  position: relative;
+
+  .driver-info {
+    border-left-color: #e10600 !important;
+    font-weight: 800;
+  }
+
+  &::after {
+    content: '★';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #e10600;
+    font-size: 1.2rem;
+    pointer-events: none;
+  }
+}
+
 // Animaciones de parpadeo
 @keyframes flash-purple {
   0% {
     background-color: #5d258b;
   }
+
   100% {
     background-color: transparent;
   }
@@ -109,6 +131,7 @@ mat-card {
   0% {
     background-color: #4caf50;
   }
+
   100% {
     background-color: transparent;
   }
@@ -118,7 +141,7 @@ mat-card {
 .mat-mdc-row,
 ::ng-deep .mat-mdc-row {
   transition: background-color 0.3s ease;
-  
+
   &:hover {
     background-color: #f5f5f5;
   }
@@ -186,11 +209,11 @@ mat-card {
   flex-wrap: nowrap;
   overflow-x: auto;
   max-width: 150px;
-  
+
   &::-webkit-scrollbar {
     height: 4px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 2px;
@@ -274,22 +297,23 @@ mat-card {
 
   // Ocultar columnas no esenciales
   ::ng-deep {
+
     .mat-column-gapToLeader,
     .mat-column-gapToAhead,
     .mat-column-sectors {
       display: none !important;
     }
   }
-  
+
   .mat-mdc-cell,
   ::ng-deep .mat-mdc-cell {
     padding: 8px 4px;
   }
-  
+
   .driver-code {
     width: 30px;
   }
-  
+
   .tyre-history-container {
     max-width: 100px;
   }

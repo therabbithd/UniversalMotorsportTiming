@@ -79,6 +79,8 @@
                 "BIO_PLACEHOLDER": "Escribe algo sobre ti...",
                 "PHONE_LABEL": "Teléfono",
                 "ADDRESS_LABEL": "Dirección",
+                "FAVORITE_DRIVER_LABEL": "Piloto Favorito",
+                "SELECT_DRIVER": "Selecciona tu piloto favorito",
                 "SKIP_BUTTON": "Saltar por ahora",
                 "SAVE_BUTTON": "Guardar Perfil",
                 "SAVING_BUTTON": "Guardando...",

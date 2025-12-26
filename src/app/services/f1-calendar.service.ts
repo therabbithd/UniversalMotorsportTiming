@@ -41,6 +41,22 @@ export interface RaceTable {
   Races: Race[];
 }
 
+export interface Driver {
+  driverId: string;
+  permanentNumber: string;
+  code: string;
+  url: string;
+  givenName: string;
+  familyName: string;
+  dateOfBirth: string;
+  nationality: string;
+}
+
+export interface DriverTable {
+  season: string;
+  Drivers: Driver[];
+}
+
 export interface MRData {
   xmlns: string;
   series: string;
@@ -48,7 +64,8 @@ export interface MRData {
   limit: string;
   offset: string;
   total: string;
-  RaceTable: RaceTable;
+  RaceTable?: RaceTable;
+  DriverTable?: DriverTable;
 }
 
 export interface ErgastResponse {
@@ -65,7 +82,14 @@ export class F1CalendarService {
 
   getRaceCalendar(): Observable<Race[]> {
     return this.http.get<ErgastResponse>(this.apiUrl).pipe(
-      map(response => response.MRData.RaceTable.Races)
+      map(response => response.MRData.RaceTable!.Races)
+    );
+  }
+
+  getDrivers(): Observable<Driver[]> {
+    const driversUrl = 'https://api.jolpi.ca/ergast/f1/2026/drivers.json';
+    return this.http.get<ErgastResponse>(driversUrl).pipe(
+      map(response => response.MRData.DriverTable!.Drivers)
     );
   }
 
