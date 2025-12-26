@@ -1,5 +1,5 @@
 export const API_CONFIG = {
-  baseUrl: 'http://localhost:3000', // Ajusta el puerto según tu configuración de env.PORT
+  baseUrl: 'https://node-server-ut-lq2p.vercel.app',
   endpoints: {
     auth: {
       register: '/api/auth/register',
