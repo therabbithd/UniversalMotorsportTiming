@@ -1,4 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { FeedbackModalComponent } from '../components/shared/feedback-modal/feedback-modal.component';
 import {
   AbstractControl,
   FormBuilder,
@@ -28,7 +30,7 @@ const passwordMatchValidator: ValidatorFn = (
 @Component({
   selector: 'app-register-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule, MatDialogModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
@@ -36,6 +38,7 @@ export class RegisterComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   readonly registrationForm = this.fb.group(
     {
@@ -50,8 +53,6 @@ export class RegisterComponent {
 
   readonly isSubmitted = signal(false);
   readonly isLoading = signal(false);
-  readonly errorMessage = signal<string | null>(null);
-  readonly successMessage = signal<string | null>(null);
 
   readonly passwordMismatch = computed(() => {
     const confirmTouched = this.confirmPassword?.touched;
@@ -63,8 +64,6 @@ export class RegisterComponent {
 
   submit(): void {
     this.isSubmitted.set(true);
-    this.errorMessage.set(null);
-    this.successMessage.set(null);
 
     if (this.registrationForm.invalid) {
       this.registrationForm.markAllAsTouched();
@@ -85,12 +84,17 @@ export class RegisterComponent {
         next: (response) => {
           this.isLoading.set(false);
 
-          this.successMessage.set('¡Cuenta creada exitosamente! Redirigiendo...');
-
-          // Redirigir después de 1.5 segundos
-          setTimeout(() => {
+          this.dialog.open(FeedbackModalComponent, {
+            data: {
+              type: 'success',
+              title: 'AUTH.REGISTER.SUCCESS_TITLE',
+              message: 'AUTH.REGISTER.SUCCESS_MESSAGE',
+              buttonText: 'COMMON.CONTINUE'
+            },
+            disableClose: true
+          }).afterClosed().subscribe(() => {
             this.router.navigate(['/setup-profile']);
-          }, 1500);
+          });
         },
         error: (error) => {
           this.isLoading.set(false);
@@ -98,7 +102,14 @@ export class RegisterComponent {
             error.error?.message ||
             error.message ||
             'Error al crear la cuenta. Por favor, intenta de nuevo.';
-          this.errorMessage.set(message);
+
+          this.dialog.open(FeedbackModalComponent, {
+            data: {
+              type: 'error',
+              title: 'AUTH.REGISTER.ERROR_TITLE',
+              message: message
+            }
+          });
         },
       });
   }

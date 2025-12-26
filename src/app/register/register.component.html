@@ -6,16 +6,6 @@
   </header>
 
   <form class="register__form" [formGroup]="registrationForm" (ngSubmit)="submit()" novalidate>
-    <!-- Mensaje de éxito -->
-    <div class="message message--success" *ngIf="successMessage()">
-      <p>{{ successMessage() }}</p>
-    </div>
-
-    <!-- Mensaje de error -->
-    <div class="message message--error" *ngIf="errorMessage()">
-      <p>{{ errorMessage() }}</p>
-    </div>
-
     <label class="field">
       <span>{{ 'AUTH.REGISTER.FULLNAME_LABEL' | translate }}</span>
       <input type="text" [placeholder]="'AUTH.REGISTER.FULLNAME_PLACEHOLDER' | translate" formControlName="fullName"

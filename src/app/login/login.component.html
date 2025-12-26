@@ -8,16 +8,6 @@
   </header>
 
   <form class="login__form" [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
-    <!-- Mensaje de éxito -->
-    <div class="message message--success" *ngIf="successMessage()">
-      <p>{{ successMessage() }}</p>
-    </div>
-
-    <!-- Mensaje de error -->
-    <div class="message message--error" *ngIf="errorMessage()">
-      <p>{{ errorMessage() }}</p>
-    </div>
-
     <label class="field">
       <span>{{ 'AUTH.LOGIN.EMAIL_LABEL' | translate }}</span>
       <input type="email" [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate" formControlName="email"

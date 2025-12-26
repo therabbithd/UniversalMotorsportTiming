@@ -5,6 +5,8 @@
         "REGISTER": "Registrati",
         "PROFILE": "Il Mio Profilo",
         "LOGOUT": "Disconnettersi",
+        "LOGOUT_CONFIRM_TITLE": "Disconnettersi?",
+        "LOGOUT_CONFIRM_MESSAGE": "Sei sicuro di voler uscire? Dovrai accedere di nuovo per visualizzare i tuoi dati.",
         "LIVE_TIMING": "Live Timing",
         "CALENDAR": "Calendario"
     },
@@ -13,6 +15,8 @@
         "WELCOME": "Benvenuto",
         "SUBMIT": "Invia",
         "CANCEL": "Annulla",
+        "ACCEPT": "Accetta",
+        "CONTINUE": "Continua",
         "SAVE": "Salva",
         "LOADING": "Caricamento...",
         "ERROR": "Errore"
@@ -20,6 +24,9 @@
     "AUTH": {
         "LOGIN": {
             "TITLE": "Accedi",
+            "SUCCESS_TITLE": "Bentornato!",
+            "SUCCESS_MESSAGE": "Hai effettuato l'accesso con successo. Reindirizzamento al dashboard...",
+            "ERROR_TITLE": "Errore di Accesso",
             "SUBTITLE": "Accedi al tuo account per gestire i tuoi eventi sportivi e i dashboard personalizzati.",
             "EMAIL_LABEL": "Email",
             "EMAIL_PLACEHOLDER": "email@esempio.com",
@@ -36,6 +43,9 @@
         },
         "REGISTER": {
             "TITLE": "Crea Account",
+            "SUCCESS_TITLE": "Registrazione Completata!",
+            "SUCCESS_MESSAGE": "Il tuo account è stato creato con successo. Ora completiamo il tuo profilo.",
+            "ERROR_TITLE": "Errore di Registrazione",
             "FULLNAME_LABEL": "Nome completo",
             "FULLNAME_PLACEHOLDER": "Es. Mario Rossi",
             "EMAIL_LABEL": "Email",
@@ -60,6 +70,9 @@
         "PROFILE": {
             "SETUP": {
                 "TITLE": "Completa il tuo profilo",
+                "SUCCESS_TITLE": "Profilo Salvato!",
+                "SUCCESS_MESSAGE": "Il tuo profilo è stato aggiornato con successo.",
+                "ERROR_TITLE": "Errore durante il Salvataggio",
                 "SUBTITLE": "Raccontaci un po' di più su di te per personalizzare la tua esperienza.",
                 "AVATAR_LABEL": "URL Avatar",
                 "BIO_LABEL": "Biografia",

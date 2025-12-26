@@ -1,4 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { FeedbackModalComponent } from '../components/shared/feedback-modal/feedback-modal.component';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -12,7 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule, MatDialogModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -20,6 +22,7 @@ export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   readonly loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -28,13 +31,9 @@ export class LoginComponent {
 
   readonly isSubmitted = signal(false);
   readonly isLoading = signal(false);
-  readonly errorMessage = signal<string | null>(null);
-  readonly successMessage = signal<string | null>(null);
 
   submit(): void {
     this.isSubmitted.set(true);
-    this.errorMessage.set(null);
-    this.successMessage.set(null);
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -54,12 +53,17 @@ export class LoginComponent {
         next: (response) => {
           this.isLoading.set(false);
 
-          this.successMessage.set('¡Inicio de sesión exitoso! Redirigiendo...');
-
-          // Redirigir después de 1.5 segundos
-          setTimeout(() => {
+          this.dialog.open(FeedbackModalComponent, {
+            data: {
+              type: 'success',
+              title: 'AUTH.LOGIN.SUCCESS_TITLE',
+              message: 'AUTH.LOGIN.SUCCESS_MESSAGE',
+              buttonText: 'COMMON.CONTINUE'
+            },
+            disableClose: true
+          }).afterClosed().subscribe(() => {
             this.router.navigate(['/']);
-          }, 1500);
+          });
         },
         error: (error) => {
           this.isLoading.set(false);
@@ -67,7 +71,14 @@ export class LoginComponent {
             error.error?.message ||
             error.message ||
             'Error al iniciar sesión. Verifica tus credenciales.';
-          this.errorMessage.set(message);
+
+          this.dialog.open(FeedbackModalComponent, {
+            data: {
+              type: 'error',
+              title: 'AUTH.LOGIN.ERROR_TITLE',
+              message: message
+            }
+          });
         },
       });
   }

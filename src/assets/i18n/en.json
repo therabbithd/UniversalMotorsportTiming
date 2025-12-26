@@ -5,6 +5,8 @@
         "REGISTER": "Register",
         "PROFILE": "My Profile",
         "LOGOUT": "Log Out",
+        "LOGOUT_CONFIRM_TITLE": "Log Out?",
+        "LOGOUT_CONFIRM_MESSAGE": "Are you sure you want to log out? You will need to log in again to access your data.",
         "LIVE_TIMING": "Live Timing",
         "CALENDAR": "Calendar"
     },
@@ -13,6 +15,8 @@
         "WELCOME": "Welcome",
         "SUBMIT": "Submit",
         "CANCEL": "Cancel",
+        "ACCEPT": "Accept",
+        "CONTINUE": "Continue",
         "SAVE": "Save",
         "LOADING": "Loading...",
         "ERROR": "Error"
@@ -20,6 +24,9 @@
     "AUTH": {
         "LOGIN": {
             "TITLE": "Log In",
+            "SUCCESS_TITLE": "Welcome Back!",
+            "SUCCESS_MESSAGE": "You have logged in successfully. Redirecting to dashboard...",
+            "ERROR_TITLE": "Login Error",
             "SUBTITLE": "Access your account to manage your sporting events and custom dashboards.",
             "EMAIL_LABEL": "Email",
             "EMAIL_PLACEHOLDER": "email@example.com",
@@ -36,6 +43,9 @@
         },
         "REGISTER": {
             "TITLE": "Create Account",
+            "SUCCESS_TITLE": "Registration Complete!",
+            "SUCCESS_MESSAGE": "Your account has been created successfully. Now let's complete your profile.",
+            "ERROR_TITLE": "Registration Error",
             "FULLNAME_LABEL": "Full Name",
             "FULLNAME_PLACEHOLDER": "Ex. John Doe",
             "EMAIL_LABEL": "Email",
@@ -60,6 +70,9 @@
         "PROFILE": {
             "SETUP": {
                 "TITLE": "Complete your profile",
+                "SUCCESS_TITLE": "Profile Saved!",
+                "SUCCESS_MESSAGE": "Your profile has been updated successfully.",
+                "ERROR_TITLE": "Save Error",
                 "SUBTITLE": "Tell us a bit more about yourself to personalize your experience.",
                 "AVATAR_LABEL": "Avatar URL",
                 "BIO_LABEL": "Bio",
