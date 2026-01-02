@@ -2,11 +2,25 @@
     <div *ngIf="isLoading" class="loading-map">{{ 'RACE.MAP.LOADING' | translate }}</div>
     <div *ngIf="error" class="error-map">{{ error }}</div>
 
-    <div class="canvas-wrapper" [class.hidden]="isLoading || error">
-        <canvas #mapCanvas></canvas>
+    <div class="map-wrapper" [class.hidden]="isLoading || error">
+        <svg [attr.viewBox]="viewBox" class="f1-svg" preserveAspectRatio="xMidYMid meet">
+            <!-- Track Line -->
+            <path [attr.d]="circuitPath" class="track-line"></path>
+
+            <!-- Drivers -->
+            <g *ngFor="let d of processedDrivers" class="driver-marker"
+                [attr.transform]="'translate(' + d.x + ',' + d.y + ')'" [class.off-track]="!d.onTrack">
+
+                <circle r="150" [attr.fill]="d.teamColor" class="driver-circle"></circle>
+
+                <text y="-250" class="driver-label" [attr.fill]="d.teamColor">
+                    {{ d.driverCode }}
+                </text>
+            </g>
+        </svg>
     </div>
 
-    <div class="track-info" *ngIf="trackData">
+    <div class="track-info" *ngIf="trackData && !isLoading && !error">
         <span class="circuit-name">{{ trackData.circuitName }}</span>
         <span class="location">{{ trackData.location }}, {{ trackData.countryName }}</span>
     </div>

@@ -121,7 +121,7 @@ export class F1LiveTimingStreamService {
     if (isLocalDev) {
       wsUrl = 'ws://localhost:3001';
     } else {
-      wsUrl = 'wss://universalmotorsporttiming-production.up.railway.app';
+      wsUrl = 'wss://f1-websocket-proxy-production.up.railway.app';
     }
 
     this.setupWebSocket(wsUrl);

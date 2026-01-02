@@ -1,0 +1,243 @@
+<div class="motogp-container">
+    <mat-card class="header-card">
+        <div class="header-content">
+            <div class="title-section">
+                <img src="https://resources.motogp.com/files/images/logo/motogp_logo.svg" alt="MotoGP Logo"
+                    class="logo">
+                <h1>{{ 'MOTOGP_TIMING.TITLE' | translate }}</h1>
+                <div class="live-indicator" *ngIf="isLiveVisible">
+                    <span class="dot"></span>
+                    LIVE
+                </div>
+            </div>
+
+            <div class="selectors">
+                <mat-form-field appearance="outline" class="selector">
+                    <mat-label>{{ 'MOTOGP_TIMING.SEASON' | translate }}</mat-label>
+                    <mat-select [(value)]="selectedSeason" (selectionChange)="onSeasonChange($event.value)">
+                        <mat-option *ngFor="let season of seasons" [value]="season.id">
+                            {{ season.year }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="selector">
+                    <mat-label>{{ 'MOTOGP_TIMING.CATEGORY' | translate }}</mat-label>
+                    <mat-select [(value)]="selectedCategory" (selectionChange)="onSeasonChange(selectedSeason!)">
+                        <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                            {{ cat.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="selector">
+                    <mat-label>{{ 'MOTOGP_TIMING.EVENT' | translate }}</mat-label>
+                    <mat-select [(value)]="selectedEvent" (selectionChange)="onEventChange($event.value)">
+                        <mat-option *ngFor="let event of events" [value]="event.id">
+                            <img [src]="getCountryFlag(event.country.iso)" class="flag-icon">
+                            {{ event.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="selector">
+                    <mat-label>{{ 'MOTOGP_TIMING.SESSION' | translate }}</mat-label>
+                    <mat-select [(value)]="selectedSession" (selectionChange)="onSessionChange($event.value)">
+                        <mat-option *ngFor="let session of sessions" [value]="session.id">
+                            Sesión {{ session.number }} ({{ session.date | date:'short' }})
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-card>
+
+    <div class="content-grid">
+        <!-- Loading State -->
+        <div class="loading-overlay" *ngIf="isLoading">
+            <mat-spinner diameter="50"></mat-spinner>
+        </div>
+
+        <!-- No Data State -->
+        <div class="no-data-card" *ngIf="noData && !isLoading && !isLiveVisible">
+            <mat-card>
+                <mat-card-content>
+                    <div class="no-data-content">
+                        <i class="material-icons info-icon">info_outline</i>
+                        <p>{{ 'MOTOGP_TIMING.NO_DATA' | translate }}</p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div class="main-content" [class.full-width]="!standings.length">
+            <mat-tab-group class="custom-tabs">
+                <!-- Live Timing Tab -->
+                <mat-tab *ngIf="isLiveVisible">
+                    <ng-template mat-tab-label>
+                        <div class="tab-label">
+                            <span class="live-dot-small"></span>
+                            {{ 'MOTOGP_TIMING.LIVE_SESS' | translate }}
+                        </div>
+                    </ng-template>
+
+                    <mat-card class="timing-card live-card">
+                        <mat-card-header>
+                            <div class="live-header">
+                                <mat-card-title>{{ liveTiming?.head?.session_name }} - {{ liveTiming?.head?.circuit_name
+                                    }}</mat-card-title>
+                                <div class="remaining" *ngIf="liveTiming?.head?.remaining !== '0'">
+                                    {{ 'MOTOGP_TIMING.REMAINING' | translate }}: {{ liveTiming?.head?.remaining }}
+                                </div>
+                            </div>
+                        </mat-card-header>
+                        <mat-table [dataSource]="liveRiders" class="premium-table">
+                            <ng-container matColumnDef="position">
+                                <mat-header-cell *matHeaderCellDef>POS</mat-header-cell>
+                                <mat-cell *matCellDef="let entry" [class.podium]="entry.pos <= 3">
+                                    {{ entry.pos }}
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="rider">
+                                <mat-header-cell *matHeaderCellDef>PILOTO</mat-header-cell>
+                                <mat-cell *matCellDef="let entry">
+                                    <span class="rider-number">#{{ entry.rider_number }}</span>
+                                    <span class="rider-name">{{ entry.rider_shortname }}</span>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="team">
+                                <mat-header-cell *matHeaderCellDef>EQUIPO</mat-header-cell>
+                                <mat-cell *matCellDef="let entry">
+                                    <div class="team-info">
+                                        <span class="team-name">{{ entry.team_name }}</span>
+                                        <span class="constructor-tag">{{ entry.bike_name }}</span>
+                                    </div>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="lap">
+                                <mat-header-cell *matHeaderCellDef>VUELTA</mat-header-cell>
+                                <mat-cell *matCellDef="let entry">{{ entry.num_lap }}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="lap_time">
+                                <mat-header-cell *matHeaderCellDef>T. VUELTA</mat-header-cell>
+                                <mat-cell *matCellDef="let entry" [class.on-pit]="entry.on_pit">{{ entry.on_pit ? 'PIT'
+                                    : entry.lap_time }}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="gap">
+                                <mat-header-cell *matHeaderCellDef>GAP (+1º)</mat-header-cell>
+                                <mat-cell *matCellDef="let entry" [class.zero-gap]="entry.gap_first === '0.000'">
+                                    {{ entry.gap_first === '0.000' ? 'LIDER' : '+' + entry.gap_first }}
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="pit">
+                                <mat-header-cell *matHeaderCellDef>PIT</mat-header-cell>
+                                <mat-cell *matCellDef="let entry">
+                                    <i class="material-icons pit-icon" *ngIf="entry.on_pit">directions_car</i>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedLiveColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedLiveColumns;" class="rider-row"></mat-row>
+                        </mat-table>
+                    </mat-card>
+                </mat-tab>
+
+                <!-- Results Tab -->
+                <mat-tab>
+                    <ng-template mat-tab-label>{{ 'MOTOGP_TIMING.SESSION_RESULTS' | translate }}</ng-template>
+                    <mat-card class="timing-card">
+                        <mat-table [dataSource]="classification" class="premium-table">
+                            <ng-container matColumnDef="position">
+                                <mat-header-cell *matHeaderCellDef>POS</mat-header-cell>
+                                <mat-cell *matCellDef="let entry" [class.podium]="entry.position <= 3">
+                                    {{ entry.position }}
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="rider">
+                                <mat-header-cell *matHeaderCellDef>PILOTO</mat-header-cell>
+                                <mat-cell *matCellDef="let entry">
+                                    <img [src]="getCountryFlag(entry.rider.country.iso)" class="flag-icon-table">
+                                    <span class="rider-number">#{{ entry.rider.number }}</span>
+                                    <span class="rider-name">{{ entry.rider.full_name }}</span>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="team">
+                                <mat-header-cell *matHeaderCellDef>EQUIPO / CONSTRUCTOR</mat-header-cell>
+                                <mat-cell *matCellDef="let entry">
+                                    <div class="team-info">
+                                        <span class="team-name">{{ entry.team.name }}</span>
+                                        <span class="constructor-tag">{{ entry.constructor.name }}</span>
+                                    </div>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="best_lap">
+                                <mat-header-cell *matHeaderCellDef>MEJOR VUELTA</mat-header-cell>
+                                <mat-cell *matCellDef="let entry">{{ entry.best_lap.time }}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="gap">
+                                <mat-header-cell *matHeaderCellDef>GAP (+1º)</mat-header-cell>
+                                <mat-cell *matCellDef="let entry" [class.zero-gap]="entry.gap.first === '0.000'">
+                                    {{ entry.gap.first === '0.000' ? 'LIDER' : '+' + entry.gap.first }}
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="speed">
+                                <mat-header-cell *matHeaderCellDef>SPEED (km/h)</mat-header-cell>
+                                <mat-cell *matCellDef="let entry">{{ entry.top_speed }}</mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedResultsColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedResultsColumns;"
+                                class="rider-row"></mat-row>
+                        </mat-table>
+                    </mat-card>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+
+        <!-- Standings Sidebar -->
+        <div class="standings-section" *ngIf="standings.length > 0 && !isLoading">
+            <mat-card class="standings-card">
+                <mat-card-header>
+                    <mat-card-title>{{ 'MOTOGP_TIMING.WORLD_STANDING' | translate }}</mat-card-title>
+                </mat-card-header>
+                <mat-table [dataSource]="standings" class="premium-table">
+                    <ng-container matColumnDef="position">
+                        <mat-header-cell *matHeaderCellDef>POS</mat-header-cell>
+                        <mat-cell *matCellDef="let entry">{{ entry.position }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="rider">
+                        <mat-header-cell *matHeaderCellDef>PILOTO</mat-header-cell>
+                        <mat-cell *matCellDef="let entry">
+                            <span class="rider-name-short">{{ entry.rider.full_name }}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="team">
+                        <mat-header-cell *matHeaderCellDef>EQUIPO</mat-header-cell>
+                        <mat-cell *matCellDef="let entry">{{ entry.team.name }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="points">
+                        <mat-header-cell *matHeaderCellDef>PTS</mat-header-cell>
+                        <mat-cell *matCellDef="let entry" class="points-cell">{{ entry.points }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedStandingsColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedStandingsColumns;"></mat-row>
+                </mat-table>
+            </mat-card>
+        </div>
+    </div>
+</div>

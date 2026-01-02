@@ -8,7 +8,8 @@
         "LOGOUT_CONFIRM_TITLE": "¿Cerrar Sesión?",
         "LOGOUT_CONFIRM_MESSAGE": "¿Estás seguro de que deseas salir? Tendrás que volver a iniciar sesión para ver tus datos.",
         "LIVE_TIMING": "Live Timing",
-        "CALENDAR": "Calendario"
+        "CALENDAR": "Calendario",
+        "MOTOGP": "MotoGP"
     },
     "COMMON": {
         "LANGUAGE": "Idioma",
@@ -155,5 +156,17 @@
             "RACE": "Carrera"
         },
         "LOADING": "Cargando detalles de la carrera..."
+    },
+    "MOTOGP_TIMING": {
+        "TITLE": "Dashboard MotoGP",
+        "SEASON": "Temporada",
+        "CATEGORY": "Categoría",
+        "EVENT": "Gran Premio",
+        "SESSION": "Sesión",
+        "SESSION_RESULTS": "Resultados de la Sesión",
+        "WORLD_STANDING": "Clasificación Mundial",
+        "LIVE_SESS": "Sesión en Vivo",
+        "REMAINING": "Tiempo Restante",
+        "NO_DATA": "No hay datos de timing disponibles para esta selección."
     }
 }

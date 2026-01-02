@@ -42,7 +42,7 @@ const PROXY_URL = 'wss://your-websocket-proxy.railway.app'; // ⚠️ CHANGE THI
 Reemplázala con tu URL de Railway (cambia `https://` por `wss://`):
 
 ```typescript
-const PROXY_URL = 'wss://universal-motorsport-timing-production.up.railway.app';
+const PROXY_URL = 'wss://f1-websocket-proxy-production.up.railway.app';
 ```
 
 ### 3. Redesplegar en Vercel

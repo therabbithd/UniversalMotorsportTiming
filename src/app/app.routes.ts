@@ -47,6 +47,11 @@ export const routes: Routes = [
     title: 'Detalles de Carrera | Universal Timing',
   },
   {
+    path: 'motogp',
+    loadComponent: () => import('./components/motogp-timing/motogp-timing.component').then(m => m.MotoGPTimingComponent),
+    title: 'MotoGP Timing | Universal Timing',
+  },
+  {
     path: '**',
     redirectTo: '',
   },

@@ -8,7 +8,8 @@
         "LOGOUT_CONFIRM_TITLE": "Se déconnecter ?",
         "LOGOUT_CONFIRM_MESSAGE": "Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à vos données.",
         "LIVE_TIMING": "Live Timing",
-        "CALENDAR": "Calendrier"
+        "CALENDAR": "Calendrier",
+        "MOTOGP": "MotoGP"
     },
     "COMMON": {
         "LANGUAGE": "Langue",
@@ -153,5 +154,17 @@
             "RACE": "Course"
         },
         "LOADING": "Chargement des détails de la course..."
+    },
+    "MOTOGP_TIMING": {
+        "TITLE": "Tableau de Bord MotoGP",
+        "SEASON": "Saison",
+        "CATEGORY": "Catégorie",
+        "EVENT": "Grand Prix",
+        "SESSION": "Session",
+        "SESSION_RESULTS": "Résultats de la Session",
+        "WORLD_STANDING": "Classement Mondial",
+        "LIVE_SESS": "Session en Direct",
+        "REMAINING": "Temps Restant",
+        "NO_DATA": "Aucune donnée de chronométrage disponible pour cette sélection."
     }
 }

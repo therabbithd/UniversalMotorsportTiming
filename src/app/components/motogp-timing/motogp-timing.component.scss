@@ -1,0 +1,321 @@
+.motogp-container {
+    padding: 20px;
+    background-color: #0d0d0d;
+    min-height: calc(100vh - 64px);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+
+    .header-card {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        border-left: 4px solid #e10600;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+
+            .title-section {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+
+                .logo {
+                    height: 30px;
+                }
+
+                h1 {
+                    margin: 0;
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    letter-spacing: -0.5px;
+                    text-transform: uppercase;
+                }
+
+                .live-indicator {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: rgba(225, 6, 0, 0.2);
+                    padding: 4px 12px;
+                    border-radius: 20px;
+                    border: 1px solid #e10600;
+                    font-weight: 900;
+                    font-size: 0.75rem;
+                    color: #e10600;
+                    margin-left: 10px;
+
+                    .dot {
+                        width: 8px;
+                        height: 8px;
+                        background-color: #e10600;
+                        border-radius: 50%;
+                        animation: pulse 1.5s infinite;
+                    }
+                }
+            }
+
+            .selectors {
+                display: flex;
+                gap: 15px;
+                flex-wrap: wrap;
+
+                .selector {
+                    width: 200px;
+
+                    ::ng-deep .mat-mdc-text-field-wrapper {
+                        background-color: rgba(255, 255, 255, 0.05);
+                    }
+
+                    ::ng-deep .mat-mdc-form-field-label {
+                        color: rgba(255, 255, 255, 0.6);
+                    }
+
+                    ::ng-deep .mat-mdc-select-value {
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+
+    .content-grid {
+        position: relative;
+        display: grid;
+        grid-template-columns: 2.5fr 1fr;
+        gap: 20px;
+
+        @media (max-width: 1200px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .loading-overlay {
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+    }
+
+    .no-data-card {
+        grid-column: 1 / -1;
+        text-align: center;
+
+        mat-card {
+            background: #1a1a1a;
+            border: 1px dashed #333;
+        }
+
+        .no-data-content {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            .info-icon {
+                font-size: 48px;
+                color: #e10600;
+            }
+
+            p {
+                font-size: 1.2rem;
+                color: rgba(255, 255, 255, 0.7);
+            }
+        }
+    }
+
+    .timing-card,
+    .standings-card {
+        background: #1a1a1a;
+        border-radius: 8px;
+        overflow: hidden;
+
+        mat-card-header {
+            background-color: #262626;
+            padding: 10px 20px;
+            border-bottom: 2px solid #e10600;
+
+            mat-card-title {
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin: 0;
+            }
+        }
+    }
+
+    .premium-table {
+        background: transparent;
+
+        mat-header-row {
+            min-height: 48px;
+            background-color: #000;
+            border-bottom: 1px solid #333;
+        }
+
+        mat-header-cell {
+            color: #999;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        mat-row {
+            min-height: 56px;
+            border-bottom: 1px solid #262626;
+            transition: background-color 0.2s ease;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.05);
+            }
+        }
+
+        mat-cell {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .podium {
+            font-weight: 900;
+            color: #e10600;
+        }
+
+        .flag-icon-table {
+            width: 20px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .rider-number {
+            font-family: 'F1-Bold', sans-serif;
+            font-size: 0.8rem;
+            color: #999;
+            margin-right: 8px;
+            width: 30px;
+            display: inline-block;
+        }
+
+        .rider-name {
+            font-weight: 700;
+        }
+
+        .team-info {
+            display: flex;
+            flex-direction: column;
+
+            .team-name {
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
+
+            .constructor-tag {
+                font-size: 0.7rem;
+                color: #e10600;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+        }
+
+        .zero-gap {
+            font-weight: 800;
+            color: #e10600;
+        }
+
+        .points-cell {
+            font-weight: 800;
+            color: #e10600;
+            font-size: 1rem;
+        }
+
+        .on-pit {
+            color: #e10600;
+            font-weight: 800;
+        }
+
+        .pit-icon {
+            color: #e10600;
+            font-size: 18px;
+        }
+    }
+
+    .custom-tabs {
+        ::ng-deep {
+            .mat-mdc-tab-header {
+                background: #1a1a1a;
+                border-bottom: 2px solid #333;
+            }
+
+            .mat-mdc-tab .mdc-tab__text-label {
+                color: #999;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+
+            .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+                color: #fff;
+            }
+
+            .mat-mdc-tab-indicator .mdc-tab-indicator__content--underline {
+                border-color: #e10600;
+            }
+        }
+    }
+
+    .live-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        .remaining {
+            font-family: 'F1-Bold', sans-serif;
+            color: #e10600;
+            font-size: 0.9rem;
+        }
+    }
+
+    .tab-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .live-dot-small {
+            width: 6px;
+            height: 6px;
+            background-color: #e10600;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.flag-icon {
+    width: 18px;
+    vertical-align: middle;
+    margin-right: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}

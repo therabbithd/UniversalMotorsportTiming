@@ -174,6 +174,18 @@ const f1Proxy = createProxyMiddleware({
 
 app.use('/f1-api', f1Proxy);
 
+const motogpProxy = createProxyMiddleware({
+    target: 'https://api.motogp.pulselive.com',
+    changeOrigin: true,
+    pathRewrite: { '^/motogp-api': '' },
+    headers: {
+        'Origin': 'https://www.motogp.com',
+        'Referer': 'https://www.motogp.com/'
+    }
+});
+
+app.use('/motogp-api', motogpProxy);
+
 app.get('/health', (req, res) => {
     res.json({
         status: brokerRunning ? 'running' : 'starting',

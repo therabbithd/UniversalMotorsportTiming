@@ -8,7 +8,8 @@
         "LOGOUT_CONFIRM_TITLE": "Log Out?",
         "LOGOUT_CONFIRM_MESSAGE": "Are you sure you want to log out? You will need to log in again to access your data.",
         "LIVE_TIMING": "Live Timing",
-        "CALENDAR": "Calendar"
+        "CALENDAR": "Calendar",
+        "MOTOGP": "MotoGP"
     },
     "COMMON": {
         "LANGUAGE": "Language",
@@ -153,5 +154,17 @@
             "RACE": "Race"
         },
         "LOADING": "Loading race details..."
+    },
+    "MOTOGP_TIMING": {
+        "TITLE": "MotoGP Dashboard",
+        "SEASON": "Season",
+        "CATEGORY": "Category",
+        "EVENT": "Grand Prix",
+        "SESSION": "Session",
+        "SESSION_RESULTS": "Session Results",
+        "WORLD_STANDING": "World Standing",
+        "LIVE_SESS": "Live Session",
+        "REMAINING": "Remaining Time",
+        "NO_DATA": "No timing data available for this selection."
     }
 }

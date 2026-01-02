@@ -1,11 +1,9 @@
 // circuit-map.component.ts
 
-import { Component, Input, OnChanges, SimpleChanges, ElementRef, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { catchError, of, Subscription } from 'rxjs';
-import Chart from 'chart.js/auto';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { F1LiveTimingStreamService } from '../../services/f1-livetiming.service';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -16,6 +14,7 @@ interface DriverPosition {
   z: number;
   teamColor: string;
   driverCode: string;
+  onTrack: boolean;
 }
 
 @Component({
@@ -26,31 +25,31 @@ interface DriverPosition {
   styleUrls: ['./circuit-map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CircuitMapComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class CircuitMapComponent implements OnChanges, OnDestroy {
   @Input() circuitKey: number | string | undefined;
   @Input() year: number | string | undefined;
-  @ViewChild('mapCanvas') mapCanvas!: ElementRef;
 
   trackData: any = null;
   isLoading = false;
   error: string | null = null;
-  chart: Chart | null = null;
   streamSubscription: Subscription | null = null;
+
+  // Track rendering
+  circuitPath: string = '';
+  viewBox: string = "-1000 -1000 2000 2000";
 
   // Rotation state
   rotation: number = 0;
 
-  // Circuit info
-  circuitName: string = '';
-  location: string = '';
+  // Drivers
+  processedDrivers: DriverPosition[] = [];
+  startLinePos: { x: number, y: number } | null = null;
 
   constructor(
     private http: HttpClient,
     private streamService: F1LiveTimingStreamService,
     private cdr: ChangeDetectorRef
-  ) {
-    Chart.register(ChartDataLabels);
-  }
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['circuitKey'] || changes['year']) {
@@ -58,20 +57,7 @@ export class CircuitMapComponent implements OnChanges, AfterViewInit, OnDestroy 
     }
   }
 
-  ngAfterViewInit(): void {
-    if (this.trackData) {
-      this.renderChart();
-    }
-
-    // Suscribirse al stream para actualizaciones de posición en tiempo real
-    this.subscribeToPositions();
-  }
-
   ngOnDestroy(): void {
-    if (this.chart) {
-      this.chart.destroy();
-    }
-
     if (this.streamSubscription) {
       this.streamSubscription.unsubscribe();
     }
@@ -98,204 +84,144 @@ export class CircuitMapComponent implements OnChanges, AfterViewInit, OnDestroy 
       if (data) {
         this.trackData = data;
         this.rotation = data.rotation || 0;
-        this.circuitName = data.name || '';
-        this.location = data.location || '';
-        this.renderChart();
+        this.generateCircuitPath();
+        this.subscribeToPositions();
       }
-
       this.cdr.markForCheck();
     });
   }
 
+  generateCircuitPath() {
+    if (!this.trackData || !this.trackData.x || !this.trackData.y) return;
+
+    const xArr = this.trackData.x;
+    const yArr = this.trackData.y;
+
+    // First transform all points
+    const transformedPoints = this.transformPoints(xArr, yArr);
+
+    if (transformedPoints.length === 0) return;
+
+    // Generate SVG path string "M x1,y1 L x2,y2 ..."
+    let path = `M ${transformedPoints[0].x},${transformedPoints[0].y}`;
+    for (let i = 1; i < transformedPoints.length; i++) {
+      path += ` L ${transformedPoints[i].x},${transformedPoints[i].y}`;
+    }
+    path += ' Z'; // Close the path
+
+    this.circuitPath = path;
+
+    // Store start line position (first point of the track)
+    this.startLinePos = transformedPoints[0] || null;
+
+    // Update ViewBox to fit the track
+    this.updateViewBox(transformedPoints);
+  }
+
+  updateViewBox(points: { x: number, y: number }[]) {
+    if (points.length === 0) return;
+
+    let minX = points[0].x;
+    let maxX = points[0].x;
+    let minY = points[0].y;
+    let maxY = points[0].y;
+
+    for (const p of points) {
+      minX = Math.min(minX, p.x);
+      maxX = Math.max(maxX, p.x);
+      minY = Math.min(minY, p.y);
+      maxY = Math.max(maxY, p.y);
+    }
+
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    // Add 10% padding
+    const paddingX = width * 0.1;
+    const paddingY = height * 0.1;
+
+    this.viewBox = `${minX - paddingX} ${minY - paddingY} ${width + paddingX * 2} ${height + paddingY * 2}`;
+  }
+
   subscribeToPositions() {
-    // Desuscribirse de suscripción previa si existe
     if (this.streamSubscription) {
       this.streamSubscription.unsubscribe();
     }
 
-    // Suscribirse al stream para recibir posiciones en tiempo real
     this.streamSubscription = this.streamService.state$.subscribe(() => {
-      const positions = this.extractDriverPositions();
-      if (positions.length > 0) {
-        this.updateDriverPositions(positions);
-      }
+      this.updateDriverPositions();
     });
   }
 
-  extractDriverPositions(): DriverPosition[] {
+  updateDriverPositions() {
     const state = this.streamService.getCurrentState();
-    if (!state.Position?.Position || !state.DriverList) {
-      return [];
+    if (!state.DriverList) {
+      return;
     }
 
-    const positions: DriverPosition[] = [];
-    const positionData = state.Position.Position;
+    const positionData = state.Position?.Position || {};
     const driverList = state.DriverList;
+    const timingData = state.TimingData?.Lines || {};
 
-    // Extraer posiciones de cada piloto
-    for (const [driverNumber, posData] of Object.entries(positionData)) {
-      const driver = driverList[driverNumber];
-      if (driver && posData && typeof posData === 'object') {
+    const newProcessedDrivers: DriverPosition[] = [];
+
+    // Iterate over all drivers to ensure those without position data are shown at the start line
+    for (const [driverNumber, driver] of Object.entries(driverList)) {
+      if (!driver) continue;
+
+      const posData = positionData[driverNumber];
+      let rx = 0;
+      let ry = 0;
+      let rz = 0;
+
+      if (posData && typeof posData === 'object') {
         const pos = posData as any;
-        positions.push({
-          racingNumber: driver.RacingNumber || driverNumber,
-          x: pos.X || 0,
-          y: pos.Y || 0,
-          z: pos.Z || 0,
-          teamColor: driver.TeamColour || '000000',
-          driverCode: driver.Tla || ''
-        });
+        [rx, ry] = this.rotate(pos.X, pos.Y, this.rotation);
+        rz = pos.Z || 0;
+      } else if (this.startLinePos) {
+        // Fallback to start line position
+        rx = this.startLinePos.x;
+        ry = this.startLinePos.y;
+        rz = 0;
+      } else {
+        // Skip if no position info and no start line reference
+        continue;
       }
+
+      const timing = timingData[driverNumber];
+      const onTrack = timing ? (!timing.InPit && !timing.Retired && !timing.Stopped) : true;
+
+      newProcessedDrivers.push({
+        racingNumber: driver.RacingNumber || driverNumber,
+        x: rx,
+        y: ry,
+        z: rz,
+        teamColor: driver.TeamColour ? `#${driver.TeamColour}` : '#ffffff',
+        driverCode: driver.Tla || '',
+        onTrack: onTrack
+      });
     }
 
-    return positions;
+    this.processedDrivers = newProcessedDrivers;
+    this.cdr.markForCheck();
   }
 
-  updateDriverPositions(positions: DriverPosition[]) {
-    if (!this.chart || !this.trackData || positions.length === 0) return;
-
-    // Transformar coordenadas con rotación
-    const rotatedPositions = this.transformCoordinates(
-      positions.map(p => p.x),
-      positions.map(p => p.y)
-    );
-
-    // Actualizar dataset de pilotos (índice 1)
-    this.chart.data.datasets[1].data = rotatedPositions.map((p, i) => ({
-      x: p.x,
-      y: p.y,
-      driverInfo: positions[i]
-    }));
-
-    // Actualizar colores de los puntos
-    const colors = positions.map(p => '#' + p.teamColor);
-    (this.chart.data.datasets[1] as any).pointBackgroundColor = colors;
-
-    // Actualizar el gráfico
-    this.chart.update('none'); // 'none' mode for performance
+  transformPoints(xArr: number[], yArr: number[]): { x: number, y: number }[] {
+    return xArr.map((x, i) => {
+      const [rx, ry] = this.rotate(x, yArr[i], this.rotation);
+      return { x: rx, y: ry };
+    });
   }
 
-  transformCoordinates(xArr: number[], yArr: number[]): { x: number, y: number }[] {
-    // 1. Invertir Y (coordenadas de canvas vs coordenadas del mundo)
-    const yInverted = yArr.map(y => -y);
-
-    // 2. Rotar según la rotación del circuito
-    const rotationDeg = this.rotation || 0;
-    const rad = (rotationDeg * Math.PI) / 180;
+  rotate(x: number, y: number, angle: number): [number, number] {
+    const rad = angle * (Math.PI / 180);
     const cos = Math.cos(rad);
     const sin = Math.sin(rad);
 
-    return xArr.map((x, i) => ({
-      x: x * cos - yInverted[i] * sin,
-      y: x * sin + yInverted[i] * cos
-    }));
-  }
+    // Formula from the guide: Y inverted for F1 coordinate system
+    const newX = x * cos - y * sin;
+    const newY = y * cos + x * sin;
 
-  renderChart() {
-    if (!this.mapCanvas || !this.trackData) return;
-
-    if (this.chart) {
-      this.chart.destroy();
-    }
-
-    const ctx = this.mapCanvas.nativeElement.getContext('2d');
-    if (!ctx) return;
-
-    // Transformar datos del circuito
-    const trackPoints = this.transformCoordinates(this.trackData.x, this.trackData.y);
-
-    this.chart = new Chart(ctx, {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            // Track Line (Circuito)
-            data: trackPoints,
-            borderColor: '#e10600',
-            borderWidth: 5,
-            showLine: true,
-            pointRadius: 0,
-            fill: false,
-            tension: 0,
-            borderJoinStyle: 'round',
-            borderCapStyle: 'round',
-            order: 2 // Renderizar debajo de los pilotos
-          },
-          {
-            // Drivers (Pilotos)
-            data: [], // Se poblará con streaming en tiempo real
-            pointRadius: 8,
-            pointHoverRadius: 10,
-            pointBackgroundColor: [],
-            pointBorderColor: '#ffffff',
-            pointBorderWidth: 2,
-            showLine: false,
-            order: 1, // Renderizar encima del circuito
-            datalabels: {
-              display: true,
-              color: '#ffffff',
-              font: {
-                weight: 'bold',
-                size: 9
-              },
-              formatter: (value: any) => {
-                return value.driverInfo ? value.driverInfo.racingNumber : '';
-              },
-              align: 'center',
-              anchor: 'center',
-              textStrokeColor: '#000000',
-              textStrokeWidth: 2
-            }
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true, // ✅ CAMBIADO A TRUE
-        aspectRatio: 1, // ✅ RATIO 1:1 PARA MANTENER PROPORCIÓN CUADRADA
-        animation: {
-          duration: 0 // Sin animación inicial para mejor rendimiento
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            enabled: true,
-            callbacks: {
-              label: (context: any) => {
-                const driver = context.raw?.driverInfo;
-                if (driver) {
-                  return `${driver.driverCode} (#${driver.racingNumber})`;
-                }
-                return '';
-              }
-            }
-          },
-          datalabels: {
-            display: (context: any) => {
-              // Solo mostrar labels en el dataset de pilotos (índice 1)
-              return context.datasetIndex === 1;
-            }
-          }
-        },
-        scales: {
-          x: {
-            display: false,
-            grid: { display: false }
-          },
-          y: {
-            display: false,
-            grid: { display: false }
-          }
-        },
-        layout: {
-          padding: {
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20
-          }
-        }
-      }
-    });
+    return [newX, newY * -1];
   }
 }
