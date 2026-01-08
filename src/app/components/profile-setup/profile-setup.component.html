@@ -9,13 +9,23 @@
     <form [formGroup]="setupForm" (ngSubmit)="submit()" class="setup-form">
       <div class="form-grid">
         <!-- Avatar Preview/Upload Placeholder -->
+        <!-- Avatar Preview/Upload Placeholder -->
         <div class="avatar-section">
-          <div class="avatar-circle">
-            <i class="fas fa-user"></i>
+          <div class="avatar-circle" (click)="fileInput.click()">
+            <img *ngIf="avatarPreview()" [src]="avatarPreview()" alt="Avatar preview" class="avatar-img">
+            <i *ngIf="!avatarPreview()" class="fas fa-user"></i>
+            <div *ngIf="isUploading()" class="upload-overlay">
+              <span class="loader-spinner"></span>
+            </div>
           </div>
           <div class="avatar-input">
-            <label for="avatar">{{ 'AUTH.PROFILE.SETUP.AVATAR_LABEL' | translate }}</label>
-            <input type="text" id="avatar" formControlName="avatar" placeholder="https://ejemplo.com/foto.jpg">
+            <label for="avatar-upload" class="upload-label">{{ 'AUTH.PROFILE.SETUP.AVATAR_LABEL' | translate }}</label>
+            <input #fileInput type="file" id="avatar-upload" (change)="onFileSelected($event)" accept="image/*"
+              style="display: none;">
+            <button type="button" class="btn-upload" (click)="fileInput.click()">
+              {{ 'AUTH.PROFILE.SETUP.UPLOAD_BUTTON' | translate }}
+            </button>
+            <input type="hidden" formControlName="avatar">
           </div>
         </div>
 
