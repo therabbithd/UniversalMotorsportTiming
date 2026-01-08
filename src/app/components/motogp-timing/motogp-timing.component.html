@@ -126,7 +126,7 @@
                             <ng-container matColumnDef="rider">
                                 <mat-header-cell *matHeaderCellDef>PILOTO</mat-header-cell>
                                 <mat-cell *matCellDef="let entry">
-                                    <img [src]="getCountryFlag(entry.rider.country.iso)" class="flag-icon-table">
+                                    <img [src]="entry.rider.country.iso | countryFlag" class="flag-icon-table">
                                     <span class="rider-number">#{{ entry.rider.number }}</span>
                                     <span class="rider-name">{{ entry.rider.full_name }}</span>
                                 </mat-cell>

@@ -12,6 +12,8 @@ import { DriverSectorsComponent } from '../components/driver-sector/driver-secto
 import { TranslateModule } from '@ngx-translate/core';
 import { ProfileService } from '../services/profile.service';
 import { AuthService } from '../services/auth.service';
+import { TyreClassPipe } from '../pipes/tyre-class.pipe';
+import { TyreLetterPipe } from '../pipes/tyre-letter.pipe';
 
 @Component({
   selector: 'app-timing-table',
@@ -23,7 +25,10 @@ import { AuthService } from '../services/auth.service';
     CircuitMapComponent,
     DriverRadiosComponent,
     DriverSectorsComponent,
-    TranslateModule
+    DriverSectorsComponent,
+    TranslateModule,
+    TyreClassPipe,
+    TyreLetterPipe
   ],
   templateUrl: './timing-table.component.html',
   styleUrls: ['./timing-table.component.scss'],
@@ -131,11 +136,6 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     }
 
     return classes.trim();
-  }
-
-  getTyreClass(compound: string): string {
-    const compoundLower = compound.toLowerCase();
-    return `tyre-${compoundLower}`;
   }
 
   isArray(value: any): boolean {

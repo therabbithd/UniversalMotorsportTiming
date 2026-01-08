@@ -19,6 +19,7 @@ import {
     MotoGPLiveTiming,
     MotoGPLiveRider
 } from '../../models/motogp.model';
+import { CountryFlagPipe } from '../../pipes/country-flag.pipe';
 
 @Component({
     selector: 'app-motogp-timing',
@@ -31,7 +32,9 @@ import {
         MatFormFieldModule,
         MatProgressSpinnerModule,
         MatTabsModule,
-        TranslateModule
+        MatTabsModule,
+        TranslateModule,
+        CountryFlagPipe
     ],
     templateUrl: './motogp-timing.component.html',
     styleUrls: ['./motogp-timing.component.scss'],

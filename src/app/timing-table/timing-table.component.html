@@ -41,8 +41,8 @@
             <td mat-cell *matCellDef="let driver">
               <div class="tyre-history-container">
                 <div *ngFor="let stint of (isArray(driver.tyreHistory) ? driver.tyreHistory : [])" class="tyre-info">
-                  <div class="tyre-badge" [ngClass]="getTyreClass(stint.Compound)">
-                    {{ stint.Compound?.charAt(0).toUpperCase() }}
+                  <div class="tyre-badge" [ngClass]="stint.Compound | tyreClass">
+                    {{ stint.Compound | tyreLetter }}
                   </div>
                   <span class="tyre-laps">{{ stint.TotalLaps || 0 }}</span>
                 </div>
