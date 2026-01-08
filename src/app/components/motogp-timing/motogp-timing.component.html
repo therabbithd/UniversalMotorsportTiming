@@ -11,44 +11,7 @@
                 </div>
             </div>
 
-            <div class="selectors">
-                <mat-form-field appearance="outline" class="selector">
-                    <mat-label>{{ 'MOTOGP_TIMING.SEASON' | translate }}</mat-label>
-                    <mat-select [(value)]="selectedSeason" (selectionChange)="onSeasonChange($event.value)">
-                        <mat-option *ngFor="let season of seasons" [value]="season.id">
-                            {{ season.year }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
 
-                <mat-form-field appearance="outline" class="selector">
-                    <mat-label>{{ 'MOTOGP_TIMING.CATEGORY' | translate }}</mat-label>
-                    <mat-select [(value)]="selectedCategory" (selectionChange)="onSeasonChange(selectedSeason!)">
-                        <mat-option *ngFor="let cat of categories" [value]="cat.id">
-                            {{ cat.name }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="selector">
-                    <mat-label>{{ 'MOTOGP_TIMING.EVENT' | translate }}</mat-label>
-                    <mat-select [(value)]="selectedEvent" (selectionChange)="onEventChange($event.value)">
-                        <mat-option *ngFor="let event of events" [value]="event.id">
-                            <img [src]="getCountryFlag(event.country.iso)" class="flag-icon">
-                            {{ event.name }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="selector">
-                    <mat-label>{{ 'MOTOGP_TIMING.SESSION' | translate }}</mat-label>
-                    <mat-select [(value)]="selectedSession" (selectionChange)="onSessionChange($event.value)">
-                        <mat-option *ngFor="let session of sessions" [value]="session.id">
-                            Sesión {{ session.number }} ({{ session.date | date:'short' }})
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
         </div>
     </mat-card>
 

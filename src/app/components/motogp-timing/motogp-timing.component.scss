@@ -60,27 +60,7 @@
                 }
             }
 
-            .selectors {
-                display: flex;
-                gap: 15px;
-                flex-wrap: wrap;
 
-                .selector {
-                    width: 200px;
-
-                    ::ng-deep .mat-mdc-text-field-wrapper {
-                        background-color: rgba(255, 255, 255, 0.05);
-                    }
-
-                    ::ng-deep .mat-mdc-form-field-label {
-                        color: rgba(255, 255, 255, 0.6);
-                    }
-
-                    ::ng-deep .mat-mdc-select-value {
-                        color: #fff;
-                    }
-                }
-            }
         }
     }
 
@@ -318,4 +298,82 @@
     vertical-align: middle;
     margin-right: 8px;
     border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// Responsive Styles matching F1 Dashboard
+@media (max-width: 992px) {
+    .motogp-container {
+        padding: 10px;
+
+        .header-card {
+            .header-content {
+                padding: 10px;
+
+                .title-section {
+                    width: 100%;
+                    justify-content: space-between;
+
+                    h1 {
+                        font-size: 1.2rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+
+    // Hide non-essential columns on mobile
+    ::ng-deep {
+
+        .mat-column-team,
+        .mat-column-speed,
+        .mat-column-gap {
+            display: none !important;
+        }
+    }
+
+    .motogp-container {
+        .premium-table {
+            mat-header-cell {
+                font-size: 0.7rem;
+                padding: 0 4px;
+            }
+
+            mat-cell {
+                font-size: 0.8rem;
+                padding: 0 4px;
+            }
+
+            .rider-number {
+                width: 25px;
+                margin-right: 4px;
+            }
+
+            .flag-icon-table {
+                display: none; // Hide flags on mobile to save space
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    ::ng-deep {
+        .mat-column-lap {
+            display: none !important;
+        }
+    }
+
+    .motogp-container {
+        .header-card .header-content .title-section {
+            h1 {
+                font-size: 1rem;
+            }
+
+            .logo {
+                height: 24px;
+            }
+        }
+    }
 }

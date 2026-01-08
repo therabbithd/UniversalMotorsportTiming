@@ -5,11 +5,12 @@ import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { Profile } from '../../models/profile.model';
 import { TranslateModule } from '@ngx-translate/core';
+import { ImageFallbackDirective } from '../../directives/image-fallback.directive';
 
 @Component({
     selector: 'app-profile-view',
     standalone: true,
-    imports: [CommonModule, RouterLink, TranslateModule],
+    imports: [CommonModule, RouterLink, TranslateModule, ImageFallbackDirective],
     templateUrl: './profile-view.component.html',
     styleUrl: './profile-view.component.scss'
 })

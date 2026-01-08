@@ -3,6 +3,7 @@
         <div class="profile-header">
             <div class="avatar-container">
                 <img [src]="profile()?.avatar || 'https://ui-avatars.com/api/?name=' + userData.name + '&background=38bdf8&color=fff'"
+                    [appImageFallback]="'https://ui-avatars.com/api/?name=' + userData.name + '&background=38bdf8&color=fff'"
                     alt="Avatar" class="avatar-large">
             </div>
             <div class="user-main-info">
