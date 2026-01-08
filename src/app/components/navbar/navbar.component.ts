@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { LanguageService } from '../../services/language.service';
+import { SecretCodeService } from '../../services/secret-code.service';
 
 @Component({
     selector: 'app-navbar',
@@ -17,6 +18,7 @@ import { LanguageService } from '../../services/language.service';
 export class NavbarComponent {
     private readonly authService = inject(AuthService);
     readonly languageService = inject(LanguageService);
+    readonly secretCodeService = inject(SecretCodeService);
     private readonly dialog = inject(MatDialog);
 
     readonly user = this.authService.currentUser;

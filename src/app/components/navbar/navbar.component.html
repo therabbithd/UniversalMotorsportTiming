@@ -15,7 +15,8 @@
       <!-- Public Links -->
       <a routerLink="/calendar" routerLinkActive="active-link" (click)="isMenuOpen = false">{{ 'NAV.CALENDAR' |
         translate }}</a>
-      <a routerLink="/motogp" routerLinkActive="active-link" (click)="isMenuOpen = false">{{ 'NAV.MOTOGP' | translate
+      <a *ngIf="secretCodeService.isMotogpVisible()" routerLink="/motogp" routerLinkActive="active-link"
+        (click)="isMenuOpen = false">{{ 'NAV.MOTOGP' | translate
         }}</a>
       <a *ngIf="!user()" routerLink="/register" routerLinkActive="active-link" (click)="isMenuOpen = false">{{
         'NAV.REGISTER' | translate }}</a>
