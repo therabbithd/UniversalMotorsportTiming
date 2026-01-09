@@ -85,7 +85,8 @@
                 "SAVING_BUTTON": "Saving...",
                 "ERRORS": {
                     "BIO_LENGTH": "Bio cannot exceed 500 characters."
-                }
+                },
+                "UPLOAD_BUTTON": "Upload Image"
             },
             "VIEW": {
                 "MEMBER_SINCE": "Member since {{date}}",

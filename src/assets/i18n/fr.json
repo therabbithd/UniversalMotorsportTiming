@@ -85,7 +85,8 @@
                 "SAVING_BUTTON": "Enregistrement...",
                 "ERRORS": {
                     "BIO_LENGTH": "La biographie ne peut pas dépasser 500 caractères."
-                }
+                },
+                "UPLOAD_BUTTON": "Télécharger une Image"
             },
             "VIEW": {
                 "MEMBER_SINCE": "Membre depuis {{date}}",

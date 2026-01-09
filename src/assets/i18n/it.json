@@ -85,7 +85,8 @@
                 "SAVING_BUTTON": "Salvataggio...",
                 "ERRORS": {
                     "BIO_LENGTH": "La biografia non può superare i 500 caratteri."
-                }
+                },
+                "UPLOAD_BUTTON": "Carica Immagine"
             },
             "VIEW": {
                 "MEMBER_SINCE": "Membro dal {{date}}",
