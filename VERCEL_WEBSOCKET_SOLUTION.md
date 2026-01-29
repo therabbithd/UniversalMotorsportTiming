@@ -36,13 +36,13 @@ Desplegar un **servidor proxy WebSocket** en un servicio que SÍ soporte WebSock
 Abre el archivo `src/app/services/f1-livetiming.service.ts` y busca esta línea (aproximadamente línea 248):
 
 ```typescript
-const PROXY_URL = 'wss://your-websocket-proxy.railway.app'; // ⚠️ CHANGE THIS
+const PROXY_URL = 'wss://f1-websocket-proxy-production-9991.up.railway.app'; // ⚠️ CHANGE THIS
 ```
 
 Reemplázala con tu URL de Railway (cambia `https://` por `wss://`):
 
 ```typescript
-const PROXY_URL = 'wss://f1-websocket-proxy-production.up.railway.app';
+const PROXY_URL = 'wss://f1-websocket-proxy-production-9991.up.railway.app';
 ```
 
 ### 3. Redesplegar en Vercel

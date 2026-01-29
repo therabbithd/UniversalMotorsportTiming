@@ -19,7 +19,7 @@ export class MotoGPService {
         const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         return isLocalDev
             ? 'http://localhost:3001/motogp-api'
-            : 'https://f1-websocket-proxy-production.up.railway.app/motogp-api';
+            : 'https://f1-websocket-proxy-production-9991.up.railway.app/motogp-api';
     }
 
     constructor(private http: HttpClient) { }
