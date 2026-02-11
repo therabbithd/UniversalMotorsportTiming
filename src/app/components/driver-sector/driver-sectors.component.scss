@@ -10,6 +10,7 @@
     flex-direction: column;
     gap: 3px;
     align-items: center;
+    position: relative; // Added for absolute positioning of sector-time
   }
   
   .segments {
@@ -28,14 +29,21 @@
   }
   
   .sector-time {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    margin-top: 2px;
     font-size: 9px;
     font-weight: 600;
     color: #333;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 1px 3px;
-    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 1px 4px;
+    border-radius: 3px;
     white-space: nowrap;
-    text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    pointer-events: none; // Prevent it from interfering with tooltips if any
   }
   
   .no-sectors {
