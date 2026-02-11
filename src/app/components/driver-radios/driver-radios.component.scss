@@ -1,9 +1,10 @@
 .radios-container {
   background-color: #121212;
-  padding: 5px;
+  padding: 16px;
   border-radius: 12px;
   width: 100%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -209,9 +210,20 @@
 }
 
 // Responsive
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .drivers-list {
     display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .radios-container {
+    padding: 15px;
+  }
+
+  .drivers-list {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
   }
@@ -219,7 +231,7 @@
 
 @media (max-width: 768px) {
   .radios-container {
-    padding: 20px;
+    padding: 12px;
   }
 
   .drivers-list {
@@ -227,37 +239,70 @@
   }
 
   .driver-radio {
-    padding: 14px;
+    padding: 12px;
+  }
+
+  .audio-row {
+    gap: 12px;
   }
 }
 
 @media (max-width: 480px) {
+  .radios-container {
+    padding: 8px;
+  }
+
   .radios-title {
-    font-size: 1.2em;
-    margin-bottom: 16px;
+    font-size: 1.1em;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+  }
+
+  .driver-radio {
+    padding: 10px;
+  }
+
+  .radio-header {
+    margin-bottom: 4px;
   }
 
   .audio-row {
-    gap: 10px;
+    gap: 8px;
+    flex-wrap: wrap; // Permite que se apilen si es muy estrecho
   }
 
   .play-button {
-    width: 38px !important;
-    height: 38px !important;
+    width: 36px !important;
+    height: 36px !important;
 
     mat-icon {
-      font-size: 22px;
-      width: 22px;
-      height: 22px;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
     }
   }
 
+  .progress-container {
+    gap: 6px;
+    width: 100%;
+    order: 2; // El slider va después del botón si se rompe la línea
+    margin-top: 4px;
+  }
+
   .driver-badge .driver-code {
-    font-size: 1.2em;
+    font-size: 1.1em;
   }
 
   .time-display {
-    font-size: 0.75em;
-    min-width: 40px;
+    font-size: 0.7em;
+    min-width: 35px;
+  }
+}
+
+@media (max-width: 350px) {
+  .progress-container {
+    .time-display {
+      display: none; // Ocultar tiempos en pantallas extremadamente pequeñas para dejar espacio al slider
+    }
   }
 }
