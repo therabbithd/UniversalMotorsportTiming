@@ -153,6 +153,7 @@
             "P2": "Práctica 2",
             "P3": "Práctica 3",
             "QUALIFYING": "Clasificación",
+            "SPRINT_QUALIFYING": "Clasificación Sprint",
             "SPRINT": "Sprint",
             "RACE": "Carrera"
         },

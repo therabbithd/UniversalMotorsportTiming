@@ -151,6 +151,7 @@
             "P2": "Essais Libres 2",
             "P3": "Essais Libres 3",
             "QUALIFYING": "Qualifications",
+            "SPRINT_QUALIFYING": "Qualifications Sprint",
             "SPRINT": "Sprint",
             "RACE": "Course"
         },

@@ -73,12 +73,10 @@ interface LiveTimingState {
   };
 
   Position?: {
-    Position?: {
-      [driverNumber: string]: {
-        X?: number;
-        Y?: number;
-        Z?: number;
-      };
+    [driverNumber: string]: {
+      X?: number;
+      Y?: number;
+      Z?: number;
     };
   };
 
@@ -94,6 +92,13 @@ interface LiveTimingState {
   Heartbeat?: any;
 }
 
+/**
+ * Servicio encargado de gestionar la conexión WebSocket al stream de telemetría de Fórmula 1 en directo.
+ * 
+ * Se conecta a un proxy (Railway Broker o local) que a su vez consume el SignalR oficial de F1.
+ * Mantiene un estado reactivo global (`liveState`) del cual el resto de componentes pueden 
+ * suscribirse u obtener datos puntuales.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -112,6 +117,10 @@ export class F1LiveTimingStreamService {
 
   constructor() { }
 
+  /**
+   * Inicia la conexión WebSocket con el servidor proxy.
+   * Dependiendo del entorno (desarrollo local o producción), elige la URL adecuada.
+   */
   async connect(): Promise<void> {
     console.log('[F1 Stream] Attempting to connect to Railway Broker...');
 
@@ -174,6 +183,11 @@ export class F1LiveTimingStreamService {
       }
 
       this.liveState.next(newState);
+      if (newState.Position) {
+        console.warn('[F1 Service] State has Position data:', Object.keys(newState.Position).length, 'drivers');
+      } else {
+        // console.log('[F1 Service] State updated, but no Position keys.');
+      }
       this.messageCount++;
     } catch (e) {
       console.error(`[F1 Stream] Could not update data: ${e}`);
@@ -202,6 +216,11 @@ export class F1LiveTimingStreamService {
 
   // ===== Datos tipados =====
 
+  /**
+   * Recupera la lista de información básica de todos los pilotos participantes.
+   * 
+   * @returns Un array de `DriverInfo` con datos como el nombre, número, color de equipo y foto.
+   */
   getDriversInfo(): DriverInfo[] {
     const state: any = this.liveState.value;
     if (!state.DriverList) return [];
@@ -221,6 +240,14 @@ export class F1LiveTimingStreamService {
     }));
   }
 
+  /**
+   * Obtiene y formatea los datos de telemetría más recientes de cada piloto para la tabla de tiempos.
+   * 
+   * Combina información de `TimingData.Lines`, `DriverList` y `TimingAppData` para generar
+   * la vista consolidada de posiciones, tiempos, intervalos y uso de neumáticos.
+   * 
+   * @returns Un array de `DriverTiming` ordenado por la posición actual en carrera/sesión.
+   */
   getDriversTiming(): DriverTiming[] {
     const state: any = this.liveState.value;
 
@@ -302,6 +329,11 @@ export class F1LiveTimingStreamService {
 
   // ===== TeamRadio desde el WebSocket usando el modelo =====
 
+  /**
+   * Extrae el historial de mensajes de radio del equipo recibidos a través del stream.
+   * 
+   * @returns Un array de `TeamRadioCapture` ordenado del más reciente al más antiguo.
+   */
   getTeamRadioCaptures(): TeamRadioCapture[] {
     const state: LiveTimingState = this.liveState.value;
 
@@ -319,6 +351,11 @@ export class F1LiveTimingStreamService {
       );
   }
 
+  /**
+   * Agrupa los mensajes de radio para obtener únicamente la captura más reciente por cada piloto.
+   * 
+   * @returns Un `Map` donde la key es el número del coche y el valor su última `TeamRadioCapture`.
+   */
   getLatestRadioByDriver(): Map<string, TeamRadioCapture> {
     const captures = this.getTeamRadioCaptures();
     const latestByDriver = new Map<string, TeamRadioCapture>();

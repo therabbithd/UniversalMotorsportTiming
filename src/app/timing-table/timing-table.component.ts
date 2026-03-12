@@ -15,6 +15,13 @@ import { AuthService } from '../services/auth.service';
 import { TyreClassPipe } from '../pipes/tyre-class.pipe';
 import { TyreLetterPipe } from '../pipes/tyre-letter.pipe';
 
+/**
+ * Componente principal para mostrar la tabla de tiempos en directo (Live Timing).
+ * 
+ * Se conecta al servicio `F1LiveTimingStreamService` para recibir actualizaciones 
+ * en tiempo real. Incluye subcomponentes como el mapa del circuito, radios de los 
+ * pilotos y los sectores.
+ */
 @Component({
   selector: 'app-timing-table',
   standalone: true,
@@ -53,8 +60,10 @@ export class TimingTableComponent implements OnInit, OnDestroy {
   public isConnected: boolean = false;
   public favoriteDriverCode: string | null = null;
 
+  /** @ignore */
   private subscription?: Subscription;
 
+  /** @ignore */
   constructor(
     private streamService: F1LiveTimingStreamService,
     private profileService: ProfileService,
@@ -62,6 +71,10 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef
   ) { }
 
+  /**
+   * Inicializa el componente y se suscribe al flujo de datos en directo.
+   * También verifica si el usuario está autenticado para resaltar a su piloto favorito.
+   */
   ngOnInit(): void {
     console.log('[Timing Table] Initializing component');
 
@@ -117,6 +130,12 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Aplica clases CSS a las filas de la tabla de tiempos según el estado del piloto (box, vuelta rápida, favorito).
+   * 
+   * @param driver Objeto con los datos de tiempo de un piloto.
+   * @returns Un string con las clases CSS calculadas (ej: `row-pit row-session-best`).
+   */
   getRowClass(driver: DriverTiming): string {
     let classes = '';
 
@@ -138,10 +157,22 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     return classes.trim();
   }
 
+  /**
+   * Función auxiliar para usar en el template HTML y comprobar si un valor es un array.
+   * 
+   * @param value Cualquier tipo de dato.
+   * @returns `true` si el valor es un array, `false` en caso contrario.
+   */
   isArray(value: any): boolean {
     return Array.isArray(value);
   }
-  // Reemplaza el método actual por este
+
+  /**
+   * Obtiene los datos detallados de los sectores para un piloto específico basándose en su posición.
+   * 
+   * @param position La posición en pista del piloto (como string).
+   * @returns Los sectores registrados (`Sectors`) u `undefined` si no se encuentran.
+   */
   getDriverSectorsData(position: string): any {
     const state = this.streamService.getCurrentState();
     const lines = state.TimingData?.Lines;

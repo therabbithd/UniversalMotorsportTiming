@@ -5,6 +5,12 @@ import { LanguageService } from './services/language.service';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
+/**
+ * Componente principal de la aplicación.
+ * 
+ * Contiene el enrutador (`RouterOutlet`) y la barra de navegación (`NavbarComponent`),
+ * y gestiona la inicialización principal de la app, incluyendo el servicio de traducción.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -13,11 +19,30 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
+  /**
+   * Título principal de la aplicación.
+   */
   title = 'UnivesalTiming';
+
+  /**
+   * @ignore
+   */
   private languageService = inject(LanguageService);
+  
+  /**
+   * @ignore
+   */
   private http = inject(HttpClient);
+  
+  /**
+   * @ignore
+   */
   private translate = inject(TranslateService);
 
+  /**
+   * Método de inicialización del ciclo de vida de Angular.
+   * Usado para probar y verificar la configuración de las traducciones al cargar la aplicación.
+   */
   ngOnInit() {
     console.log('[DEBUG] AppComponent initialized');
 

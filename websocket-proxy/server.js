@@ -38,6 +38,7 @@ function decompress(data) {
         const inflated = pako.inflateRaw(buffer, { to: 'string' });
         return JSON.parse(inflated);
     } catch (e) {
+        console.error('[Broker] Decompression error:', e.message);
         return {};
     }
 }
@@ -110,11 +111,15 @@ function updateBrokerState(rawData) {
             for (const message of parsed.M) {
                 if (message.M === 'feed') {
                     let [field, value] = message.A;
+                    console.log(`[Broker] Received field: ${field}`);
                     let update = {};
 
-                    if (field.endsWith('.z')) {
+                    if (field.toLowerCase().endsWith('.z')) {
                         const baseField = field.split('.')[0];
                         value = decompress(value);
+                        if (value && typeof value === 'object' && Object.keys(value).length > 0) {
+                            console.log(`[Broker] Decompressed ${field} successfully with ${Object.keys(value).length} keys`);
+                        }
                         update = { [baseField]: value };
                     } else {
                         update = { [field]: value };
@@ -129,7 +134,9 @@ function updateBrokerState(rawData) {
             for (let [field, value] of Object.entries(parsed.R)) {
                 if (field.endsWith('.z')) {
                     const baseField = field.split('.')[0];
-                    bulkUpdate[baseField] = decompress(value);
+                    value = decompress(value);
+                    console.log(`[Broker] Bulk update decompressed for ${baseField}:`, Object.keys(value).length, 'keys');
+                    bulkUpdate[baseField] = value;
                 } else {
                     bulkUpdate[field] = value;
                 }

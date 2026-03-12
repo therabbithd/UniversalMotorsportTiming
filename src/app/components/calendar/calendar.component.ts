@@ -5,6 +5,12 @@ import { F1CalendarService, Race } from '../../services/f1-calendar.service';
 import { Observable } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
+/**
+ * Componente que muestra la lista de carreras y grandes premios del calendario actual de Fórmula 1.
+ * 
+ * Se conecta con `F1CalendarService` para recuperar todo el calendario estacional y presentarlo
+ * visualmente al usuario con formato internacionalizado.
+ */
 @Component({
   selector: 'app-calendar',
   standalone: true,
@@ -13,15 +19,31 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrl: './calendar.component.scss'
 })
 export class CalendarComponent implements OnInit {
+  /**
+   * Observable que contiene el listado completo de carreras una vez cargado.
+   */
   races$: Observable<Race[]> | undefined;
+  
+  /** @ignore */
   private translate = inject(TranslateService);
 
+  /** @ignore */
   constructor(private calendarService: F1CalendarService) { }
 
+  /**
+   * Inicializa el componente solicitando los datos del calendario a través del servicio respectivo.
+   */
   ngOnInit(): void {
     this.races$ = this.calendarService.getRaceCalendar();
   }
 
+  /**
+   * Elabora un string de rango de fechas legible humanamente para un fin de semana de Gran Premio.
+   * Maneja casos de cambio de mes entre las prácticas y la carrera (ej. "30 Mar - 1 Abr" vs "12 - 14 May").
+   * 
+   * @param race Objeto con la información individual del fin de semana.
+   * @returns Un texto formateado listando los días y mes del evento, usando la localización actual.
+   */
   getRaceDateRange(race: Race): string {
     const startDateStr = race.FirstPractice?.date || race.date;
     const endDateStr = race.date;

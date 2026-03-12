@@ -14,6 +14,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 
+/**
+ * Validador personalizado para comprobar que las contraseñas ingresadas coincidan.
+ * 
+ * @param control El control de formulario abstracto padre (el FormGroup del registro).
+ * @returns Retorna un error `passwordMismatch: true` si no coinciden, o `null` si son idénticas o faltan campos.
+ */
 const passwordMatchValidator: ValidatorFn = (
   control: AbstractControl,
 ): ValidationErrors | null => {
@@ -27,6 +33,12 @@ const passwordMatchValidator: ValidatorFn = (
   return password !== confirm ? { passwordMismatch: true } : null;
 };
 
+/**
+ * Componente de registro de usuario en la aplicación.
+ * 
+ * Este componente permite al nuevo usuario proporcionar sus datos básicos (nombre, email y contraseña) 
+ * para crear una cuenta nueva y posteriormente llevarlo al flujo de configuración de perfil.
+ */
 @Component({
   selector: 'app-register-page',
   standalone: true,
@@ -35,11 +47,22 @@ const passwordMatchValidator: ValidatorFn = (
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
+  /** @ignore */
   private readonly fb = inject(FormBuilder);
+  
+  /** @ignore */
   private readonly authService = inject(AuthService);
+  
+  /** @ignore */
   private readonly router = inject(Router);
+  
+  /** @ignore */
   private readonly dialog = inject(MatDialog);
 
+  /**
+   * Grupo de formulario reactivo con todos los datos necesarios para registrar al usuario, 
+   * incluyendo la validación a nivel de todo el grupo (`passwordMatchValidator`).
+   */
   readonly registrationForm = this.fb.group(
     {
       fullName: ['', [Validators.required, Validators.minLength(3)]],
@@ -51,9 +74,20 @@ export class RegisterComponent {
     { validators: passwordMatchValidator },
   );
 
+  /**
+   * Señal que indica si el formulario ha sido interactuado para enviar, usado para mostrar errores.
+   */
   readonly isSubmitted = signal(false);
+  
+  /**
+   * Señal de estado de carga asíncrona conectada al API de registro.
+   */
   readonly isLoading = signal(false);
 
+  /**
+   * Señal computada para verificar de forma unificada si existe el error de 'passwordMismatch' y 
+   * si el usuario ya ha interactuado con los controles correspondientes.
+   */
   readonly passwordMismatch = computed(() => {
     const confirmTouched = this.confirmPassword?.touched;
     return (
@@ -62,6 +96,14 @@ export class RegisterComponent {
     );
   });
 
+  /**
+   * Procesa el formulario de registro y contacta con el `AuthService`.
+   * 
+   * Al enviarlo correctamente muestra un modal informativo de éxito y dirige a 
+   * `/setup-profile` para completar la creación de la cuenta.
+   * 
+   * @returns Void
+   */
   submit(): void {
     this.isSubmitted.set(true);
 
@@ -114,18 +156,30 @@ export class RegisterComponent {
       });
   }
 
+  /**
+   * Obtiene el control de nombre completo del formulario.
+   */
   get fullName() {
     return this.registrationForm.get('fullName');
   }
 
+  /**
+   * Obtiene el control de email del formulario.
+   */
   get email() {
     return this.registrationForm.get('email');
   }
 
+  /**
+   * Obtiene el control de la contraseña original del formulario.
+   */
   get password() {
     return this.registrationForm.get('password');
   }
 
+  /**
+   * Obtiene el control de confirmación de contraseña del formulario.
+   */
   get confirmPassword() {
     return this.registrationForm.get('confirmPassword');
   }

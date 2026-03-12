@@ -17,6 +17,12 @@ interface DriverPosition {
   onTrack: boolean;
 }
 
+/**
+ * Componente que representa el mapa del circuito interactivo en tiempo real.
+ * 
+ * Se encarga de descargar el archivo SVG/Data del trazado del circuito y posicionar
+ * a los pilotos sobre él según sus coordenadas XYZ emitidas por el telemetry stream.
+ */
 @Component({
   selector: 'app-circuit-map',
   standalone: true,
@@ -44,6 +50,8 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
   // Drivers
   processedDrivers: DriverPosition[] = [];
   startLinePos: { x: number, y: number } | null = null;
+  trackPoints: { x: number, y: number }[] = [];
+  totalTrackLength: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -63,6 +71,10 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
     }
   }
 
+  /**
+   * Carga los datos matemáticos y de trazado del circuito desde una API externa,
+   * permitiendo generar el Path SVG sobre el que se situarán los pilotos.
+   */
   loadMap() {
     if (!this.circuitKey || !this.year) return;
 
@@ -99,8 +111,17 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
 
     // First transform all points
     const transformedPoints = this.transformPoints(xArr, yArr);
+    this.trackPoints = transformedPoints;
 
     if (transformedPoints.length === 0) return;
+
+    // Calculate total track length for interpolation
+    this.totalTrackLength = 0;
+    for (let i = 0; i < transformedPoints.length; i++) {
+      const p1 = transformedPoints[i];
+      const p2 = transformedPoints[(i + 1) % transformedPoints.length];
+      this.totalTrackLength += Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+    }
 
     // Generate SVG path string "M x1,y1 L x2,y2 ..."
     let path = `M ${transformedPoints[0].x},${transformedPoints[0].y}`;
@@ -116,6 +137,13 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
 
     // Update ViewBox to fit the track
     this.updateViewBox(transformedPoints);
+
+    // DEBUG: Track data range
+    const minX = Math.min(...transformedPoints.map(p => p.x));
+    const maxX = Math.max(...transformedPoints.map(p => p.x));
+    const minY = Math.min(...transformedPoints.map(p => p.y));
+    const maxY = Math.max(...transformedPoints.map(p => p.y));
+    console.log(`[Circuit Map] Track Range: X[${minX.toFixed(0)}, ${maxX.toFixed(0)}], Y[${minY.toFixed(0)}, ${maxY.toFixed(0)}], Total Length: ${this.totalTrackLength.toFixed(0)}`);
   }
 
   updateViewBox(points: { x: number, y: number }[]) {
@@ -153,19 +181,33 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
     });
   }
 
+  /**
+   * Actualiza las posiciones (X, Y) calculadas para los pilotos basándose en los 
+   * datos telemétricos recuperados del servicio de Timing.
+   */
   updateDriverPositions() {
     const state = this.streamService.getCurrentState();
     if (!state.DriverList) {
       return;
     }
 
-    const positionData = state.Position?.Position || {};
+    // After interface simplification, Position is the driver map
+    console.warn('[Circuit Map] State Keys:', Object.keys(state));
+    const positionData = state.Position || {};
     const driverList = state.DriverList;
     const timingData = state.TimingData?.Lines || {};
 
+    if (Object.keys(positionData).length > 0) {
+      console.warn(`[Circuit Map] OK: Data for ${Object.keys(positionData).length} drivers`);
+      const sampleKey = Object.keys(positionData)[0];
+      console.log(`[Circuit Map] Sample Driver ${sampleKey}:`, positionData[sampleKey]);
+    } else {
+      console.warn('[Circuit Map] Waiting for position data...');
+    }
+
     const newProcessedDrivers: DriverPosition[] = [];
 
-    // Iterate over all drivers to ensure those without position data are shown at the start line
+    // Iterate over all drivers
     for (const [driverNumber, driver] of Object.entries(driverList)) {
       if (!driver) continue;
 
@@ -176,15 +218,27 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
 
       if (posData && typeof posData === 'object') {
         const pos = posData as any;
-        [rx, ry] = this.rotate(pos.X, pos.Y, this.rotation);
         rz = pos.Z || 0;
+
+        // F1 Z is often altitude. 
+        // Heuristic: If Z is much larger than typical altitude (e.g. > 100m) 
+        // and doesn't match X or Y, it might be track progress.
+        const isZTrackProgress = rz > 500 && rz !== pos.X && rz !== pos.Y;
+
+        if (this.trackPoints.length > 0 && isZTrackProgress) {
+          const interpolated = this.getPositionFromZ(rz);
+          rx = interpolated.x;
+          ry = interpolated.y;
+        } else {
+          // Fallback to X, Y. 
+          // Both raw coords and track data seem to be in decimeters, so no scaling needed.
+          [rx, ry] = this.rotate(pos.X, pos.Y, this.rotation);
+        }
       } else if (this.startLinePos) {
-        // Fallback to start line position
         rx = this.startLinePos.x;
         ry = this.startLinePos.y;
         rz = 0;
       } else {
-        // Skip if no position info and no start line reference
         continue;
       }
 
@@ -204,6 +258,53 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
 
     this.processedDrivers = newProcessedDrivers;
     this.cdr.markForCheck();
+  }
+
+  private getPositionFromZ(z: number): { x: number, y: number } {
+    // console.log('[Circuit Map] Interpolating Z:', z);
+    let normalizedZ = 0;
+
+    // F1 Z is cumulative distance. 
+    // We can try to normalize it using the total track length from Multiviewer.
+    // However, Multiviewer track points might not be perfectly scaled to meters.
+    // Let's assume z is meters and we need a scale factor.
+
+    // For now, let's try assuming z is already the point index progress if it's small,
+    // or normalized if it's 0-1.
+
+    if (z > 32767) {
+      // Very large Z, might be millimeters?
+      normalizedZ = (z / 1000) / (this.totalTrackLength || 5000);
+    } else if (z > 1) {
+      // Could be meters or 0-32767. 
+      // F1 standard for track progress in some feeds is 0-32767.
+      // If z is much larger than typical track length (~6000), it's likely 0-32767.
+      if (z > 10000) {
+        normalizedZ = z / 32767;
+      } else {
+        // Assume meters
+        normalizedZ = z / (this.totalTrackLength || 5000);
+      }
+    } else {
+      normalizedZ = z;
+    }
+
+    // Find the point on the track points array
+    const pointIndex = normalizedZ * (this.trackPoints.length - 1);
+    const index = Math.floor(pointIndex);
+    const fraction = pointIndex - index;
+
+    if (index >= this.trackPoints.length - 1) {
+      return this.trackPoints[this.trackPoints.length - 1];
+    }
+
+    const p1 = this.trackPoints[index];
+    const p2 = this.trackPoints[index + 1];
+
+    return {
+      x: p1.x + (p2.x - p1.x) * fraction,
+      y: p1.y + (p2.y - p1.y) * fraction
+    };
   }
 
   transformPoints(xArr: number[], yArr: number[]): { x: number, y: number }[] {

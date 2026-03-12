@@ -151,6 +151,7 @@
             "P2": "Practice 2",
             "P3": "Practice 3",
             "QUALIFYING": "Qualifying",
+            "SPRINT_QUALIFYING": "Sprint Qualifying",
             "SPRINT": "Sprint",
             "RACE": "Race"
         },

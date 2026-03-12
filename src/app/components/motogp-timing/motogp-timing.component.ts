@@ -21,6 +21,13 @@ import {
 } from '../../models/motogp.model';
 import { CountryFlagPipe } from '../../pipes/country-flag.pipe';
 
+/**
+ * Componente principal para visualizar la información del mundial de MotoGP.
+ * 
+ * Permite al usuario navegar a través de diferentes temporadas, categorías (MotoGP, Moto2, Moto3)
+ * y eventos, revisar las tablas de clasificación, el campeonato general (standings), 
+ * y observar una versión Lite del Live Timing cuando existe una sesión actualmente activa.
+ */
 @Component({
     selector: 'app-motogp-timing',
     standalone: true,
@@ -32,7 +39,6 @@ import { CountryFlagPipe } from '../../pipes/country-flag.pipe';
         MatFormFieldModule,
         MatProgressSpinnerModule,
         MatTabsModule,
-        MatTabsModule,
         TranslateModule,
         CountryFlagPipe
     ],
@@ -41,22 +47,39 @@ import { CountryFlagPipe } from '../../pipes/country-flag.pipe';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MotoGPTimingComponent implements OnInit, OnDestroy {
+    /** Lista de temporadas disponibles en el API histórico. */
     public seasons: MotoGPSeason[] = [];
+    /** Lista de categorías disponibles para la temporada actual. */
     public categories: MotoGPCategory[] = [];
+    /** Lista de grandes premios y eventos de la categoría actual. */
     public events: MotoGPEvent[] = [];
+    /** Sesiones cronometradas y de carrera del evento actual. */
     public sessions: MotoGPSession[] = [];
+    
+    /** Resultados clasificatorios de la sesión seleccionada. */
     public classification: MotoGPClassificationEntry[] = [];
+    /** Tabla general del campeonato mundial (Standings). */
     public standings: MotoGPStandingEntry[] = [];
+    
+    /** Objeto con el snapshot actual del Live Timing. */
     public liveTiming?: MotoGPLiveTiming;
+    /** Matriz de pilotos activos en directo ordenados por posición. */
     public liveRiders: MotoGPLiveRider[] = [];
 
+    /** @ignore */
     public selectedSeason?: string;
+    /** @ignore */
     public selectedCategory?: string;
+    /** @ignore */
     public selectedEvent?: string;
+    /** @ignore */
     public selectedSession?: string;
 
+    /** Indica si hay peticiones en curso bloqueando la UI. */
     public isLoading = false;
+    /** Indica si la consulta finalizó vacía (sin registros disponibles). */
     public noData = false;
+    /** Controla la visualización condicional de la pestaña de Live Timing. */
     public isLiveVisible = false;
 
     public displayedResultsColumns: string[] = ['position', 'rider', 'team', 'best_lap', 'gap', 'speed'];
@@ -79,6 +102,10 @@ export class MotoGPTimingComponent implements OnInit, OnDestroy {
         this.stopLivePolling();
     }
 
+    /**
+     * Inicia un observador periódico que comprueba cada 10 segundos la disponibilidad 
+     * de un nuevo set de tiempos en vivo a través del API Proxy.
+     */
     startLivePolling(): void {
         // Poll every 10 seconds for lite live timing
         this.pollingSubscription = interval(10000).pipe(
@@ -107,12 +134,17 @@ export class MotoGPTimingComponent implements OnInit, OnDestroy {
         });
     }
 
+    /** Módulo para finalizar el "polling" recurrente del servidor en caso de destrucción. */
     stopLivePolling(): void {
         if (this.pollingSubscription) {
             this.pollingSubscription.unsubscribe();
         }
     }
 
+    /**
+     * Carga el historial de temporadas de MotoGP soportadas y selecciona la actual 
+     * por defecto, encadenando subsiguientes cargas (Categorías, Eventos, Sesiones).
+     */
     loadSeasons(): void {
         this.isLoading = true;
         this.motogpService.getSeasons().subscribe({
@@ -248,6 +280,13 @@ export class MotoGPTimingComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Devuelve la URL de la miniatura de la bandera correspondiente al código ISO
+     * usando la red pública gratuita `flagcdn`.
+     * 
+     * @param iso Código de país (ej. `IT`, `ES`, `GB`).
+     * @returns Un link HTTP directo a la bandera en formato PNG de 20px de ancho.
+     */
     getCountryFlag(iso: string): string {
         return `https://flagcdn.com/w20/${iso.toLowerCase()}.png`;
     }

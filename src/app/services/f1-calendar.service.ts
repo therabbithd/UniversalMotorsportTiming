@@ -33,6 +33,7 @@ export interface Race {
   SecondPractice?: Session;
   ThirdPractice?: Session;
   Qualifying?: Session;
+  SprintQualifying?: Session;
   Sprint?: Session;
 }
 
@@ -72,20 +73,38 @@ export interface ErgastResponse {
   MRData: MRData;
 }
 
+/**
+ * Servicio encargado de consultar los datos históricos y del calendario a la API
+ * comunitaria Ergast (a través de jolpi.ca).
+ * 
+ * Permite buscar la lista de carreras por circuito, fechas de sesiones, 
+ * y listados de pilotos de la temporada especificada.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class F1CalendarService {
+  /** @ignore */
   private apiUrl = 'https://api.jolpi.ca/ergast/f1/2026.json';
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Obtiene la estructura global del calendario (sesiones, circuitos, fechas).
+   * 
+   * @returns Un `Observable` con un array del modelo `Race`.
+   */
   getRaceCalendar(): Observable<Race[]> {
     return this.http.get<ErgastResponse>(this.apiUrl).pipe(
       map(response => response.MRData.RaceTable!.Races)
     );
   }
 
+  /**
+   * Obtiene la lista completa de pilotos confirmados para la temporada estipulada.
+   * 
+   * @returns Un `Observable` con un array del modelo `Driver`.
+   */
   getDrivers(): Observable<Driver[]> {
     const driversUrl = 'https://api.jolpi.ca/ergast/f1/2026/drivers.json';
     return this.http.get<ErgastResponse>(driversUrl).pipe(
@@ -93,6 +112,12 @@ export class F1CalendarService {
     );
   }
 
+  /**
+   * Obtiene la información estructurada de una carrera o fin de semana en específico.
+   * 
+   * @param round El número de la ronda del mundial solicitada (como string).
+   * @returns Un `Observable` que emite un objeto `Race` o `undefined` si no existe la ronda.
+   */
   getRaceDetails(round: string): Observable<Race | undefined> {
     return this.getRaceCalendar().pipe(
       map(races => races.find(r => r.round === round))

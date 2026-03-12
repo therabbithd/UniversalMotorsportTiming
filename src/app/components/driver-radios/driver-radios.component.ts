@@ -9,6 +9,10 @@ import { F1LiveTimingStreamService } from '../../services/f1-livetiming.service'
 import { DriverInfo, TeamRadioCapture } from '../../models/f1-livetiming.model';
 import { TranslateModule } from '@ngx-translate/core';
 
+/**
+ * Interface puramente UI para combinar la tarjeta de piloto, con 
+ * el estado temporal y de control de su reproductor de audio ("Team Radio").
+ */
 interface DriverRadio {
   racingNumber: string;
   driverCode: string;
@@ -18,12 +22,20 @@ interface DriverRadio {
   headshotUrl: string;
   latestCapture: TeamRadioCapture;
   audioUrl: string;
-  // estado de reproducción
+  /**  Indica si el audio de este piloto está en reproducción. */
   playing: boolean;
+  /** Duración en segundos del archivo de audio. */
   duration: number;
+  /** Progreso actual en segundos de la reproducción. */
   progress: number;
 }
 
+/**
+ * Componente para mostrar las últimas comunicaciones de radio de los pilotos (Team Radio).
+ * 
+ * Se conecta al stream en directo de F1 y genera una lista reproducibles (Play, Pause, Barra de progreso)
+ * por cara piloto basados en el archivo de audio subido por el API.
+ */
 @Component({
   selector: 'app-driver-radios',
   standalone: true,
@@ -32,8 +44,10 @@ interface DriverRadio {
   styleUrls: ['./driver-radios.component.scss']
 })
 export class DriverRadiosComponent implements OnInit, OnDestroy {
+  /** Array de tarjetas compuestas de radio listas para proyectarse en la vista HTML. */
   drivers: DriverRadio[] = [];
 
+  /** @ignore */
   private subscription?: Subscription;
 
   constructor(

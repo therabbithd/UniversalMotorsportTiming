@@ -3,7 +3,13 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { TimingTableComponent } from './timing-table/timing-table.component';
 
-
+/**
+ * Definición de las rutas de la aplicación.
+ * 
+ * Contiene el enrutamiento principal de la aplicación `UniversalMotorsportTiming`,
+ * soportando lazy loading para distintos módulos y un mecanismo de fallback para 
+ * rutas desconocidas.
+ */
 export const routes: Routes = [
   {
     path: '',

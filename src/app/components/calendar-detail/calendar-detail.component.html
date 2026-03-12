@@ -55,6 +55,15 @@
                 </div>
             </div>
 
+            <div class="session-row" *ngIf="race.SprintQualifying">
+                <div class="session-name">{{ 'CALENDAR.SESSIONS.SPRINT_QUALIFYING' | translate }}</div>
+                <div class="session-time">
+                    <span class="date">{{ getSessionDate(race.SprintQualifying) | date:'EEEE, d MMMM':undefined:currentLang |
+                        titlecase }}</span>
+                    <span class="time">{{ getSessionDate(race.SprintQualifying) | date:'HH:mm' }}</span>
+                </div>
+            </div>
+
             <!-- Handle Sprint if it exists -->
             <div class="session-row" *ngIf="race.Sprint">
                 <div class="session-name">{{ 'CALENDAR.SESSIONS.SPRINT' | translate }}</div>
