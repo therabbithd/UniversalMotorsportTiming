@@ -1,16 +1,31 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
+/**
+ * Directive that provides a fallback image mechanism for `<img>` tags.
+ * If the original image source fails to load, it will be replaced by the provided fallback URL
+ * or a default placeholder.
+ */
 @Directive({
     selector: 'img[appImageFallback]',
     standalone: true
 })
 export class ImageFallbackDirective {
-    // Path to the fallback image.
-    // Usage: <img src="invalid.jpg" appImageFallback="assets/images/default-user.png">
+    /**
+     * URL path to the fallback image.
+     * Usage: `<img src="invalid.jpg" appImageFallback="assets/images/default-user.png">`
+     */
     @Input() appImageFallback: string = '';
 
+    /**
+     * Initializes the ImageFallbackDirective.
+     * @param el Reference to the host HTMLImageElement
+     */
     constructor(private el: ElementRef) { }
 
+    /**
+     * Listens for the 'error' event on the host image element.
+     * Replaces the broken source with the fallback image URL or a default placeholder.
+     */
     @HostListener('error')
     onError() {
         if (this.appImageFallback) {

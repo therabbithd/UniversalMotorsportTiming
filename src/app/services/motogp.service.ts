@@ -29,6 +29,10 @@ export class MotoGPService {
             : 'https://f1-websocket-proxy-production-9991.up.railway.app/motogp-api';
     }
 
+    /**
+     * Crea una instancia de MotoGPService.
+     * @param http Cliente HTTP para realizar peticiones a la API de MotoGP.
+     */
     constructor(private http: HttpClient) { }
 
     /**

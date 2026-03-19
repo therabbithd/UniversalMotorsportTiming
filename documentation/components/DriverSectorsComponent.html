@@ -1,0 +1,792 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>univesal-timing documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">univesal-timing documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  DriverSectorsComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/components/driver-sector/driver-sectors.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Displays the micro-sectors or segments for a given driver&#39;s lap.</p>
+
+    </p>
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+            <tr>
+                <td class="col-md-3">changeDetection</td>
+                <td class="col-md-9"><code>ChangeDetectionStrategy.OnPush</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-driver-sectors</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                            <code>TranslateModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./driver-sectors.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./driver-sectors.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getSectorsArray" >getSectorsArray</a>
+                            </li>
+                            <li>
+                                <a href="#getSegmentColor" >getSegmentColor</a>
+                            </li>
+                            <li>
+                                <a href="#getSegmentsArray" >getSegmentsArray</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#sectors" >sectors</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="sectors"></a>
+                        <b>sectors</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Sector.html" target="_self" >Sector[] | literal type</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/components/driver-sector/driver-sectors.component.ts:19</a></div>
+                            </td>
+                        </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <div class="io-description"><p>Input containing the sector data object or array</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSectorsArray"></a>
+                    <span class="name">
+                        <span ><b>getSectorsArray</b></span>
+                        <a href="#getSectorsArray"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSectorsArray()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="25"
+                                    class="link-to-prism">src/app/components/driver-sector/driver-sectors.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Helper method to extract an array of sectors from the input.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/Sector.html" target="_self" >Sector[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Filtered array of sectors</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSegmentColor"></a>
+                    <span class="name">
+                        <span ><b>getSegmentColor</b></span>
+                        <a href="#getSegmentColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSegmentColor(status?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="59"
+                                    class="link-to-prism">src/app/components/driver-sector/driver-sectors.component.ts:59</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Returns the appropriate CSS hex color code based on the segment status.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>status</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <p>The segment status indicator</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Hex color string</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSegmentsArray"></a>
+                    <span class="name">
+                        <span ><b>getSegmentsArray</b></span>
+                        <a href="#getSegmentsArray"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSegmentsArray(sector: <a href="../interfaces/Sector.html" target="_self">Sector</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="43"
+                                    class="link-to-prism">src/app/components/driver-sector/driver-sectors.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Helper method to extract segments from a specific sector.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>sector</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Sector.html" target="_self" >Sector</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>The sector instance</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/Segment.html" target="_self" >Segment[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Array of Segments</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input, ChangeDetectionStrategy } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { TranslateModule } from &#x27;@ngx-translate/core&#x27;;
+import { Sector, Segment } from &#x27;../../models/f1-livetiming.model&#x27;;
+
+/**
+ * Displays the micro-sectors or segments for a given driver&#x27;s lap.
+ */
+@Component({
+  selector: &#x27;app-driver-sectors&#x27;,
+  standalone: true,
+  imports: [CommonModule, TranslateModule],
+  templateUrl: &#x27;./driver-sectors.component.html&#x27;,
+  styleUrls: [&#x27;./driver-sectors.component.scss&#x27;],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class DriverSectorsComponent {
+  /** Input containing the sector data object or array */
+  @Input() sectors?: Sector[] | { [key: string]: Sector };
+
+  /** 
+   * Helper method to extract an array of sectors from the input.
+   * @returns Filtered array of sectors 
+   */
+  getSectorsArray(): Sector[] {
+    if (!this.sectors) return [];
+
+    const sectorsArray &#x3D; Array.isArray(this.sectors)
+      ? this.sectors
+      : Object.values(this.sectors);
+
+    // Filtrar sectores válidos que tengan segmentos
+    return sectorsArray.filter(s &#x3D;&gt;
+      s &amp;&amp; (s.Segments || s.Value)
+    );
+  }
+
+  /** 
+   * Helper method to extract segments from a specific sector.
+   * @param sector The sector instance
+   * @returns Array of Segments
+   */
+  getSegmentsArray(sector: Sector): Segment[] {
+    if (!sector || !sector.Segments) return [];
+
+    const segments &#x3D; Array.isArray(sector.Segments)
+      ? sector.Segments
+      : Object.values(sector.Segments);
+
+    // Filtrar segmentos válidos
+    return segments.filter(seg &#x3D;&gt; seg &amp;&amp; seg.Status !&#x3D;&#x3D; undefined);
+  }
+
+  /** 
+   * Returns the appropriate CSS hex color code based on the segment status.
+   * @param status The segment status indicator
+   * @returns Hex color string
+   */
+  getSegmentColor(status?: number): string {
+    switch (status) {
+      case 2048: return &#x27;#ffd700&#x27;;        // Amarillo (tiempo personal)
+      case 2049: return &#x27;#32cd32&#x27;;        // Verde lima (mejor personal)
+      case 2051: return &#x27;#ff00ff&#x27;;        // Magenta (mejor sesión)
+      case 2064: return &#x27;#1e90ff&#x27;;        // Azul (bandera amarilla/invalidado)
+      case 2052: return &#x27;#9370db&#x27;;        // Púrpura (otro estado)
+      default: return &#x27;#555&#x27;;             // Gris oscuro (sin datos especiales)
+    }
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;sectors-container&quot;&gt;
+  @if (getSectorsArray().length &gt; 0) {
+  @for (sector of getSectorsArray(); track $index) {
+  &lt;div class&#x3D;&quot;sector&quot;&gt;
+    &lt;div class&#x3D;&quot;segments&quot;&gt;
+      @for (segment of getSegmentsArray(sector); track $index) {
+      &lt;span class&#x3D;&quot;segment&quot; [style.background-color]&#x3D;&quot;getSegmentColor(segment.Status)&quot;
+        [title]&#x3D;&quot;(&#x27;RACE.SECTORS.STATUS_PREFIX&#x27; | translate) + segment.Status&quot;&gt;
+      &lt;/span&gt;
+      }
+    &lt;/div&gt;
+    @if (sector.Value) {
+    &lt;span class&#x3D;&quot;sector-time&quot;&gt;{{ sector.Value }}&lt;/span&gt;
+    }
+  &lt;/div&gt;
+  }
+  } @else {
+  &lt;span class&#x3D;&quot;no-sectors&quot;&gt;—&lt;/span&gt;
+  }
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./driver-sectors.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.sectors-container {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  min-height: 32px; // Increased to accommodate timing labels
+  padding-bottom: 4px; // Added margin/padding below
+}
+
+.sector {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  position: relative; // Added for absolute positioning of sector-time
+}
+
+.segments {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.segment {
+  display: block;
+  width: 5px;
+  height: 18px;
+  border-radius: 2px;
+  transition: background-color 150ms;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.sector-time {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  margin-top: 4px; // Increased margin from bars
+  font-size: 9px;
+  font-weight: 600;
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  pointer-events: none; // Prevent it from interfering with tooltips if any
+}
+
+.no-sectors {
+  font-size: 0.85em;
+  color: #999;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .segments {
+    gap: 1px;
+  }
+
+  .segment {
+    width: 4px;
+    height: 16px;
+  }
+
+  .sector-time {
+    font-size: 8px;
+    padding: 1px 2px;
+  }
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="sectors-container">  @if (getSectorsArray().length > 0) {  @for (sector of getSectorsArray(); track $index) {  <div class="sector">    <div class="segments">      @for (segment of getSegmentsArray(sector); track $index) {      <span class="segment" [style.background-color]="getSegmentColor(segment.Status)"        [title]="(\'RACE.SECTORS.STATUS_PREFIX\' | translate) + segment.Status">      </span>      }    </div>    @if (sector.Value) {    <span class="sector-time">{{ sector.Value }}</span>    }  </div>  }  } @else {  <span class="no-sectors">—</span>  }</div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CalendarComponent', 'selector': 'app-calendar'},{'name': 'CalendarDetailComponent', 'selector': 'app-calendar-detail'},{'name': 'CircuitMapComponent', 'selector': 'app-circuit-map'},{'name': 'ConfirmModalComponent', 'selector': 'app-confirm-modal'},{'name': 'DriverRadiosComponent', 'selector': 'app-driver-radios'},{'name': 'DriverSectorsComponent', 'selector': 'app-driver-sectors'},{'name': 'DriverSelectorComponent', 'selector': 'app-driver-selector'},{'name': 'FeedbackModalComponent', 'selector': 'app-feedback-modal'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MotoGPTimingComponent', 'selector': 'app-motogp-timing'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'ProfileSetupComponent', 'selector': 'app-profile-setup'},{'name': 'ProfileViewComponent', 'selector': 'app-profile-view'},{'name': 'RegisterComponent', 'selector': 'app-register-page'},{'name': 'TimingTableComponent', 'selector': 'app-timing-table'}];
+    var DIRECTIVES = [{'name': 'ImageFallbackDirective', 'selector': 'img[appImageFallback]'}];
+    var ACTUAL_COMPONENT = {'name': 'DriverSectorsComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'DriverSectorsComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

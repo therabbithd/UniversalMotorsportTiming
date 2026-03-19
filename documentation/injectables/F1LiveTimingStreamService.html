@@ -1,0 +1,2043 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>univesal-timing documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">univesal-timing documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Injectables</li>
+  <li class="breadcrumb-item" >F1LiveTimingStreamService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/services/f1-livetiming.service.ts</code>
+        </p>
+
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Servicio encargado de gestionar la conexión WebSocket al stream de telemetría de Fórmula 1 en directo.</p>
+<p>Se conecta a un proxy (Railway Broker o local) que a su vez consume el SignalR oficial de F1.
+Mantiene un estado reactivo global (<code>liveState</code>) del cual el resto de componentes pueden
+suscribirse u obtener datos puntuales.</p>
+
+            </p>
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#liveState" >liveState</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#messageCount" >messageCount</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#reconnectTimeout" >reconnectTimeout</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#RETRY_FREQ" >RETRY_FREQ</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#SIGNALR_HUB" >SIGNALR_HUB</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#state$" >state$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#ws" >ws</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#connect" >connect</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#deepObjectMerge" >deepObjectMerge</a>
+                            </li>
+                            <li>
+                                <a href="#disconnect" >disconnect</a>
+                            </li>
+                            <li>
+                                <a href="#getCurrentState" >getCurrentState</a>
+                            </li>
+                            <li>
+                                <a href="#getDriversInfo" >getDriversInfo</a>
+                            </li>
+                            <li>
+                                <a href="#getDriversTiming" >getDriversTiming</a>
+                            </li>
+                            <li>
+                                <a href="#getEventPath" >getEventPath</a>
+                            </li>
+                            <li>
+                                <a href="#getLatestRadioByDriver" >getLatestRadioByDriver</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#getStatusColor" >getStatusColor</a>
+                            </li>
+                            <li>
+                                <a href="#getTeamRadioCaptures" >getTeamRadioCaptures</a>
+                            </li>
+                            <li>
+                                <a href="#getWebSocketBaseUrl" >getWebSocketBaseUrl</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#parsePosition" >parsePosition</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#resetState" >resetState</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#scheduleReconnect" >scheduleReconnect</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#setupWebSocket" >setupWebSocket</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#updateState" >updateState</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="180" class="link-to-prism">src/app/services/f1-livetiming.service.ts:180</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><p>Crea una instancia de F1LiveTimingStreamService.</p>
+</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="connect"></a>
+                    <span class="name">
+                            <span class="modifier">Async</span>
+                        <span ><b>connect</b></span>
+                        <a href="#connect"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>connect()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="191"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:191</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Inicia la conexión WebSocket con el servidor proxy.
+Dependiendo del entorno (desarrollo local o producción), elige la URL adecuada.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;void&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deepObjectMerge"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>deepObjectMerge</b></span>
+                        <a href="#deepObjectMerge"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>deepObjectMerge(original: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, modifier: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="282"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:282</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Realiza una fusión recursiva de dos objetos, priorizando los valores del objeto <code>modifier</code>.
+Sirve para aplicar parches de estado recibidos del stream de F1 sin perder datos previos.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>original</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>Objeto base sobre el que aplicar los cambios.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>modifier</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>Objeto que contiene las claves y valores nuevos o actualizados.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un nuevo objeto con los datos fusionados.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="disconnect"></a>
+                    <span class="name">
+                        <span ><b>disconnect</b></span>
+                        <a href="#disconnect"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>disconnect()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="430"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:430</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Cierra de forma limpia la conexión WebSocket y anula cualquier intento de reconexión pendiente.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCurrentState"></a>
+                    <span class="name">
+                        <span ><b>getCurrentState</b></span>
+                        <a href="#getCurrentState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCurrentState()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="402"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:402</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Devuelve el último snapshot completo del estado de telemetría sin necesidad de suscripción.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/LiveTimingState.html" target="_self" >LiveTimingState</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>El objeto <code>LiveTimingState</code> actual.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDriversInfo"></a>
+                    <span class="name">
+                        <span ><b>getDriversInfo</b></span>
+                        <a href="#getDriversInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDriversInfo()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="308"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:308</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Recupera la lista de información básica de todos los pilotos participantes.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>DriverInfo[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un array de <code>DriverInfo</code> con datos como el nombre, número, color de equipo y foto.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDriversTiming"></a>
+                    <span class="name">
+                        <span ><b>getDriversTiming</b></span>
+                        <a href="#getDriversTiming"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDriversTiming()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="335"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:335</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Obtiene y formatea los datos de telemetría más recientes de cada piloto para la tabla de tiempos.</p>
+<p>Combina información de <code>TimingData.Lines</code>, <code>DriverList</code> y <code>TimingAppData</code> para generar
+la vista consolidada de posiciones, tiempos, intervalos y uso de neumáticos.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>DriverTiming[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un array de <code>DriverTiming</code> ordenado por la posición actual en carrera/sesión.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getEventPath"></a>
+                    <span class="name">
+                        <span ><b>getEventPath</b></span>
+                        <a href="#getEventPath"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getEventPath()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="497"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:497</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLatestRadioByDriver"></a>
+                    <span class="name">
+                        <span ><b>getLatestRadioByDriver</b></span>
+                        <a href="#getLatestRadioByDriver"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getLatestRadioByDriver()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="470"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:470</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Agrupa los mensajes de radio para obtener únicamente la captura más reciente por cada piloto.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/TeamRadioCapture.html" target="_self" >Map&lt;string, TeamRadioCapture&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un <code>Map</code> donde la key es el número del coche y el valor su última <code>TeamRadioCapture</code>.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getStatusColor"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>getStatusColor</b></span>
+                        <a href="#getStatusColor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getStatusColor(timing: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="388"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:388</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Determina el color o estado visual de la vuelta de un piloto basándose en si es
+récord de sesión, récord personal o una vuelta normal.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>timing</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Datos de tiempo filtrados de un piloto.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>&quot;personal-best&quot; | &quot;session-best&quot; | &quot;normal&quot; | &quot;none&quot;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un identificador de estado: &#39;session-best&#39;, &#39;personal-best&#39;, &#39;normal&#39; o &#39;none&#39;.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTeamRadioCaptures"></a>
+                    <span class="name">
+                        <span ><b>getTeamRadioCaptures</b></span>
+                        <a href="#getTeamRadioCaptures"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTeamRadioCaptures()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="448"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:448</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Extrae el historial de mensajes de radio del equipo recibidos a través del stream.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/TeamRadioCapture.html" target="_self" >TeamRadioCapture[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un array de <code>TeamRadioCapture</code> ordenado del más reciente al más antiguo.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getWebSocketBaseUrl"></a>
+                    <span class="name">
+                        <span ><b>getWebSocketBaseUrl</b></span>
+                        <a href="#getWebSocketBaseUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getWebSocketBaseUrl()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="489"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:489</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Construye la URL base para el API de F1 basándose en el protocolo y host actuales.
+Utilizado principalmente para redirigir peticiones de assets al proxy local o remoto.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>URL base (ej: <code>http://localhost:4200/f1-api</code>).</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parsePosition"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>parsePosition</b></span>
+                        <a href="#parsePosition"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>parsePosition(position: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="375"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:375</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Convierte un valor de posición (que puede ser string o number) a un número entero.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>position</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>El valor de posición extraído del stream.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Representación numérica de la posición, o 999 si no es válida.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetState"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>resetState</b></span>
+                        <a href="#resetState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>resetState()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="409"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:409</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Limpia el estado interno y reinicia los contadores. Se usa al abrir una nueva conexión.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scheduleReconnect"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>scheduleReconnect</b></span>
+                        <a href="#scheduleReconnect"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>scheduleReconnect()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="417"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:417</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Programa un intento de reconexión tras el intervalo de tiempo definido en <code>RETRY_FREQ</code>.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setupWebSocket"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>setupWebSocket</b></span>
+                        <a href="#setupWebSocket"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>setupWebSocket(wsUrl: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="212"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:212</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Configura los eventos del WebSocket para manejar la apertura, recepción de mensajes,
+errores y cierre de la conexión.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>wsUrl</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>URL completa del WebSocket al que conectarse.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="updateState"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>updateState</b></span>
+                        <a href="#updateState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>updateState(data: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="243"
+                                    class="link-to-prism">src/app/services/f1-livetiming.service.ts:243</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Procesa un mensaje crudo recibido del WebSocket, parsea el JSON y actualiza
+el estado interno realizando un merge profundo.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>data</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>String JSON con las actualizaciones de telemetría.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="liveState"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>liveState</b></span>
+                        <a href="#liveState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new BehaviorSubject&lt;LiveTimingState&gt;({})</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="173" class="link-to-prism">src/app/services/f1-livetiming.service.ts:173</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Sujeto de comportamiento que mantiene el último estado conocido del stream.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="messageCount"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>messageCount</b></span>
+                        <a href="#messageCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="175" class="link-to-prism">src/app/services/f1-livetiming.service.ts:175</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Contador acumulativo de mensajes recibidos durante la sesión actual.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reconnectTimeout"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>reconnectTimeout</b></span>
+                        <a href="#reconnectTimeout"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="177" class="link-to-prism">src/app/services/f1-livetiming.service.ts:177</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Referencia al temporizador de reconexión.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="RETRY_FREQ"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>RETRY_FREQ</b></span>
+                        <a href="#RETRY_FREQ"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>10000</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="168" class="link-to-prism">src/app/services/f1-livetiming.service.ts:168</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Tiempo de espera en milisegundos antes de intentar una reconexión tras un fallo.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SIGNALR_HUB"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>SIGNALR_HUB</b></span>
+                        <a href="#SIGNALR_HUB"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;Streaming&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="166" class="link-to-prism">src/app/services/f1-livetiming.service.ts:166</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Identificador del Hub de SignalR para el stream de F1.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="state$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>state$</b></span>
+                        <a href="#state$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/LiveTimingState.html" target="_self" >Observable&lt;LiveTimingState&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this.liveState.asObservable()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="180" class="link-to-prism">src/app/services/f1-livetiming.service.ts:180</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Observable público que emite el estado completo de telemetría a los suscriptores.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ws"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>ws</b></span>
+                        <a href="#ws"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>WebSocket | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="171" class="link-to-prism">src/app/services/f1-livetiming.service.ts:171</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Instancia activa del WebSocket.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { BehaviorSubject, Observable } from &#x27;rxjs&#x27;;
+import { DriverTiming, DriverInfo, TyreStint, TeamRadioCapture, TeamRadioState } from &#x27;../models/f1-livetiming.model&#x27;;
+
+/**
+ * Represents the complete live timing state of the F1 session.
+ */
+interface LiveTimingState {
+  /** Core timing data for all drivers */
+  TimingData?: {
+    /** Map of driver timing lines by driver number */
+    Lines?: {
+      [driverNumber: string]: {
+        /** Current track position */
+        Position?: string;
+        /** Racing number of the driver */
+        RacingNumber?: string;
+        /** General sorting line/position */
+        Line?: number;
+        /** Indicates if the driver retired */
+        Retired?: boolean;
+        /** Indicates if the driver is in the pits */
+        InPit?: boolean;
+        /** Indicates if the driver just exited the pits */
+        PitOut?: boolean;
+        /** Indicates if the car is stopped on track */
+        Stopped?: boolean;
+        /** General status code for the driver */
+        Status?: number;
+        /** Details of the driver&#x27;s last completed lap */
+        LastLapTime?: {
+          /** Last lap time string */
+          Value?: string;
+          /** Indicates if it&#x27;s the driver&#x27;s personal fastest lap */
+          PersonalFastest?: boolean;
+          /** Indicates if it&#x27;s the overall fastest lap in the session */
+          OverallFastest?: boolean;
+        };
+        /** Details of the driver&#x27;s best lap */
+        BestLapTime?: {
+          /** Best lap time string */
+          Value?: string;
+        };
+        /** Total number of laps completed */
+        NumberOfLaps?: number;
+        /** Current time gap to the leader */
+        GapToLeader?: string;
+        /** Time gap to the car directly ahead */
+        IntervalToPositionAhead?: {
+          /** Interval value */
+          Value?: string;
+        };
+        /** Sector times and data */
+        Sectors?: Array&lt;{
+          /** Array of segments within the sector */
+          Segments?: Array&lt;{ Status?: number }&gt; | { [key: string]: { Status?: number } };
+          /** Sector time value */
+          Value?: string;
+        }&gt; | {
+          [key: string]: {
+            /** Map of segments within the sector */
+            Segments?: Array&lt;{ Status?: number }&gt; | { [key: string]: { Status?: number } };
+            /** Sector time value */
+            Value?: string;
+          }
+        };
+        /** Supplementary statistics */
+        Stats?: {
+          [key: string]: {
+            /** Time difference to the car ahead */
+            TimeDifftoPositionAhead?: string;
+            /** Time difference to the fastest car */
+            TimeDiffToFastest?: string;
+          };
+        };
+      };
+    };
+  };
+
+  /** Detailed list of driver metadata */
+  DriverList?: {
+    [driverNumber: string]: {
+      /** Driver&#x27;s racing number */
+      RacingNumber?: string;
+      /** Broadcast name */
+      BroadcastName?: string;
+      /** Driver&#x27;s full name */
+      FullName?: string;
+      /** Driver&#x27;s three-letter abbreviation */
+      Tla?: string;
+      /** Position line identifier */
+      Line?: number;
+      /** Name of the driver&#x27;s team */
+      TeamName?: string;
+      /** HTML color code of the team */
+      TeamColour?: string;
+      /** Driver&#x27;s first name */
+      FirstName?: string;
+      /** Driver&#x27;s last name */
+      LastName?: string;
+      /** Driver&#x27;s reference code */
+      Reference?: string;
+      /** URL to the driver&#x27;s headshot */
+      HeadshotUrl?: string;
+    };
+  };
+
+  /** Supplementary app data, mostly tyre stints */
+  TimingAppData?: {
+    /** Map of app data lines by driver */
+    Lines?: {
+      [driverNumber: string]: {
+        /** Array of tyre stints used by the driver */
+        Stints?: TyreStint[];
+      };
+    };
+  };
+
+  /** Real-time track position telemetry data */
+  Position?: {
+    [driverNumber: string]: {
+      /** X coordinate on track */
+      X?: number;
+      /** Y coordinate on track */
+      Y?: number;
+      /** Z coordinate (elevation) */
+      Z?: number;
+    };
+  };
+
+  /** Raw car telemetry data streams */
+  CarData?: any;
+  /** Primary session metadata */
+  SessionInfo?: any;
+  /** Additional session data and events */
+  SessionData?: any;
+  /** Overall track status codes (Flags, Safety Car, etc) */
+  TrackStatus?: any;
+  /** Current weather parameters */
+  WeatherData?: any;
+  /** Messages from Race Control */
+  RaceControlMessages?: any;
+  /** Broadcasted team radio captures */
+  TeamRadio?: TeamRadioState | any;
+  /** Extrapolated session clock */
+  ExtrapolatedClock?: any;
+  /** Current lap count summary */
+  LapCount?: any;
+  /** Keepalive and connection status markers */
+  Heartbeat?: any;
+}
+
+/**
+ * Servicio encargado de gestionar la conexión WebSocket al stream de telemetría de Fórmula 1 en directo.
+ * 
+ * Se conecta a un proxy (Railway Broker o local) que a su vez consume el SignalR oficial de F1.
+ * Mantiene un estado reactivo global (&#x60;liveState&#x60;) del cual el resto de componentes pueden 
+ * suscribirse u obtener datos puntuales.
+ */
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class F1LiveTimingStreamService {
+
+  /** Identificador del Hub de SignalR para el stream de F1. */
+  private readonly SIGNALR_HUB &#x3D; &#x27;Streaming&#x27;;
+  /** Tiempo de espera en milisegundos antes de intentar una reconexión tras un fallo. */
+  private readonly RETRY_FREQ &#x3D; 10000;
+
+  /** Instancia activa del WebSocket. */
+  private ws: WebSocket | null &#x3D; null;
+  /** Sujeto de comportamiento que mantiene el último estado conocido del stream. */
+  private liveState &#x3D; new BehaviorSubject&lt;LiveTimingState&gt;({});
+  /** Contador acumulativo de mensajes recibidos durante la sesión actual. */
+  private messageCount &#x3D; 0;
+  /** Referencia al temporizador de reconexión. */
+  private reconnectTimeout: any;
+
+  /** Observable público que emite el estado completo de telemetría a los suscriptores. */
+  public state$: Observable&lt;LiveTimingState&gt; &#x3D; this.liveState.asObservable();
+
+  /**
+   * Crea una instancia de F1LiveTimingStreamService.
+   */
+  constructor() { }
+
+  /**
+   * Inicia la conexión WebSocket con el servidor proxy.
+   * Dependiendo del entorno (desarrollo local o producción), elige la URL adecuada.
+   */
+  async connect(): Promise&lt;void&gt; {
+    console.log(&#x27;[F1 Stream] Attempting to connect to Railway Broker...&#x27;);
+
+    const isLocalDev &#x3D; window.location.hostname &#x3D;&#x3D;&#x3D; &#x27;localhost&#x27; || window.location.hostname &#x3D;&#x3D;&#x3D; &#x27;127.0.0.1&#x27;;
+    let wsUrl: string;
+
+    if (isLocalDev) {
+      wsUrl &#x3D; &#x27;ws://localhost:3001&#x27;;
+    } else {
+      wsUrl &#x3D; &#x27;wss://f1-websocket-proxy-production-9991.up.railway.app&#x27;;
+    }
+
+    this.setupWebSocket(wsUrl);
+  }
+
+  /**
+   * Configura los eventos del WebSocket para manejar la apertura, recepción de mensajes,
+   * errores y cierre de la conexión.
+   * 
+   * @param wsUrl URL completa del WebSocket al que conectarse.
+   */
+  private setupWebSocket(wsUrl: string): void {
+    console.log(&#x27;[F1 Stream] Connecting to:&#x27;, wsUrl);
+
+    this.ws &#x3D; new WebSocket(wsUrl);
+
+    this.ws.onopen &#x3D; () &#x3D;&gt; {
+      console.log(&#x27;[F1 Stream] Connected to Railway Broker&#x27;);
+      this.resetState();
+    };
+
+    this.ws.onmessage &#x3D; (event) &#x3D;&gt; {
+      this.updateState(event.data);
+    };
+
+    this.ws.onerror &#x3D; (error) &#x3D;&gt; {
+      console.error(&#x27;[F1 Stream] WebSocket error:&#x27;, error);
+      this.ws?.close();
+    };
+
+    this.ws.onclose &#x3D; () &#x3D;&gt; {
+      console.log(&#x27;[F1 Stream] WebSocket closed&#x27;);
+      this.scheduleReconnect();
+    };
+  }
+
+  /**
+   * Procesa un mensaje crudo recibido del WebSocket, parsea el JSON y actualiza
+   * el estado interno realizando un merge profundo.
+   * 
+   * @param data String JSON con las actualizaciones de telemetría.
+   */
+  private updateState(data: string): void {
+    try {
+      const updates &#x3D; JSON.parse(data);
+
+      if (!updates || (Array.isArray(updates) &amp;&amp; updates.length &#x3D;&#x3D;&#x3D; 0)) return;
+
+      const currentState &#x3D; this.liveState.value;
+      let newState &#x3D; { ...currentState };
+
+      if (Array.isArray(updates)) {
+        // Multi-message update
+        for (const update of updates) {
+          newState &#x3D; this.deepObjectMerge(newState, update);
+        }
+      } else {
+        // Single message update (or full state)
+        newState &#x3D; this.deepObjectMerge(newState, updates);
+      }
+
+      this.liveState.next(newState);
+      if (newState.Position) {
+        console.warn(&#x27;[F1 Service] State has Position data:&#x27;, Object.keys(newState.Position).length, &#x27;drivers&#x27;);
+      } else {
+        // console.log(&#x27;[F1 Service] State updated, but no Position keys.&#x27;);
+      }
+      this.messageCount++;
+    } catch (e) {
+      console.error(&#x60;[F1 Stream] Could not update data: ${e}&#x60;);
+    }
+  }
+
+  /**
+   * Realiza una fusión recursiva de dos objetos, priorizando los valores del objeto &#x60;modifier&#x60;.
+   * Sirve para aplicar parches de estado recibidos del stream de F1 sin perder datos previos.
+   * 
+   * @param original Objeto base sobre el que aplicar los cambios.
+   * @param modifier Objeto que contiene las claves y valores nuevos o actualizados.
+   * @returns Un nuevo objeto con los datos fusionados.
+   */
+  private deepObjectMerge(original: any &#x3D; {}, modifier: any): any {
+    if (!modifier) return original;
+
+    const copy: any &#x3D; { ...original };
+
+    for (const [key, value] of Object.entries(modifier)) {
+      const valueIsObject &#x3D;
+        typeof value &#x3D;&#x3D;&#x3D; &#x27;object&#x27; &amp;&amp; !Array.isArray(value) &amp;&amp; value !&#x3D;&#x3D; null;
+
+      if (valueIsObject &amp;&amp; Object.keys(value as any).length) {
+        copy[key] &#x3D; this.deepObjectMerge(copy[key], value);
+      } else {
+        copy[key] &#x3D; value;
+      }
+    }
+
+    return copy;
+  }
+
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D; Datos tipados &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+
+  /**
+   * Recupera la lista de información básica de todos los pilotos participantes.
+   * 
+   * @returns Un array de &#x60;DriverInfo&#x60; con datos como el nombre, número, color de equipo y foto.
+   */
+  getDriversInfo(): DriverInfo[] {
+    const state: any &#x3D; this.liveState.value;
+    if (!state.DriverList) return [];
+
+    return Object.values(state.DriverList).map((driver: any) &#x3D;&gt; ({
+      RacingNumber: driver.RacingNumber || &#x27;&#x27;,
+      BroadcastName: driver.BroadcastName || &#x27;&#x27;,
+      FullName: driver.FullName || &#x27;&#x27;,
+      Tla: driver.Tla || &#x27;&#x27;,
+      Line: driver.Line || 0,
+      TeamName: driver.TeamName || &#x27;&#x27;,
+      TeamColour: driver.TeamColour || &#x27;&#x27;,
+      FirstName: driver.FirstName || &#x27;&#x27;,
+      LastName: driver.LastName || &#x27;&#x27;,
+      Reference: driver.Reference || &#x27;&#x27;,
+      HeadshotUrl: driver.HeadshotUrl || &#x27;&#x27;
+    }));
+  }
+
+  /**
+   * Obtiene y formatea los datos de telemetría más recientes de cada piloto para la tabla de tiempos.
+   * 
+   * Combina información de &#x60;TimingData.Lines&#x60;, &#x60;DriverList&#x60; y &#x60;TimingAppData&#x60; para generar
+   * la vista consolidada de posiciones, tiempos, intervalos y uso de neumáticos.
+   * 
+   * @returns Un array de &#x60;DriverTiming&#x60; ordenado por la posición actual en carrera/sesión.
+   */
+  getDriversTiming(): DriverTiming[] {
+    const state: any &#x3D; this.liveState.value;
+
+    if (!state.TimingData?.Lines || !state.DriverList) return [];
+
+    const timingLines &#x3D; state.TimingData.Lines;
+    const driverList &#x3D; state.DriverList;
+    const tyreData &#x3D; state.TimingAppData?.Lines || {};
+
+    return Object.entries(timingLines).map(([driverNumber, timing]: any) &#x3D;&gt; {
+      const driverInfo &#x3D; driverList[driverNumber];
+      const tyreInfo &#x3D; tyreData[driverNumber];
+
+      return {
+        position: timing.Position || timing.Line,
+        driverCode: driverInfo?.Tla || &#x27;&#x27;,
+        driverName: driverInfo?.LastName || driverInfo?.BroadcastName || &#x27;&#x27;,
+        lapNumber: timing.NumberOfLaps || 0,
+        lastLapTime: timing.LastLapTime?.Value || &#x27;--&#x27;,
+        gapToLeader: timing.GapToLeader || (timing.Position &#x3D;&#x3D;&#x3D; &#x27;1&#x27; ? &#x27;--&#x27; : &#x27;&#x27;),
+        gapToAhead: timing.IntervalToPositionAhead?.Value || &#x27;Gap&#x27;,
+        isPit: timing.InPit || timing.PitOut || false,
+        statusColor: this.getStatusColor(timing),
+        teamName: driverInfo?.TeamName,
+        teamColor: driverInfo?.TeamColour ? &#x60;#${driverInfo.TeamColour}&#x60; : undefined,
+        tyreHistory: tyreInfo?.Stints || []
+      };
+    }).sort((a, b) &#x3D;&gt; {
+      const posA &#x3D; this.parsePosition(a.position);
+      const posB &#x3D; this.parsePosition(b.position);
+      return posA - posB;
+    });
+  }
+
+  /**
+   * Convierte un valor de posición (que puede ser string o number) a un número entero.
+   * 
+   * @param position El valor de posición extraído del stream.
+   * @returns Representación numérica de la posición, o 999 si no es válida.
+   */
+  private parsePosition(position: any): number {
+    if (typeof position &#x3D;&#x3D;&#x3D; &#x27;number&#x27;) return position;
+    if (typeof position &#x3D;&#x3D;&#x3D; &#x27;string&#x27;) return parseInt(position, 10) || 999;
+    return 999;
+  }
+
+  /**
+   * Determina el color o estado visual de la vuelta de un piloto basándose en si es
+   * récord de sesión, récord personal o una vuelta normal.
+   * 
+   * @param timing Datos de tiempo filtrados de un piloto.
+   * @returns Un identificador de estado: &#x27;session-best&#x27;, &#x27;personal-best&#x27;, &#x27;normal&#x27; o &#x27;none&#x27;.
+   */
+  private getStatusColor(
+    timing: any
+  ): &#x27;personal-best&#x27; | &#x27;session-best&#x27; | &#x27;normal&#x27; | &#x27;none&#x27; {
+    if (timing.LastLapTime?.OverallFastest) return &#x27;session-best&#x27;;
+    if (timing.LastLapTime?.PersonalFastest) return &#x27;personal-best&#x27;;
+    if (timing.LastLapTime?.Value) return &#x27;normal&#x27;;
+    return &#x27;none&#x27;;
+  }
+
+  /**
+   * Devuelve el último snapshot completo del estado de telemetría sin necesidad de suscripción.
+   * 
+   * @returns El objeto &#x60;LiveTimingState&#x60; actual.
+   */
+  getCurrentState(): LiveTimingState {
+    return this.liveState.value;
+  }
+
+  /**
+   * Limpia el estado interno y reinicia los contadores. Se usa al abrir una nueva conexión.
+   */
+  private resetState(): void {
+    this.liveState.next({});
+    this.messageCount &#x3D; 0;
+  }
+
+  /**
+   * Programa un intento de reconexión tras el intervalo de tiempo definido en &#x60;RETRY_FREQ&#x60;.
+   */
+  private scheduleReconnect(): void {
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+    }
+
+    this.reconnectTimeout &#x3D; setTimeout(() &#x3D;&gt; {
+      this.connect();
+    }, this.RETRY_FREQ);
+  }
+
+  /**
+   * Cierra de forma limpia la conexión WebSocket y anula cualquier intento de reconexión pendiente.
+   */
+  disconnect(): void {
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+    }
+
+    if (this.ws) {
+      this.ws.close();
+      this.ws &#x3D; null;
+    }
+  }
+
+  // &#x3D;&#x3D;&#x3D;&#x3D;&#x3D; TeamRadio desde el WebSocket usando el modelo &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+
+  /**
+   * Extrae el historial de mensajes de radio del equipo recibidos a través del stream.
+   * 
+   * @returns Un array de &#x60;TeamRadioCapture&#x60; ordenado del más reciente al más antiguo.
+   */
+  getTeamRadioCaptures(): TeamRadioCapture[] {
+    const state: LiveTimingState &#x3D; this.liveState.value;
+
+    if (!state.TeamRadio || !Array.isArray((state.TeamRadio as TeamRadioState).Captures)) {
+      return [];
+    }
+
+    const captures &#x3D; (state.TeamRadio as TeamRadioState).Captures as TeamRadioCapture[];
+
+    return captures
+      .filter(c &#x3D;&gt; !!c.RacingNumber &amp;&amp; !!c.Path)
+      .sort(
+        (a, b) &#x3D;&gt;
+          new Date(b.Utc).getTime() - new Date(a.Utc).getTime()
+      );
+  }
+
+  /**
+   * Agrupa los mensajes de radio para obtener únicamente la captura más reciente por cada piloto.
+   * 
+   * @returns Un &#x60;Map&#x60; donde la key es el número del coche y el valor su última &#x60;TeamRadioCapture&#x60;.
+   */
+  getLatestRadioByDriver(): Map&lt;string, TeamRadioCapture&gt; {
+    const captures &#x3D; this.getTeamRadioCaptures();
+    const latestByDriver &#x3D; new Map&lt;string, TeamRadioCapture&gt;();
+
+    for (const capture of captures) {
+      if (!latestByDriver.has(capture.RacingNumber)) {
+        latestByDriver.set(capture.RacingNumber, capture);
+      }
+    }
+
+    return latestByDriver;
+  }
+
+  /**
+   * Construye la URL base para el API de F1 basándose en el protocolo y host actuales.
+   * Utilizado principalmente para redirigir peticiones de assets al proxy local o remoto.
+   * 
+   * @returns URL base (ej: &#x60;http://localhost:4200/f1-api&#x60;).
+   */
+  getWebSocketBaseUrl(): string {
+    const protocol &#x3D; window.location.protocol &#x3D;&#x3D;&#x3D; &#x27;https:&#x27; ? &#x27;https:&#x27; : &#x27;http:&#x27;;
+    const host &#x3D; window.location.host; // localhost:4200 en dev
+
+    return &#x60;${protocol}//${host}/f1-api&#x60;;
+  }
+  // Base del evento para construir URLs de assets (TeamRadio, etc.)
+
+  getEventPath(): string {
+    const state: any &#x3D; this.liveState.value;
+    // En tu server.js usas SessionInfo.Path como base
+    // ej: &quot;2025/2025-12-07_Abu_Dhabi_Grand_Prix/2025-12-07_Race/&quot;
+    const sessionPath: string | undefined &#x3D; state.SessionInfo?.Path;
+    if (!sessionPath) return &#x27;&#x27;;
+
+    const clean &#x3D; sessionPath.replace(/\/$/, &#x27;&#x27;); // quita &quot;/&quot; final
+    return &#x60;https://livetiming.formula1.com/static/${clean}&#x60;;
+  }
+}</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'F1LiveTimingStreamService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

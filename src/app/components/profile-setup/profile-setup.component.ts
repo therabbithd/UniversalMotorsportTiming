@@ -9,6 +9,10 @@ import { CloudinaryService } from '../../services/cloudinary.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { DriverSelectorComponent } from '../shared/driver-selector/driver-selector.component';
 
+/**
+ * Component responsible for setting up or updating a user's profile details.
+ * Contains a reactive form and integration with Cloudinary for avatar uploads.
+ */
 @Component({
     selector: 'app-profile-setup',
     standalone: true,
@@ -17,12 +21,18 @@ import { DriverSelectorComponent } from '../shared/driver-selector/driver-select
     styleUrl: './profile-setup.component.scss'
 })
 export class ProfileSetupComponent {
+    /** Injected form builder */
     private readonly fb = inject(FormBuilder);
+    /** Injected profile service */
     private readonly profileService = inject(ProfileService);
+    /** Injected Cloudinary service for image uploading */
     private readonly cloudinaryService = inject(CloudinaryService);
+    /** Injected Angular router */
     private readonly router = inject(Router);
+    /** Injected Material Dialog service */
     private readonly dialog = inject(MatDialog);
 
+    /** Main reactive form group for profile setup */
     readonly setupForm = this.fb.group({
         bio: ['', [Validators.maxLength(500)]],
         phone: ['', [Validators.pattern('^[0-9+ ]*$')]],
@@ -32,11 +42,19 @@ export class ProfileSetupComponent {
         favoritos: ['']
     });
 
+    /** State signal indicating if the form was submitted */
     readonly isSubmitted = signal(false);
+    /** State signal indicating if data is being saved */
     readonly isLoading = signal(false);
+    /** State signal indicating if an image is currently uploading to Cloudinary */
     readonly isUploading = signal(false);
+    /** State signal containing the preview URL of the avatar */
     readonly avatarPreview = signal<string | null>(null);
 
+    /**
+     * Handles file selection for avatar uploading.
+     * @param event DOM file input change event
+     */
     onFileSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
@@ -82,6 +100,9 @@ export class ProfileSetupComponent {
         }
     }
 
+    /**
+     * Validates and submits the setup form to the backend to create the profile.
+     */
     submit(): void {
         this.isSubmitted.set(true);
 
@@ -123,6 +144,9 @@ export class ProfileSetupComponent {
         });
     }
 
+    /**
+     * Skips the profile setup phase and directly navigates to the dashboard.
+     */
     skip(): void {
         this.router.navigate(['/dashboard']);
     }

@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { Sector, Segment } from '../../models/f1-livetiming.model';
 
+/**
+ * Displays the micro-sectors or segments for a given driver's lap.
+ */
 @Component({
   selector: 'app-driver-sectors',
   standalone: true,
@@ -12,8 +15,13 @@ import { Sector, Segment } from '../../models/f1-livetiming.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DriverSectorsComponent {
+  /** Input containing the sector data object or array */
   @Input() sectors?: Sector[] | { [key: string]: Sector };
 
+  /** 
+   * Helper method to extract an array of sectors from the input.
+   * @returns Filtered array of sectors 
+   */
   getSectorsArray(): Sector[] {
     if (!this.sectors) return [];
 
@@ -27,6 +35,11 @@ export class DriverSectorsComponent {
     );
   }
 
+  /** 
+   * Helper method to extract segments from a specific sector.
+   * @param sector The sector instance
+   * @returns Array of Segments
+   */
   getSegmentsArray(sector: Sector): Segment[] {
     if (!sector || !sector.Segments) return [];
 
@@ -38,6 +51,11 @@ export class DriverSectorsComponent {
     return segments.filter(seg => seg && seg.Status !== undefined);
   }
 
+  /** 
+   * Returns the appropriate CSS hex color code based on the segment status.
+   * @param status The segment status indicator
+   * @returns Hex color string
+   */
   getSegmentColor(status?: number): string {
     switch (status) {
       case 2048: return '#ffd700';        // Amarillo (tiempo personal)

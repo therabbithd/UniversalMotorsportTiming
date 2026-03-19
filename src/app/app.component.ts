@@ -40,8 +40,11 @@ export class AppComponent implements OnInit {
   private translate = inject(TranslateService);
 
   /**
-   * Método de inicialización del ciclo de vida de Angular.
-   * Usado para probar y verificar la configuración de las traducciones al cargar la aplicación.
+   * Main initialization hook.
+   * Performs the following actions:
+   * 1. Verifies i18n asset availability by manually fetching es.json.
+   * 2. Subscribes to language change events for debugging.
+   * 3. Tests immediate and delayed translation lookups to verify the i18n pipeline.
    */
   ngOnInit() {
     console.log('[DEBUG] AppComponent initialized');

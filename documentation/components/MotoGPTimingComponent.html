@@ -1,0 +1,2872 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>univesal-timing documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">univesal-timing documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  MotoGPTimingComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/components/motogp-timing/motogp-timing.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Componente principal para visualizar la información del mundial de MotoGP.</p>
+<p>Permite al usuario navegar a través de diferentes temporadas, categorías (MotoGP, Moto2, Moto3)
+y eventos, revisar las tablas de clasificación, el campeonato general (standings),
+y observar una versión Lite del Live Timing cuando existe una sesión actualmente activa.</p>
+
+    </p>
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                    <code><a href="https://angular.io/api/core/OnDestroy" target="_blank" >OnDestroy</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+            <tr>
+                <td class="col-md-3">changeDetection</td>
+                <td class="col-md-9"><code>ChangeDetectionStrategy.OnPush</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-motogp-timing</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                            <code>MatCardModule</code>
+                            <code>MatTableModule</code>
+                            <code>MatSelectModule</code>
+                            <code>MatFormFieldModule</code>
+                            <code>MatProgressSpinnerModule</code>
+                            <code>MatTabsModule</code>
+                            <code>TranslateModule</code>
+                            <code>CountryFlagPipe</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./motogp-timing.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./motogp-timing.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#categories" >categories</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#classification" >classification</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#displayedLiveColumns" >displayedLiveColumns</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#displayedResultsColumns" >displayedResultsColumns</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#displayedStandingsColumns" >displayedStandingsColumns</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#events" >events</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isLiveVisible" >isLiveVisible</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isLoading" >isLoading</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#liveRiders" >liveRiders</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#liveTiming" >liveTiming</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#noData" >noData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#pollingSubscription" >pollingSubscription</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#seasons" >seasons</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#selectedCategory" >selectedCategory</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#selectedEvent" >selectedEvent</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Optional</span>
+                                <a href="#selectedSession" >selectedSession</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#sessions" >sessions</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#standings" >standings</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getCountryFlag" >getCountryFlag</a>
+                            </li>
+                            <li>
+                                <a href="#loadClassification" >loadClassification</a>
+                            </li>
+                            <li>
+                                <a href="#loadEvents" >loadEvents</a>
+                            </li>
+                            <li>
+                                <a href="#loadSeasons" >loadSeasons</a>
+                            </li>
+                            <li>
+                                <a href="#loadStandings" >loadStandings</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onEventChange" >onEventChange</a>
+                            </li>
+                            <li>
+                                <a href="#onSeasonChange" >onSeasonChange</a>
+                            </li>
+                            <li>
+                                <a href="#onSessionChange" >onSessionChange</a>
+                            </li>
+                            <li>
+                                <a href="#startLivePolling" >startLivePolling</a>
+                            </li>
+                            <li>
+                                <a href="#stopLivePolling" >stopLivePolling</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(motogpService: <a href="../injectables/MotoGPService.html" target="_self">MotoGPService</a>, cdr: <a href="https://angular.io/api/core/ChangeDetectorRef" target="_blank">ChangeDetectorRef</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:94</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><p>Crea una instancia de MotoGPTimingComponent.</p>
+</div>
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                                    <td>Description</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>motogpService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/MotoGPService.html" target="_self" >MotoGPService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Servicio de datos de MotoGP.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>cdr</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/core/ChangeDetectorRef" target="_blank" >ChangeDetectorRef</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Referencia para la detección de cambios manual.</p>
+
+                                                        </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCountryFlag"></a>
+                    <span class="name">
+                        <span ><b>getCountryFlag</b></span>
+                        <a href="#getCountryFlag"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCountryFlag(iso: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="332"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:332</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Devuelve la URL de la miniatura de la bandera correspondiente al código ISO
+usando la red pública gratuita <code>flagcdn</code>.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>iso</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Código de país (ej. <code>IT</code>, <code>ES</code>, <code>GB</code>).</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Un link HTTP directo a la bandera en formato PNG de 20px de ancho.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadClassification"></a>
+                    <span class="name">
+                        <span ><b>loadClassification</b></span>
+                        <a href="#loadClassification"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadClassification(sessionId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="289"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:289</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Carga los resultados detallados de clasificación de una sesión específica.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>sessionId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>UUID de la sesión.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadEvents"></a>
+                    <span class="name">
+                        <span ><b>loadEvents</b></span>
+                        <a href="#loadEvents"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadEvents(seasonId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="226"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:226</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Recupera la lista de grandes premios (eventos) para la temporada seleccionada.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>seasonId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>UUID de la temporada.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadSeasons"></a>
+                    <span class="name">
+                        <span ><b>loadSeasons</b></span>
+                        <a href="#loadSeasons"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadSeasons()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="164"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:164</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Carga el historial de temporadas de MotoGP soportadas y selecciona la actual
+por defecto, encadenando subsiguientes cargas (Categorías, Eventos, Sesiones).</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadStandings"></a>
+                    <span class="name">
+                        <span ><b>loadStandings</b></span>
+                        <a href="#loadStandings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadStandings()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="310"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:310</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Carga la tabla de puntos general del campeonato mundial (Standings).</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="117"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:117</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Detiene el polling al destruir el componente para evitar fugas de memoria.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:109</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Inicializa el componente cargando las temporadas e iniciado el polling de datos en vivo.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onEventChange"></a>
+                    <span class="name">
+                        <span ><b>onEventChange</b></span>
+                        <a href="#onEventChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onEventChange(eventId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="249"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:249</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Handles the event change, loading subsequent sessions for the selected event and category.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>eventId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Selected event ID</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSeasonChange"></a>
+                    <span class="name">
+                        <span ><b>onSeasonChange</b></span>
+                        <a href="#onSeasonChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSeasonChange(seasonId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="191"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:191</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Handles the season change event, resetting subsequent filters and loading categories.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>seasonId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Selected season ID</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSessionChange"></a>
+                    <span class="name">
+                        <span ><b>onSessionChange</b></span>
+                        <a href="#onSessionChange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSessionChange(sessionId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="279"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:279</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Maneja el cambio de sesión manual por parte del usuario.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>sessionId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>UUID de la nueva sesión seleccionada.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="startLivePolling"></a>
+                    <span class="name">
+                        <span ><b>startLivePolling</b></span>
+                        <a href="#startLivePolling"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>startLivePolling()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="125"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:125</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Inicia un observador periódico que comprueba cada 10 segundos la disponibilidad
+de un nuevo set de tiempos en vivo a través del API Proxy.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="stopLivePolling"></a>
+                    <span class="name">
+                        <span ><b>stopLivePolling</b></span>
+                        <a href="#stopLivePolling"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>stopLivePolling()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="154"
+                                    class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:154</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Módulo para finalizar el &quot;polling&quot; recurrente del servidor en caso de destrucción.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="categories"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>categories</b></span>
+                        <a href="#categories"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/MotoGPCategory.html" target="_self" >MotoGPCategory[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:53</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Lista de categorías disponibles para la temporada actual.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="classification"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>classification</b></span>
+                        <a href="#classification"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/MotoGPClassificationEntry.html" target="_self" >MotoGPClassificationEntry[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:60</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Resultados clasificatorios de la sesión seleccionada.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="displayedLiveColumns"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>displayedLiveColumns</b></span>
+                        <a href="#displayedLiveColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[&#x27;position&#x27;, &#x27;rider&#x27;, &#x27;team&#x27;, &#x27;lap&#x27;, &#x27;lap_time&#x27;, &#x27;gap&#x27;, &#x27;pit&#x27;]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="91" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:91</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Definición de columnas para la tabla de Live Timing Lite.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="displayedResultsColumns"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>displayedResultsColumns</b></span>
+                        <a href="#displayedResultsColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[&#x27;position&#x27;, &#x27;rider&#x27;, &#x27;team&#x27;, &#x27;best_lap&#x27;, &#x27;gap&#x27;, &#x27;speed&#x27;]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:87</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Definición de columnas para la tabla de resultados de sesión.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="displayedStandingsColumns"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>displayedStandingsColumns</b></span>
+                        <a href="#displayedStandingsColumns"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[&#x27;position&#x27;, &#x27;rider&#x27;, &#x27;team&#x27;, &#x27;points&#x27;]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="89" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:89</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Definición de columnas para la tabla de clasificación del mundial.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="events"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>events</b></span>
+                        <a href="#events"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/MotoGPEvent.html" target="_self" >MotoGPEvent[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:55</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Lista de grandes premios y eventos de la categoría actual.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLiveVisible"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isLiveVisible</b></span>
+                        <a href="#isLiveVisible"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="84" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:84</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Controls the conditional display of the Live Timing tab</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoading"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isLoading</b></span>
+                        <a href="#isLoading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="80" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:80</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Indicates if there are active HTTP requests blocking the UI</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="liveRiders"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>liveRiders</b></span>
+                        <a href="#liveRiders"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/MotoGPLiveRider.html" target="_self" >MotoGPLiveRider[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:67</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Matriz de pilotos activos en directo ordenados por posición.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="liveTiming"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>liveTiming</b></span>
+                        <a href="#liveTiming"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/MotoGPLiveTiming.html" target="_self" >MotoGPLiveTiming</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:65</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Objeto con el snapshot actual del Live Timing.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="noData"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>noData</b></span>
+                        <a href="#noData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:82</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Indicates if the data query returned no results</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pollingSubscription"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>pollingSubscription</b></span>
+                        <a href="#pollingSubscription"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Subscription</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:94</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Suscripción al intervalo de polling para datos en vivo.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="seasons"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>seasons</b></span>
+                        <a href="#seasons"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/MotoGPSeason.html" target="_self" >MotoGPSeason[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:51</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Lista de temporadas disponibles en el API histórico.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectedCategory"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>selectedCategory</b></span>
+                        <a href="#selectedCategory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:73</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Currently selected category ID (MotoGP, Moto2, etc.)</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectedEvent"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>selectedEvent</b></span>
+                        <a href="#selectedEvent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="75" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:75</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Currently selected event ID</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectedSession"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Optional</span>
+                        <span ><b>selectedSession</b></span>
+                        <a href="#selectedSession"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:77</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Currently selected session ID</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sessions"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>sessions</b></span>
+                        <a href="#sessions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>MotoGPSession[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:57</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Sesiones cronometradas y de carrera del evento actual.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="standings"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>standings</b></span>
+                        <a href="#standings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/MotoGPStandingEntry.html" target="_self" >MotoGPStandingEntry[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/components/motogp-timing/motogp-timing.component.ts:62</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Tabla general del campeonato mundial (Standings).</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { interval, Subscription, switchMap, catchError, of } from &#x27;rxjs&#x27;;
+import { MatCardModule } from &#x27;@angular/material/card&#x27;;
+import { MatTableModule } from &#x27;@angular/material/table&#x27;;
+import { MatSelectModule } from &#x27;@angular/material/select&#x27;;
+import { MatFormFieldModule } from &#x27;@angular/material/form-field&#x27;;
+import { MatProgressSpinnerModule } from &#x27;@angular/material/progress-spinner&#x27;;
+import { MatTabsModule } from &#x27;@angular/material/tabs&#x27;;
+import { TranslateModule } from &#x27;@ngx-translate/core&#x27;;
+import { MotoGPService } from &#x27;../../services/motogp.service&#x27;;
+import {
+    MotoGPSeason,
+    MotoGPCategory,
+    MotoGPEvent,
+    MotoGPSession,
+    MotoGPClassificationEntry,
+    MotoGPStandingEntry,
+    MotoGPLiveTiming,
+    MotoGPLiveRider
+} from &#x27;../../models/motogp.model&#x27;;
+import { CountryFlagPipe } from &#x27;../../pipes/country-flag.pipe&#x27;;
+
+/**
+ * Componente principal para visualizar la información del mundial de MotoGP.
+ * 
+ * Permite al usuario navegar a través de diferentes temporadas, categorías (MotoGP, Moto2, Moto3)
+ * y eventos, revisar las tablas de clasificación, el campeonato general (standings), 
+ * y observar una versión Lite del Live Timing cuando existe una sesión actualmente activa.
+ */
+@Component({
+    selector: &#x27;app-motogp-timing&#x27;,
+    standalone: true,
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatTableModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatProgressSpinnerModule,
+        MatTabsModule,
+        TranslateModule,
+        CountryFlagPipe
+    ],
+    templateUrl: &#x27;./motogp-timing.component.html&#x27;,
+    styleUrls: [&#x27;./motogp-timing.component.scss&#x27;],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class MotoGPTimingComponent implements OnInit, OnDestroy {
+    /** Lista de temporadas disponibles en el API histórico. */
+    public seasons: MotoGPSeason[] &#x3D; [];
+    /** Lista de categorías disponibles para la temporada actual. */
+    public categories: MotoGPCategory[] &#x3D; [];
+    /** Lista de grandes premios y eventos de la categoría actual. */
+    public events: MotoGPEvent[] &#x3D; [];
+    /** Sesiones cronometradas y de carrera del evento actual. */
+    public sessions: MotoGPSession[] &#x3D; [];
+    
+    /** Resultados clasificatorios de la sesión seleccionada. */
+    public classification: MotoGPClassificationEntry[] &#x3D; [];
+    /** Tabla general del campeonato mundial (Standings). */
+    public standings: MotoGPStandingEntry[] &#x3D; [];
+    
+    /** Objeto con el snapshot actual del Live Timing. */
+    public liveTiming?: MotoGPLiveTiming;
+    /** Matriz de pilotos activos en directo ordenados por posición. */
+    public liveRiders: MotoGPLiveRider[] &#x3D; [];
+
+    /** @ignore */
+    /** Currently selected season ID */
+    public selectedSeason?: string;
+    /** Currently selected category ID (MotoGP, Moto2, etc.) */
+    public selectedCategory?: string;
+    /** Currently selected event ID */
+    public selectedEvent?: string;
+    /** Currently selected session ID */
+    public selectedSession?: string;
+
+    /** Indicates if there are active HTTP requests blocking the UI */
+    public isLoading &#x3D; false;
+    /** Indicates if the data query returned no results */
+    public noData &#x3D; false;
+    /** Controls the conditional display of the Live Timing tab */
+    public isLiveVisible &#x3D; false;
+
+    /** Definición de columnas para la tabla de resultados de sesión. */
+    public displayedResultsColumns: string[] &#x3D; [&#x27;position&#x27;, &#x27;rider&#x27;, &#x27;team&#x27;, &#x27;best_lap&#x27;, &#x27;gap&#x27;, &#x27;speed&#x27;];
+    /** Definición de columnas para la tabla de clasificación del mundial. */
+    public displayedStandingsColumns: string[] &#x3D; [&#x27;position&#x27;, &#x27;rider&#x27;, &#x27;team&#x27;, &#x27;points&#x27;];
+    /** Definición de columnas para la tabla de Live Timing Lite. */
+    public displayedLiveColumns: string[] &#x3D; [&#x27;position&#x27;, &#x27;rider&#x27;, &#x27;team&#x27;, &#x27;lap&#x27;, &#x27;lap_time&#x27;, &#x27;gap&#x27;, &#x27;pit&#x27;];
+
+    /** Suscripción al intervalo de polling para datos en vivo. */
+    private pollingSubscription?: Subscription;
+
+    /**
+     * Crea una instancia de MotoGPTimingComponent.
+     * @param motogpService Servicio de datos de MotoGP.
+     * @param cdr Referencia para la detección de cambios manual.
+     */
+    constructor(
+        private motogpService: MotoGPService,
+        private cdr: ChangeDetectorRef
+    ) { }
+
+    /**
+     * Inicializa el componente cargando las temporadas e iniciado el polling de datos en vivo.
+     */
+    ngOnInit(): void {
+        this.loadSeasons();
+        this.startLivePolling();
+    }
+
+    /**
+     * Detiene el polling al destruir el componente para evitar fugas de memoria.
+     */
+    ngOnDestroy(): void {
+        this.stopLivePolling();
+    }
+
+    /**
+     * Inicia un observador periódico que comprueba cada 10 segundos la disponibilidad 
+     * de un nuevo set de tiempos en vivo a través del API Proxy.
+     */
+    startLivePolling(): void {
+        // Poll every 10 seconds for lite live timing
+        this.pollingSubscription &#x3D; interval(10000).pipe(
+            switchMap(() &#x3D;&gt; this.motogpService.getLiveTiming().pipe(
+                catchError(() &#x3D;&gt; of(null))
+            ))
+        ).subscribe(data &#x3D;&gt; {
+            if (data &amp;&amp; data.head &amp;&amp; data.rider) {
+                this.liveTiming &#x3D; data;
+                this.liveRiders &#x3D; Object.values(data.rider).sort((a, b) &#x3D;&gt; a.pos - b.pos);
+                this.isLiveVisible &#x3D; true;
+            } else {
+                this.isLiveVisible &#x3D; false;
+            }
+            this.cdr.markForCheck();
+        });
+
+        // Initial load
+        this.motogpService.getLiveTiming().subscribe(data &#x3D;&gt; {
+            if (data &amp;&amp; data.head &amp;&amp; data.rider) {
+                this.liveTiming &#x3D; data;
+                this.liveRiders &#x3D; Object.values(data.rider).sort((a, b) &#x3D;&gt; a.pos - b.pos);
+                this.isLiveVisible &#x3D; true;
+            }
+            this.cdr.markForCheck();
+        });
+    }
+
+    /** Módulo para finalizar el &quot;polling&quot; recurrente del servidor en caso de destrucción. */
+    stopLivePolling(): void {
+        if (this.pollingSubscription) {
+            this.pollingSubscription.unsubscribe();
+        }
+    }
+
+    /**
+     * Carga el historial de temporadas de MotoGP soportadas y selecciona la actual 
+     * por defecto, encadenando subsiguientes cargas (Categorías, Eventos, Sesiones).
+     */
+    loadSeasons(): void {
+        this.isLoading &#x3D; true;
+        this.motogpService.getSeasons().subscribe({
+            next: (seasons) &#x3D;&gt; {
+                this.seasons &#x3D; seasons;
+                const currentSeason &#x3D; seasons.find(s &#x3D;&gt; s.current) || seasons[0];
+                if (currentSeason) {
+                    this.selectedSeason &#x3D; currentSeason.id;
+                    this.onSeasonChange(this.selectedSeason);
+                } else {
+                    this.noData &#x3D; true;
+                    this.isLoading &#x3D; false;
+                }
+                this.cdr.markForCheck();
+            },
+            error: () &#x3D;&gt; {
+                this.noData &#x3D; true;
+                this.isLoading &#x3D; false;
+                this.cdr.markForCheck();
+            }
+        });
+    }
+
+    /**
+     * Handles the season change event, resetting subsequent filters and loading categories.
+     * @param seasonId Selected season ID
+     */
+    onSeasonChange(seasonId: string): void {
+        this.selectedSeason &#x3D; seasonId;
+        this.isLoading &#x3D; true;
+
+        // Reset dependant selections
+        this.selectedCategory &#x3D; undefined;
+        this.selectedEvent &#x3D; undefined;
+        this.selectedSession &#x3D; undefined;
+        this.classification &#x3D; [];
+        this.standings &#x3D; [];
+
+        this.motogpService.getCategories(seasonId).subscribe({
+            next: (categories) &#x3D;&gt; {
+                this.categories &#x3D; categories;
+                if (categories.length &gt; 0) {
+                    this.selectedCategory &#x3D; categories[0].id;
+                    this.loadEvents(seasonId);
+                    this.loadStandings();
+                } else {
+                    this.isLoading &#x3D; false;
+                }
+                this.cdr.markForCheck();
+            },
+            error: () &#x3D;&gt; {
+                this.isLoading &#x3D; false;
+                this.cdr.markForCheck();
+            }
+        });
+    }
+
+    /**
+     * Recupera la lista de grandes premios (eventos) para la temporada seleccionada.
+     * 
+     * @param seasonId UUID de la temporada.
+     */
+    loadEvents(seasonId: string): void {
+        this.motogpService.getEvents(seasonId).subscribe({
+            next: (events) &#x3D;&gt; {
+                this.events &#x3D; events.reverse(); // Latest events first
+                if (events.length &gt; 0) {
+                    this.selectedEvent &#x3D; events[0].id;
+                    this.onEventChange(this.selectedEvent);
+                } else {
+                    this.isLoading &#x3D; false;
+                }
+                this.cdr.markForCheck();
+            },
+            error: () &#x3D;&gt; {
+                this.isLoading &#x3D; false;
+                this.cdr.markForCheck();
+            }
+        });
+    }
+
+    /**
+     * Handles the event change, loading subsequent sessions for the selected event and category.
+     * @param eventId Selected event ID
+     */
+    onEventChange(eventId: string): void {
+        this.selectedEvent &#x3D; eventId;
+        if (!this.selectedCategory) return;
+
+        this.motogpService.getSessions(eventId, this.selectedCategory).subscribe({
+            next: (sessions) &#x3D;&gt; {
+                this.sessions &#x3D; sessions;
+                // Try to find a &quot;Race&quot; session or default to the last one
+                const raceSession &#x3D; sessions.find(s &#x3D;&gt; s.type &#x3D;&#x3D;&#x3D; &#x27;RAC&#x27; || s.number &#x3D;&#x3D;&#x3D; 1) || sessions[sessions.length - 1];
+                if (raceSession) {
+                    this.selectedSession &#x3D; raceSession.id;
+                    this.loadClassification(raceSession.id);
+                } else {
+                    this.isLoading &#x3D; false;
+                    this.classification &#x3D; [];
+                }
+                this.cdr.markForCheck();
+            },
+            error: () &#x3D;&gt; {
+                this.isLoading &#x3D; false;
+                this.cdr.markForCheck();
+            }
+        });
+    }
+
+    /**
+     * Maneja el cambio de sesión manual por parte del usuario.
+     * 
+     * @param sessionId UUID de la nueva sesión seleccionada.
+     */
+    onSessionChange(sessionId: string): void {
+        this.selectedSession &#x3D; sessionId;
+        this.loadClassification(sessionId);
+    }
+
+    /**
+     * Carga los resultados detallados de clasificación de una sesión específica.
+     * 
+     * @param sessionId UUID de la sesión.
+     */
+    loadClassification(sessionId: string): void {
+        this.isLoading &#x3D; true;
+        this.motogpService.getSessionClassification(sessionId).subscribe({
+            next: (resp) &#x3D;&gt; {
+                this.classification &#x3D; resp.classification || [];
+                this.noData &#x3D; this.classification.length &#x3D;&#x3D;&#x3D; 0;
+                this.isLoading &#x3D; false;
+                this.cdr.markForCheck();
+            },
+            error: () &#x3D;&gt; {
+                this.classification &#x3D; [];
+                this.noData &#x3D; true;
+                this.isLoading &#x3D; false;
+                this.cdr.markForCheck();
+            }
+        });
+    }
+
+    /**
+     * Carga la tabla de puntos general del campeonato mundial (Standings).
+     */
+    loadStandings(): void {
+        if (!this.selectedSeason || !this.selectedCategory) return;
+
+        this.motogpService.getStandings(this.selectedSeason, this.selectedCategory).subscribe({
+            next: (resp) &#x3D;&gt; {
+                this.standings &#x3D; resp.classification || [];
+                this.cdr.markForCheck();
+            },
+            error: () &#x3D;&gt; {
+                this.standings &#x3D; [];
+                this.cdr.markForCheck();
+            }
+        });
+    }
+
+    /**
+     * Devuelve la URL de la miniatura de la bandera correspondiente al código ISO
+     * usando la red pública gratuita &#x60;flagcdn&#x60;.
+     * 
+     * @param iso Código de país (ej. &#x60;IT&#x60;, &#x60;ES&#x60;, &#x60;GB&#x60;).
+     * @returns Un link HTTP directo a la bandera en formato PNG de 20px de ancho.
+     */
+    getCountryFlag(iso: string): string {
+        return &#x60;https://flagcdn.com/w20/${iso.toLowerCase()}.png&#x60;;
+    }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;motogp-container&quot;&gt;
+    &lt;mat-card class&#x3D;&quot;header-card&quot;&gt;
+        &lt;div class&#x3D;&quot;header-content&quot;&gt;
+            &lt;div class&#x3D;&quot;title-section&quot;&gt;
+                &lt;img src&#x3D;&quot;https://resources.motogp.com/files/images/logo/motogp_logo.svg&quot; alt&#x3D;&quot;MotoGP Logo&quot;
+                    class&#x3D;&quot;logo&quot;&gt;
+                &lt;h1&gt;{{ &#x27;MOTOGP_TIMING.TITLE&#x27; | translate }}&lt;/h1&gt;
+                &lt;div class&#x3D;&quot;live-indicator&quot; *ngIf&#x3D;&quot;isLiveVisible&quot;&gt;
+                    &lt;span class&#x3D;&quot;dot&quot;&gt;&lt;/span&gt;
+                    LIVE
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+
+        &lt;/div&gt;
+    &lt;/mat-card&gt;
+
+    &lt;div class&#x3D;&quot;content-grid&quot;&gt;
+        &lt;!-- Loading State --&gt;
+        &lt;div class&#x3D;&quot;loading-overlay&quot; *ngIf&#x3D;&quot;isLoading&quot;&gt;
+            &lt;mat-spinner diameter&#x3D;&quot;50&quot;&gt;&lt;/mat-spinner&gt;
+        &lt;/div&gt;
+
+        &lt;!-- No Data State --&gt;
+        &lt;div class&#x3D;&quot;no-data-card&quot; *ngIf&#x3D;&quot;noData &amp;&amp; !isLoading &amp;&amp; !isLiveVisible&quot;&gt;
+            &lt;mat-card&gt;
+                &lt;mat-card-content&gt;
+                    &lt;div class&#x3D;&quot;no-data-content&quot;&gt;
+                        &lt;i class&#x3D;&quot;material-icons info-icon&quot;&gt;info_outline&lt;/i&gt;
+                        &lt;p&gt;{{ &#x27;MOTOGP_TIMING.NO_DATA&#x27; | translate }}&lt;/p&gt;
+                    &lt;/div&gt;
+                &lt;/mat-card-content&gt;
+            &lt;/mat-card&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;main-content&quot; [class.full-width]&#x3D;&quot;!standings.length&quot;&gt;
+            &lt;mat-tab-group class&#x3D;&quot;custom-tabs&quot;&gt;
+                &lt;!-- Live Timing Tab --&gt;
+                &lt;mat-tab *ngIf&#x3D;&quot;isLiveVisible&quot;&gt;
+                    &lt;ng-template mat-tab-label&gt;
+                        &lt;div class&#x3D;&quot;tab-label&quot;&gt;
+                            &lt;span class&#x3D;&quot;live-dot-small&quot;&gt;&lt;/span&gt;
+                            {{ &#x27;MOTOGP_TIMING.LIVE_SESS&#x27; | translate }}
+                        &lt;/div&gt;
+                    &lt;/ng-template&gt;
+
+                    &lt;mat-card class&#x3D;&quot;timing-card live-card&quot;&gt;
+                        &lt;mat-card-header&gt;
+                            &lt;div class&#x3D;&quot;live-header&quot;&gt;
+                                &lt;mat-card-title&gt;{{ liveTiming?.head?.session_name }} - {{ liveTiming?.head?.circuit_name
+                                    }}&lt;/mat-card-title&gt;
+                                &lt;div class&#x3D;&quot;remaining&quot; *ngIf&#x3D;&quot;liveTiming?.head?.remaining !&#x3D;&#x3D; &#x27;0&#x27;&quot;&gt;
+                                    {{ &#x27;MOTOGP_TIMING.REMAINING&#x27; | translate }}: {{ liveTiming?.head?.remaining }}
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/mat-card-header&gt;
+                        &lt;mat-table [dataSource]&#x3D;&quot;liveRiders&quot; class&#x3D;&quot;premium-table&quot;&gt;
+                            &lt;ng-container matColumnDef&#x3D;&quot;position&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;POS&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot; [class.podium]&#x3D;&quot;entry.pos &lt;&#x3D; 3&quot;&gt;
+                                    {{ entry.pos }}
+                                &lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;rider&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;PILOTO&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;
+                                    &lt;span class&#x3D;&quot;rider-number&quot;&gt;#{{ entry.rider_number }}&lt;/span&gt;
+                                    &lt;span class&#x3D;&quot;rider-name&quot;&gt;{{ entry.rider_shortname }}&lt;/span&gt;
+                                &lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;team&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;EQUIPO&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;
+                                    &lt;div class&#x3D;&quot;team-info&quot;&gt;
+                                        &lt;span class&#x3D;&quot;team-name&quot;&gt;{{ entry.team_name }}&lt;/span&gt;
+                                        &lt;span class&#x3D;&quot;constructor-tag&quot;&gt;{{ entry.bike_name }}&lt;/span&gt;
+                                    &lt;/div&gt;
+                                &lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;lap&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;VUELTA&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;{{ entry.num_lap }}&lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;lap_time&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;T. VUELTA&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot; [class.on-pit]&#x3D;&quot;entry.on_pit&quot;&gt;{{ entry.on_pit ? &#x27;PIT&#x27;
+                                    : entry.lap_time }}&lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;gap&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;GAP (+1º)&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot; [class.zero-gap]&#x3D;&quot;entry.gap_first &#x3D;&#x3D;&#x3D; &#x27;0.000&#x27;&quot;&gt;
+                                    {{ entry.gap_first &#x3D;&#x3D;&#x3D; &#x27;0.000&#x27; ? &#x27;LIDER&#x27; : &#x27;+&#x27; + entry.gap_first }}
+                                &lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;pit&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;PIT&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;
+                                    &lt;i class&#x3D;&quot;material-icons pit-icon&quot; *ngIf&#x3D;&quot;entry.on_pit&quot;&gt;directions_car&lt;/i&gt;
+                                &lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;mat-header-row *matHeaderRowDef&#x3D;&quot;displayedLiveColumns&quot;&gt;&lt;/mat-header-row&gt;
+                            &lt;mat-row *matRowDef&#x3D;&quot;let row; columns: displayedLiveColumns;&quot; class&#x3D;&quot;rider-row&quot;&gt;&lt;/mat-row&gt;
+                        &lt;/mat-table&gt;
+                    &lt;/mat-card&gt;
+                &lt;/mat-tab&gt;
+
+                &lt;!-- Results Tab --&gt;
+                &lt;mat-tab&gt;
+                    &lt;ng-template mat-tab-label&gt;{{ &#x27;MOTOGP_TIMING.SESSION_RESULTS&#x27; | translate }}&lt;/ng-template&gt;
+                    &lt;mat-card class&#x3D;&quot;timing-card&quot;&gt;
+                        &lt;mat-table [dataSource]&#x3D;&quot;classification&quot; class&#x3D;&quot;premium-table&quot;&gt;
+                            &lt;ng-container matColumnDef&#x3D;&quot;position&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;POS&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot; [class.podium]&#x3D;&quot;entry.position &lt;&#x3D; 3&quot;&gt;
+                                    {{ entry.position }}
+                                &lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;rider&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;PILOTO&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;
+                                    &lt;img [src]&#x3D;&quot;entry.rider.country.iso | countryFlag&quot; class&#x3D;&quot;flag-icon-table&quot;&gt;
+                                    &lt;span class&#x3D;&quot;rider-number&quot;&gt;#{{ entry.rider.number }}&lt;/span&gt;
+                                    &lt;span class&#x3D;&quot;rider-name&quot;&gt;{{ entry.rider.full_name }}&lt;/span&gt;
+                                &lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;team&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;EQUIPO / CONSTRUCTOR&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;
+                                    &lt;div class&#x3D;&quot;team-info&quot;&gt;
+                                        &lt;span class&#x3D;&quot;team-name&quot;&gt;{{ entry.team.name }}&lt;/span&gt;
+                                        &lt;span class&#x3D;&quot;constructor-tag&quot;&gt;{{ entry.constructor.name }}&lt;/span&gt;
+                                    &lt;/div&gt;
+                                &lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;best_lap&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;MEJOR VUELTA&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;{{ entry.best_lap.time }}&lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;gap&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;GAP (+1º)&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot; [class.zero-gap]&#x3D;&quot;entry.gap.first &#x3D;&#x3D;&#x3D; &#x27;0.000&#x27;&quot;&gt;
+                                    {{ entry.gap.first &#x3D;&#x3D;&#x3D; &#x27;0.000&#x27; ? &#x27;LIDER&#x27; : &#x27;+&#x27; + entry.gap.first }}
+                                &lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;ng-container matColumnDef&#x3D;&quot;speed&quot;&gt;
+                                &lt;mat-header-cell *matHeaderCellDef&gt;SPEED (km/h)&lt;/mat-header-cell&gt;
+                                &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;{{ entry.top_speed }}&lt;/mat-cell&gt;
+                            &lt;/ng-container&gt;
+
+                            &lt;mat-header-row *matHeaderRowDef&#x3D;&quot;displayedResultsColumns&quot;&gt;&lt;/mat-header-row&gt;
+                            &lt;mat-row *matRowDef&#x3D;&quot;let row; columns: displayedResultsColumns;&quot;
+                                class&#x3D;&quot;rider-row&quot;&gt;&lt;/mat-row&gt;
+                        &lt;/mat-table&gt;
+                    &lt;/mat-card&gt;
+                &lt;/mat-tab&gt;
+            &lt;/mat-tab-group&gt;
+        &lt;/div&gt;
+
+        &lt;!-- Standings Sidebar --&gt;
+        &lt;div class&#x3D;&quot;standings-section&quot; *ngIf&#x3D;&quot;standings.length &gt; 0 &amp;&amp; !isLoading&quot;&gt;
+            &lt;mat-card class&#x3D;&quot;standings-card&quot;&gt;
+                &lt;mat-card-header&gt;
+                    &lt;mat-card-title&gt;{{ &#x27;MOTOGP_TIMING.WORLD_STANDING&#x27; | translate }}&lt;/mat-card-title&gt;
+                &lt;/mat-card-header&gt;
+                &lt;mat-table [dataSource]&#x3D;&quot;standings&quot; class&#x3D;&quot;premium-table&quot;&gt;
+                    &lt;ng-container matColumnDef&#x3D;&quot;position&quot;&gt;
+                        &lt;mat-header-cell *matHeaderCellDef&gt;POS&lt;/mat-header-cell&gt;
+                        &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;{{ entry.position }}&lt;/mat-cell&gt;
+                    &lt;/ng-container&gt;
+
+                    &lt;ng-container matColumnDef&#x3D;&quot;rider&quot;&gt;
+                        &lt;mat-header-cell *matHeaderCellDef&gt;PILOTO&lt;/mat-header-cell&gt;
+                        &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;
+                            &lt;span class&#x3D;&quot;rider-name-short&quot;&gt;{{ entry.rider.full_name }}&lt;/span&gt;
+                        &lt;/mat-cell&gt;
+                    &lt;/ng-container&gt;
+
+                    &lt;ng-container matColumnDef&#x3D;&quot;team&quot;&gt;
+                        &lt;mat-header-cell *matHeaderCellDef&gt;EQUIPO&lt;/mat-header-cell&gt;
+                        &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot;&gt;{{ entry.team.name }}&lt;/mat-cell&gt;
+                    &lt;/ng-container&gt;
+
+                    &lt;ng-container matColumnDef&#x3D;&quot;points&quot;&gt;
+                        &lt;mat-header-cell *matHeaderCellDef&gt;PTS&lt;/mat-header-cell&gt;
+                        &lt;mat-cell *matCellDef&#x3D;&quot;let entry&quot; class&#x3D;&quot;points-cell&quot;&gt;{{ entry.points }}&lt;/mat-cell&gt;
+                    &lt;/ng-container&gt;
+
+                    &lt;mat-header-row *matHeaderRowDef&#x3D;&quot;displayedStandingsColumns&quot;&gt;&lt;/mat-header-row&gt;
+                    &lt;mat-row *matRowDef&#x3D;&quot;let row; columns: displayedStandingsColumns;&quot;&gt;&lt;/mat-row&gt;
+                &lt;/mat-table&gt;
+            &lt;/mat-card&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./motogp-timing.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.motogp-container {
+    padding: 20px;
+    background-color: #0d0d0d;
+    min-height: calc(100vh - 64px);
+    color: #fff;
+    font-family: &#x27;Inter&#x27;, sans-serif;
+
+    .header-card {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        border-left: 4px solid #e10600;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+
+            .title-section {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+
+                .logo {
+                    height: 30px;
+                }
+
+                h1 {
+                    margin: 0;
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    letter-spacing: -0.5px;
+                    text-transform: uppercase;
+                }
+
+                .live-indicator {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: rgba(225, 6, 0, 0.2);
+                    padding: 4px 12px;
+                    border-radius: 20px;
+                    border: 1px solid #e10600;
+                    font-weight: 900;
+                    font-size: 0.75rem;
+                    color: #e10600;
+                    margin-left: 10px;
+
+                    .dot {
+                        width: 8px;
+                        height: 8px;
+                        background-color: #e10600;
+                        border-radius: 50%;
+                        animation: pulse 1.5s infinite;
+                    }
+                }
+            }
+
+
+        }
+    }
+
+    .content-grid {
+        position: relative;
+        display: grid;
+        grid-template-columns: 2.5fr 1fr;
+        gap: 20px;
+
+        @media (max-width: 1200px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .loading-overlay {
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+    }
+
+    .no-data-card {
+        grid-column: 1 / -1;
+        text-align: center;
+
+        mat-card {
+            background: #1a1a1a;
+            border: 1px dashed #333;
+        }
+
+        .no-data-content {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            .info-icon {
+                font-size: 48px;
+                color: #e10600;
+            }
+
+            p {
+                font-size: 1.2rem;
+                color: rgba(255, 255, 255, 0.7);
+            }
+        }
+    }
+
+    .timing-card,
+    .standings-card {
+        background: #1a1a1a;
+        border-radius: 8px;
+        overflow: hidden;
+
+        mat-card-header {
+            background-color: #262626;
+            padding: 10px 20px;
+            border-bottom: 2px solid #e10600;
+
+            mat-card-title {
+                margin: 0;
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    .premium-table {
+        background: transparent;
+
+        mat-header-row {
+            min-height: 48px;
+            background-color: #000;
+            border-bottom: 1px solid #333;
+        }
+
+        mat-header-cell {
+            color: #999;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        mat-row {
+            min-height: 56px;
+            border-bottom: 1px solid #262626;
+            transition: background-color 0.2s ease;
+
+            &amp;:hover {
+                background-color: rgba(255, 255, 255, 0.05);
+            }
+        }
+
+        mat-cell {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .podium {
+            font-weight: 900;
+            color: #e10600;
+        }
+
+        .flag-icon-table {
+            width: 20px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .rider-number {
+            font-family: &#x27;F1-Bold&#x27;, sans-serif;
+            font-size: 0.8rem;
+            color: #999;
+            margin-right: 8px;
+            width: 30px;
+            display: inline-block;
+        }
+
+        .rider-name {
+            font-weight: 700;
+        }
+
+        .team-info {
+            display: flex;
+            flex-direction: column;
+
+            .team-name {
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
+
+            .constructor-tag {
+                font-size: 0.7rem;
+                color: #e10600;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+        }
+
+        .zero-gap {
+            font-weight: 800;
+            color: #e10600;
+        }
+
+        .points-cell {
+            font-weight: 800;
+            color: #e10600;
+            font-size: 1rem;
+        }
+
+        .on-pit {
+            color: #e10600;
+            font-weight: 800;
+        }
+
+        .pit-icon {
+            color: #e10600;
+            font-size: 18px;
+        }
+    }
+
+    .custom-tabs {
+        ::ng-deep {
+            .mat-mdc-tab-header {
+                background: #1a1a1a;
+                border-bottom: 2px solid #333;
+            }
+
+            .mat-mdc-tab .mdc-tab__text-label {
+                color: #999;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+
+            .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+                color: #fff;
+            }
+
+            .mat-mdc-tab-indicator .mdc-tab-indicator__content--underline {
+                border-color: #e10600;
+            }
+        }
+    }
+
+    .live-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        .remaining {
+            font-family: &#x27;F1-Bold&#x27;, sans-serif;
+            color: #e10600;
+            font-size: 0.9rem;
+        }
+    }
+
+    .tab-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .live-dot-small {
+            width: 6px;
+            height: 6px;
+            background-color: #e10600;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.flag-icon {
+    width: 18px;
+    vertical-align: middle;
+    margin-right: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// Responsive Styles matching F1 Dashboard
+@media (max-width: 992px) {
+    .motogp-container {
+        padding: 10px;
+
+        .header-card {
+            .header-content {
+                padding: 10px;
+
+                .title-section {
+                    width: 100%;
+                    justify-content: space-between;
+
+                    h1 {
+                        font-size: 1.2rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+
+    // Hide non-essential columns on mobile
+    ::ng-deep {
+
+        .mat-column-team,
+        .mat-column-speed,
+        .mat-column-gap {
+            display: none !important;
+        }
+    }
+
+    .motogp-container {
+        .premium-table {
+            mat-header-cell {
+                font-size: 0.7rem;
+                padding: 0 4px;
+            }
+
+            mat-cell {
+                font-size: 0.8rem;
+                padding: 0 4px;
+            }
+
+            .rider-number {
+                width: 25px;
+                margin-right: 4px;
+            }
+
+            .flag-icon-table {
+                display: none; // Hide flags on mobile to save space
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    ::ng-deep {
+        .mat-column-lap {
+            display: none !important;
+        }
+    }
+
+    .motogp-container {
+        .header-card .header-content .title-section {
+            h1 {
+                font-size: 1rem;
+            }
+
+            .logo {
+                height: 24px;
+            }
+        }
+    }
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="motogp-container">    <mat-card class="header-card">        <div class="header-content">            <div class="title-section">                <img src="https://resources.motogp.com/files/images/logo/motogp_logo.svg" alt="MotoGP Logo"                    class="logo">                <h1>{{ \'MOTOGP_TIMING.TITLE\' | translate }}</h1>                <div class="live-indicator" *ngIf="isLiveVisible">                    <span class="dot"></span>                    LIVE                </div>            </div>        </div>    </mat-card>    <div class="content-grid">        <!-- Loading State -->        <div class="loading-overlay" *ngIf="isLoading">            <mat-spinner diameter="50"></mat-spinner>        </div>        <!-- No Data State -->        <div class="no-data-card" *ngIf="noData && !isLoading && !isLiveVisible">            <mat-card>                <mat-card-content>                    <div class="no-data-content">                        <i class="material-icons info-icon">info_outline</i>                        <p>{{ \'MOTOGP_TIMING.NO_DATA\' | translate }}</p>                    </div>                </mat-card-content>            </mat-card>        </div>        <div class="main-content" [class.full-width]="!standings.length">            <mat-tab-group class="custom-tabs">                <!-- Live Timing Tab -->                <mat-tab *ngIf="isLiveVisible">                    <ng-template mat-tab-label>                        <div class="tab-label">                            <span class="live-dot-small"></span>                            {{ \'MOTOGP_TIMING.LIVE_SESS\' | translate }}                        </div>                    </ng-template>                    <mat-card class="timing-card live-card">                        <mat-card-header>                            <div class="live-header">                                <mat-card-title>{{ liveTiming?.head?.session_name }} - {{ liveTiming?.head?.circuit_name                                    }}</mat-card-title>                                <div class="remaining" *ngIf="liveTiming?.head?.remaining !== \'0\'">                                    {{ \'MOTOGP_TIMING.REMAINING\' | translate }}: {{ liveTiming?.head?.remaining }}                                </div>                            </div>                        </mat-card-header>                        <mat-table [dataSource]="liveRiders" class="premium-table">                            <ng-container matColumnDef="position">                                <mat-header-cell *matHeaderCellDef>POS</mat-header-cell>                                <mat-cell *matCellDef="let entry" [class.podium]="entry.pos <= 3">                                    {{ entry.pos }}                                </mat-cell>                            </ng-container>                            <ng-container matColumnDef="rider">                                <mat-header-cell *matHeaderCellDef>PILOTO</mat-header-cell>                                <mat-cell *matCellDef="let entry">                                    <span class="rider-number">#{{ entry.rider_number }}</span>                                    <span class="rider-name">{{ entry.rider_shortname }}</span>                                </mat-cell>                            </ng-container>                            <ng-container matColumnDef="team">                                <mat-header-cell *matHeaderCellDef>EQUIPO</mat-header-cell>                                <mat-cell *matCellDef="let entry">                                    <div class="team-info">                                        <span class="team-name">{{ entry.team_name }}</span>                                        <span class="constructor-tag">{{ entry.bike_name }}</span>                                    </div>                                </mat-cell>                            </ng-container>                            <ng-container matColumnDef="lap">                                <mat-header-cell *matHeaderCellDef>VUELTA</mat-header-cell>                                <mat-cell *matCellDef="let entry">{{ entry.num_lap }}</mat-cell>                            </ng-container>                            <ng-container matColumnDef="lap_time">                                <mat-header-cell *matHeaderCellDef>T. VUELTA</mat-header-cell>                                <mat-cell *matCellDef="let entry" [class.on-pit]="entry.on_pit">{{ entry.on_pit ? \'PIT\'                                    : entry.lap_time }}</mat-cell>                            </ng-container>                            <ng-container matColumnDef="gap">                                <mat-header-cell *matHeaderCellDef>GAP (+1º)</mat-header-cell>                                <mat-cell *matCellDef="let entry" [class.zero-gap]="entry.gap_first === \'0.000\'">                                    {{ entry.gap_first === \'0.000\' ? \'LIDER\' : \'+\' + entry.gap_first }}                                </mat-cell>                            </ng-container>                            <ng-container matColumnDef="pit">                                <mat-header-cell *matHeaderCellDef>PIT</mat-header-cell>                                <mat-cell *matCellDef="let entry">                                    <i class="material-icons pit-icon" *ngIf="entry.on_pit">directions_car</i>                                </mat-cell>                            </ng-container>                            <mat-header-row *matHeaderRowDef="displayedLiveColumns"></mat-header-row>                            <mat-row *matRowDef="let row; columns: displayedLiveColumns;" class="rider-row"></mat-row>                        </mat-table>                    </mat-card>                </mat-tab>                <!-- Results Tab -->                <mat-tab>                    <ng-template mat-tab-label>{{ \'MOTOGP_TIMING.SESSION_RESULTS\' | translate }}</ng-template>                    <mat-card class="timing-card">                        <mat-table [dataSource]="classification" class="premium-table">                            <ng-container matColumnDef="position">                                <mat-header-cell *matHeaderCellDef>POS</mat-header-cell>                                <mat-cell *matCellDef="let entry" [class.podium]="entry.position <= 3">                                    {{ entry.position }}                                </mat-cell>                            </ng-container>                            <ng-container matColumnDef="rider">                                <mat-header-cell *matHeaderCellDef>PILOTO</mat-header-cell>                                <mat-cell *matCellDef="let entry">                                    <img [src]="entry.rider.country.iso | countryFlag" class="flag-icon-table">                                    <span class="rider-number">#{{ entry.rider.number }}</span>                                    <span class="rider-name">{{ entry.rider.full_name }}</span>                                </mat-cell>                            </ng-container>                            <ng-container matColumnDef="team">                                <mat-header-cell *matHeaderCellDef>EQUIPO / CONSTRUCTOR</mat-header-cell>                                <mat-cell *matCellDef="let entry">                                    <div class="team-info">                                        <span class="team-name">{{ entry.team.name }}</span>                                        <span class="constructor-tag">{{ entry.constructor.name }}</span>                                    </div>                                </mat-cell>                            </ng-container>                            <ng-container matColumnDef="best_lap">                                <mat-header-cell *matHeaderCellDef>MEJOR VUELTA</mat-header-cell>                                <mat-cell *matCellDef="let entry">{{ entry.best_lap.time }}</mat-cell>                            </ng-container>                            <ng-container matColumnDef="gap">                                <mat-header-cell *matHeaderCellDef>GAP (+1º)</mat-header-cell>                                <mat-cell *matCellDef="let entry" [class.zero-gap]="entry.gap.first === \'0.000\'">                                    {{ entry.gap.first === \'0.000\' ? \'LIDER\' : \'+\' + entry.gap.first }}                                </mat-cell>                            </ng-container>                            <ng-container matColumnDef="speed">                                <mat-header-cell *matHeaderCellDef>SPEED (km/h)</mat-header-cell>                                <mat-cell *matCellDef="let entry">{{ entry.top_speed }}</mat-cell>                            </ng-container>                            <mat-header-row *matHeaderRowDef="displayedResultsColumns"></mat-header-row>                            <mat-row *matRowDef="let row; columns: displayedResultsColumns;"                                class="rider-row"></mat-row>                        </mat-table>                    </mat-card>                </mat-tab>            </mat-tab-group>        </div>        <!-- Standings Sidebar -->        <div class="standings-section" *ngIf="standings.length > 0 && !isLoading">            <mat-card class="standings-card">                <mat-card-header>                    <mat-card-title>{{ \'MOTOGP_TIMING.WORLD_STANDING\' | translate }}</mat-card-title>                </mat-card-header>                <mat-table [dataSource]="standings" class="premium-table">                    <ng-container matColumnDef="position">                        <mat-header-cell *matHeaderCellDef>POS</mat-header-cell>                        <mat-cell *matCellDef="let entry">{{ entry.position }}</mat-cell>                    </ng-container>                    <ng-container matColumnDef="rider">                        <mat-header-cell *matHeaderCellDef>PILOTO</mat-header-cell>                        <mat-cell *matCellDef="let entry">                            <span class="rider-name-short">{{ entry.rider.full_name }}</span>                        </mat-cell>                    </ng-container>                    <ng-container matColumnDef="team">                        <mat-header-cell *matHeaderCellDef>EQUIPO</mat-header-cell>                        <mat-cell *matCellDef="let entry">{{ entry.team.name }}</mat-cell>                    </ng-container>                    <ng-container matColumnDef="points">                        <mat-header-cell *matHeaderCellDef>PTS</mat-header-cell>                        <mat-cell *matCellDef="let entry" class="points-cell">{{ entry.points }}</mat-cell>                    </ng-container>                    <mat-header-row *matHeaderRowDef="displayedStandingsColumns"></mat-header-row>                    <mat-row *matRowDef="let row; columns: displayedStandingsColumns;"></mat-row>                </mat-table>            </mat-card>        </div>    </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CalendarComponent', 'selector': 'app-calendar'},{'name': 'CalendarDetailComponent', 'selector': 'app-calendar-detail'},{'name': 'CircuitMapComponent', 'selector': 'app-circuit-map'},{'name': 'ConfirmModalComponent', 'selector': 'app-confirm-modal'},{'name': 'DriverRadiosComponent', 'selector': 'app-driver-radios'},{'name': 'DriverSectorsComponent', 'selector': 'app-driver-sectors'},{'name': 'DriverSelectorComponent', 'selector': 'app-driver-selector'},{'name': 'FeedbackModalComponent', 'selector': 'app-feedback-modal'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MotoGPTimingComponent', 'selector': 'app-motogp-timing'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'ProfileSetupComponent', 'selector': 'app-profile-setup'},{'name': 'ProfileViewComponent', 'selector': 'app-profile-view'},{'name': 'RegisterComponent', 'selector': 'app-register-page'},{'name': 'TimingTableComponent', 'selector': 'app-timing-table'}];
+    var DIRECTIVES = [{'name': 'ImageFallbackDirective', 'selector': 'img[appImageFallback]'}];
+    var ACTUAL_COMPONENT = {'name': 'MotoGPTimingComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'MotoGPTimingComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

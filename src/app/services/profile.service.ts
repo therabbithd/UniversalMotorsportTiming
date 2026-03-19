@@ -14,6 +14,7 @@ import { Profile, ProfileInput } from '../models/profile.model';
     providedIn: 'root',
 })
 export class ProfileService {
+    /** Injected HttpClient for API requests */
     private readonly http = inject(HttpClient);
 
     /**

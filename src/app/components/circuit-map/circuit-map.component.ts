@@ -7,13 +7,23 @@ import { catchError, of, Subscription } from 'rxjs';
 import { F1LiveTimingStreamService } from '../../services/f1-livetiming.service';
 import { TranslateModule } from '@ngx-translate/core';
 
+/**
+ * Interface representing the calculated position of a driver on the track map.
+ */
 interface DriverPosition {
+  /** Driver's racing number */
   racingNumber: string;
+  /** Calculated X position on the SVG */
   x: number;
+  /** Calculated Y position on the SVG */
   y: number;
+  /** Z coordinate / progress on the track */
   z: number;
+  /** Driver team's hex color */
   teamColor: string;
+  /** Driver code (e.g., VER, HAM) */
   driverCode: string;
+  /** Indicates whether the driver is currently tracked as on track */
   onTrack: boolean;
 }
 
@@ -32,39 +42,67 @@ interface DriverPosition {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CircuitMapComponent implements OnChanges, OnDestroy {
+  /** The unique key for the circuit to load */
   @Input() circuitKey: number | string | undefined;
+  /** The championship year */
   @Input() year: number | string | undefined;
 
+  /** Track mathematical data retrieved from Multiviewer API */
   trackData: any = null;
+  /** Indicates if map data is being fetched */
   isLoading = false;
+  /** Contains error message if loading map data fails */
   error: string | null = null;
+  /** RxJS subscription reference for Live Timing updates */
   streamSubscription: Subscription | null = null;
 
   // Track rendering
+  /** The SVG path definition for rendering the track shape */
   circuitPath: string = '';
+  /** ViewBox definition to auto-scale the SVG */
   viewBox: string = "-1000 -1000 2000 2000";
 
   // Rotation state
+  /** Standard rotation degree applied to the track points */
   rotation: number = 0;
 
   // Drivers
+  /** Array of active processed drivers to render on the SVG */
   processedDrivers: DriverPosition[] = [];
+  /** X,Y Coordinates identifying the start/finish line */
   startLinePos: { x: number, y: number } | null = null;
+  /** Array of track point coordinates used for internal interpolation */
   trackPoints: { x: number, y: number }[] = [];
+  /** Total computed length of the track geometry */
   totalTrackLength: number = 0;
 
+  /**
+   * Initializes the CircuitMapComponent.
+   * @param http HttpClient instance
+   * @param streamService F1LiveTimingStreamService instance
+   * @param cdr ChangeDetectorRef instance
+   */
   constructor(
     private http: HttpClient,
     private streamService: F1LiveTimingStreamService,
     private cdr: ChangeDetectorRef
   ) { }
 
+  /**
+   * Detecta cambios en las propiedades de entrada (@Input) para recargar el mapa
+   * cuando cambian el circuito o el año.
+   * 
+   * @param changes Objeto con los cambios detectados por Angular.
+   */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['circuitKey'] || changes['year']) {
       this.loadMap();
     }
   }
 
+  /**
+   * Limpia la suscripción al stream de telemetría al destruir el componente.
+   */
   ngOnDestroy(): void {
     if (this.streamSubscription) {
       this.streamSubscription.unsubscribe();
@@ -103,6 +141,9 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
     });
   }
 
+  /**
+   * Generates the SVG path for the loaded circuit using coordinate arrays.
+   */
   generateCircuitPath() {
     if (!this.trackData || !this.trackData.x || !this.trackData.y) return;
 
@@ -146,6 +187,10 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
     console.log(`[Circuit Map] Track Range: X[${minX.toFixed(0)}, ${maxX.toFixed(0)}], Y[${minY.toFixed(0)}, ${maxY.toFixed(0)}], Total Length: ${this.totalTrackLength.toFixed(0)}`);
   }
 
+  /**
+   * Recalculates the SVG viewBox dimensional bounds to center the track.
+   * @param points Array of calculated point coordinates for the track shape
+   */
   updateViewBox(points: { x: number, y: number }[]) {
     if (points.length === 0) return;
 
@@ -171,6 +216,9 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
     this.viewBox = `${minX - paddingX} ${minY - paddingY} ${width + paddingX * 2} ${height + paddingY * 2}`;
   }
 
+  /**
+   * Subscribes to the live timing internal state feed to receive coordinate updates.
+   */
   subscribeToPositions() {
     if (this.streamSubscription) {
       this.streamSubscription.unsubscribe();
@@ -260,6 +308,13 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  /**
+   * Calcula una posición X,Y en el SVG interpolando el valor de progreso Z 
+   * sobre los puntos conocidos del trazado.
+   * 
+   * @param z Valor de progreso o distancia recorrida en el circuito.
+   * @returns Coordenadas X e Y interpoladas.
+   */
   private getPositionFromZ(z: number): { x: number, y: number } {
     // console.log('[Circuit Map] Interpolating Z:', z);
     let normalizedZ = 0;
@@ -307,6 +362,14 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
     };
   }
 
+  /**
+   * Transforma una lista de coordenadas crudas en puntos listos para el SVG, 
+   * aplicando las rotaciones necesarias.
+   * 
+   * @param xArr Array de coordenadas X.
+   * @param yArr Array de conordenadas Y.
+   * @returns Un array de objetos con las coordenadas X e Y transformadas.
+   */
   transformPoints(xArr: number[], yArr: number[]): { x: number, y: number }[] {
     return xArr.map((x, i) => {
       const [rx, ry] = this.rotate(x, yArr[i], this.rotation);
@@ -314,6 +377,15 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
     });
   }
 
+  /**
+   * Aplica una rotación matemática a un punto 2D basándose en un ángulo dado.
+   * Ajusta el eje Y para que coincida con el sistema de coordenadas de F1.
+   * 
+   * @param x Coordenada X original.
+   * @param y Coordenada Y original.
+   * @param angle Ángulo de rotación en grados.
+   * @returns Una tupla [X, Y] con el punto rotado.
+   */
   rotate(x: number, y: number, angle: number): [number, number] {
     const rad = angle * (Math.PI / 180);
     const cos = Math.cos(rad);

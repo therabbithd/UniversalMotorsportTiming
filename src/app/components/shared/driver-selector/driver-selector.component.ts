@@ -4,6 +4,10 @@ import { CommonModule } from '@angular/common';
 import { F1CalendarService, Driver } from '../../../services/f1-calendar.service';
 import { TranslateModule } from '@ngx-translate/core';
 
+/**
+ * A reusable select component to choose a driver from the current F1 grid.
+ * Implements ControlValueAccessor to integrate seamlessly with Angular forms.
+ */
 @Component({
     selector: 'app-driver-selector',
     standalone: true,
@@ -70,21 +74,34 @@ import { TranslateModule } from '@ngx-translate/core';
     ]
 })
 export class DriverSelectorComponent implements ControlValueAccessor, OnInit {
+    /** Service to fetch driver data */
     private readonly f1Service = inject(F1CalendarService);
 
+    /** Signal containing the list of available drivers */
     readonly drivers = signal<Driver[]>([]);
+    /** Signal storing the currently selected driver code */
     readonly value = signal<string>('');
+    /** Signal indicating if the selector is disabled */
     readonly disabled = signal<boolean>(false);
 
+    /** Callback function to notify form control of value changes */
     onChange: any = () => { };
+    /** Callback function to notify form control of touch events */
     onTouched: any = () => { };
 
+    /**
+     * Lifecycle hook that initializes the component by fetching the drivers.
+     */
     ngOnInit(): void {
         this.f1Service.getDrivers().subscribe(drivers => {
             this.drivers.set(drivers);
         });
     }
 
+    /**
+     * Handles the selection change event from the native select element.
+     * @param event The DOM event triggered by selection
+     */
     onSelect(event: any): void {
         const val = event.target.value;
         this.value.set(val);
@@ -93,18 +110,34 @@ export class DriverSelectorComponent implements ControlValueAccessor, OnInit {
     }
 
     // ControlValueAccessor methods
+    /**
+     * Writes a new value to the element from the form model.
+     * @param value The new value
+     */
     writeValue(value: any): void {
         this.value.set(value || '');
     }
 
+    /**
+     * Registers a callback function that is called when the control's value changes in the UI.
+     * @param fn The callback function
+     */
     registerOnChange(fn: any): void {
         this.onChange = fn;
     }
 
+    /**
+     * Registers a callback function that is called by the forms API on initialization to update the form model on blur.
+     * @param fn The callback function
+     */
     registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
 
+    /**
+     * Function that is called by the forms API when the control status changes to or from 'DISABLED'.
+     * @param isDisabled Current disabled state
+     */
     setDisabledState(isDisabled: boolean): void {
         this.disabled.set(isDisabled);
     }

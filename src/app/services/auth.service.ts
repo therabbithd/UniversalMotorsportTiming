@@ -4,30 +4,41 @@ import { Observable, tap } from 'rxjs';
 import { API_CONFIG } from '../config/api.config';
 import { Router } from '@angular/router';
 
-/** Interface para los datos de registro (creación de cuenta). */
+/** Data structure for user registration (account creation). */
 export interface RegisterInput {
+  /** User's email address */
   email: string;
+  /** User's full name */
   name: string;
+  /** User's password (min 8 chars) */
   password: string;
 }
 
-/** Interface para los credenciales de inicio de sesión. */
+/** Data structure for user login credentials. */
 export interface LoginInput {
+  /** User's email address */
   email: string;
+  /** User's password */
   password: string;
 }
 
-/** Modelo básico del usuario devuelto por la API. */
+/** Basic user model returned by the API. */
 export interface User {
+  /** Unique user identifier */
   id: number;
+  /** User's email address */
   email: string;
+  /** User's display name */
   name: string;
+  /** ISO date string of account creation */
   createdAt: string;
 }
 
-/** Respuesta de la API tras un registro o inicio de sesión exitoso. */
+/** API response structure after successful registration or login. */
 export interface AuthResponse {
+  /** Authenticated user details */
   user: User;
+  /** JWT access token for subsequent API requests */
   token: string;
 }
 
@@ -105,12 +116,20 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
+  /**
+   * Persists the authentication state (token and user) to local storage.
+   * @param response The auth response containing user and token
+   */
   private setAuthState(response: AuthResponse): void {
     localStorage.setItem('token', response.token);
     localStorage.setItem('user', JSON.stringify(response.user));
     this.currentUser.set(response.user);
   }
 
+  /**
+   * Retrieves the user data from local storage if it exists.
+   * @returns The User object or null if not found/invalid
+   */
   private getUserFromStorage(): User | null {
     const userJson = localStorage.getItem('user');
     if (!userJson) return null;

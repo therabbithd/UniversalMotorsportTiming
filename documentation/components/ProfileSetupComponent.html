@@ -1,0 +1,1214 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>univesal-timing documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">univesal-timing documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  ProfileSetupComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/components/profile-setup/profile-setup.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Component responsible for setting up or updating a user&#39;s profile details.
+Contains a reactive form and integration with Cloudinary for avatar uploads.</p>
+
+    </p>
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-profile-setup</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                <code><a href="https://angular.io/api/forms/ReactiveFormsModule" target="_blank" >ReactiveFormsModule</a></code>
+                            <code>TranslateModule</code>
+                            <code>MatDialogModule</code>
+                                <code><a href="../components/DriverSelectorComponent.html" target="_self" >DriverSelectorComponent</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./profile-setup.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./profile-setup.component.scss</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#avatarPreview" >avatarPreview</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#cloudinaryService" >cloudinaryService</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#dialog" >dialog</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#fb" >fb</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#isLoading" >isLoading</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#isSubmitted" >isSubmitted</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#isUploading" >isUploading</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#profileService" >profileService</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#router" >router</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#setupForm" >setupForm</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#onFileSelected" >onFileSelected</a>
+                            </li>
+                            <li>
+                                <a href="#skip" >skip</a>
+                            </li>
+                            <li>
+                                <a href="#submit" >submit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onFileSelected"></a>
+                    <span class="name">
+                        <span ><b>onFileSelected</b></span>
+                        <a href="#onFileSelected"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onFileSelected(event: <a href="https://angular.io/api/router/Event" target="_blank">Event</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="58"
+                                    class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:58</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Handles file selection for avatar uploading.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                            <code><a href="https://angular.io/api/router/Event" target="_blank" >Event</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>DOM file input change event</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="skip"></a>
+                    <span class="name">
+                        <span ><b>skip</b></span>
+                        <a href="#skip"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>skip()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="150"
+                                    class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:150</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Skips the profile setup phase and directly navigates to the dashboard.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submit"></a>
+                    <span class="name">
+                        <span ><b>submit</b></span>
+                        <a href="#submit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>submit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="106"
+                                    class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:106</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Validates and submits the setup form to the backend to create the profile.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="avatarPreview"></a>
+                    <span class="name">
+                            <span class="modifier">Readonly</span>
+                        <span ><b>avatarPreview</b></span>
+                        <a href="#avatarPreview"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>signal&lt;string | null&gt;(null)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:52</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>State signal containing the preview URL of the avatar</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cloudinaryService"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>cloudinaryService</b></span>
+                        <a href="#cloudinaryService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(CloudinaryService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:29</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Injected Cloudinary service for image uploading</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dialog"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>dialog</b></span>
+                        <a href="#dialog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(MatDialog)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Injected Material Dialog service</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fb"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>fb</b></span>
+                        <a href="#fb"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(FormBuilder)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Injected form builder</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoading"></a>
+                    <span class="name">
+                            <span class="modifier">Readonly</span>
+                        <span ><b>isLoading</b></span>
+                        <a href="#isLoading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>signal(false)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:48</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>State signal indicating if data is being saved</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isSubmitted"></a>
+                    <span class="name">
+                            <span class="modifier">Readonly</span>
+                        <span ><b>isSubmitted</b></span>
+                        <a href="#isSubmitted"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>signal(false)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>State signal indicating if the form was submitted</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isUploading"></a>
+                    <span class="name">
+                            <span class="modifier">Readonly</span>
+                        <span ><b>isUploading</b></span>
+                        <a href="#isUploading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>signal(false)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:50</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>State signal indicating if an image is currently uploading to Cloudinary</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="profileService"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>profileService</b></span>
+                        <a href="#profileService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(ProfileService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:27</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Injected profile service</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="router"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>router</b></span>
+                        <a href="#router"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(Router)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Injected Angular router</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setupForm"></a>
+                    <span class="name">
+                            <span class="modifier">Readonly</span>
+                        <span ><b>setupForm</b></span>
+                        <a href="#setupForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this.fb.group({
+        bio: [&#x27;&#x27;, [Validators.maxLength(500)]],
+        phone: [&#x27;&#x27;, [Validators.pattern(&#x27;^[0-9+ ]*$&#x27;)]],
+        address: [&#x27;&#x27;],
+        avatar: [&#x27;&#x27;],
+        configuracion: [&#x27;&#x27;],
+        favoritos: [&#x27;&#x27;]
+    })</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/components/profile-setup/profile-setup.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Main reactive form group for profile setup</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, inject, signal } from &#x27;@angular/core&#x27;;
+import { MatDialog, MatDialogModule } from &#x27;@angular/material/dialog&#x27;;
+import { FeedbackModalComponent } from &#x27;../shared/feedback-modal/feedback-modal.component&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormBuilder, ReactiveFormsModule, Validators } from &#x27;@angular/forms&#x27;;
+import { Router } from &#x27;@angular/router&#x27;;
+import { ProfileService } from &#x27;../../services/profile.service&#x27;;
+import { CloudinaryService } from &#x27;../../services/cloudinary.service&#x27;;
+import { TranslateModule } from &#x27;@ngx-translate/core&#x27;;
+import { DriverSelectorComponent } from &#x27;../shared/driver-selector/driver-selector.component&#x27;;
+
+/**
+ * Component responsible for setting up or updating a user&#x27;s profile details.
+ * Contains a reactive form and integration with Cloudinary for avatar uploads.
+ */
+@Component({
+    selector: &#x27;app-profile-setup&#x27;,
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, TranslateModule, MatDialogModule, DriverSelectorComponent],
+    templateUrl: &#x27;./profile-setup.component.html&#x27;,
+    styleUrl: &#x27;./profile-setup.component.scss&#x27;
+})
+export class ProfileSetupComponent {
+    /** Injected form builder */
+    private readonly fb &#x3D; inject(FormBuilder);
+    /** Injected profile service */
+    private readonly profileService &#x3D; inject(ProfileService);
+    /** Injected Cloudinary service for image uploading */
+    private readonly cloudinaryService &#x3D; inject(CloudinaryService);
+    /** Injected Angular router */
+    private readonly router &#x3D; inject(Router);
+    /** Injected Material Dialog service */
+    private readonly dialog &#x3D; inject(MatDialog);
+
+    /** Main reactive form group for profile setup */
+    readonly setupForm &#x3D; this.fb.group({
+        bio: [&#x27;&#x27;, [Validators.maxLength(500)]],
+        phone: [&#x27;&#x27;, [Validators.pattern(&#x27;^[0-9+ ]*$&#x27;)]],
+        address: [&#x27;&#x27;],
+        avatar: [&#x27;&#x27;],
+        configuracion: [&#x27;&#x27;],
+        favoritos: [&#x27;&#x27;]
+    });
+
+    /** State signal indicating if the form was submitted */
+    readonly isSubmitted &#x3D; signal(false);
+    /** State signal indicating if data is being saved */
+    readonly isLoading &#x3D; signal(false);
+    /** State signal indicating if an image is currently uploading to Cloudinary */
+    readonly isUploading &#x3D; signal(false);
+    /** State signal containing the preview URL of the avatar */
+    readonly avatarPreview &#x3D; signal&lt;string | null&gt;(null);
+
+    /**
+     * Handles file selection for avatar uploading.
+     * @param event DOM file input change event
+     */
+    onFileSelected(event: Event): void {
+        const input &#x3D; event.target as HTMLInputElement;
+        if (input.files &amp;&amp; input.files.length &gt; 0) {
+            const file &#x3D; input.files[0];
+
+            // Validate file type
+            if (!file.type.startsWith(&#x27;image/&#x27;)) {
+                this.dialog.open(FeedbackModalComponent, {
+                    data: {
+                        type: &#x27;error&#x27;,
+                        title: &#x27;Error&#x27;,
+                        message: &#x27;Por favor, selecciona un archivo de imagen válido.&#x27;
+                    }
+                });
+                return;
+            }
+
+            // Show preview immediately
+            const reader &#x3D; new FileReader();
+            reader.onload &#x3D; (e) &#x3D;&gt; {
+                this.avatarPreview.set(e.target?.result as string);
+            };
+            reader.readAsDataURL(file);
+
+            this.isUploading.set(true);
+            this.cloudinaryService.uploadImage(file).subscribe({
+                next: (url) &#x3D;&gt; {
+                    this.setupForm.patchValue({ avatar: url });
+                    this.isUploading.set(false);
+                },
+                error: (error) &#x3D;&gt; {
+                    this.isUploading.set(false);
+                    console.error(&#x27;Error uploading image&#x27;, error);
+                    this.dialog.open(FeedbackModalComponent, {
+                        data: {
+                            type: &#x27;error&#x27;,
+                            title: &#x27;Error&#x27;,
+                            message: &#x27;Error al subir la imagen. Por favor intenta de nuevo.&#x27;
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    /**
+     * Validates and submits the setup form to the backend to create the profile.
+     */
+    submit(): void {
+        this.isSubmitted.set(true);
+
+        if (this.setupForm.invalid) {
+            this.setupForm.markAllAsTouched();
+            return;
+        }
+
+        this.isLoading.set(true);
+
+        this.profileService.createProfile(this.setupForm.value as any).subscribe({
+            next: () &#x3D;&gt; {
+                this.isLoading.set(false);
+
+                this.dialog.open(FeedbackModalComponent, {
+                    data: {
+                        type: &#x27;success&#x27;,
+                        title: &#x27;AUTH.PROFILE.SETUP.SUCCESS_TITLE&#x27;,
+                        message: &#x27;AUTH.PROFILE.SETUP.SUCCESS_MESSAGE&#x27;,
+                        buttonText: &#x27;COMMON.CONTINUE&#x27;
+                    },
+                    disableClose: true
+                }).afterClosed().subscribe(() &#x3D;&gt; {
+                    this.router.navigate([&#x27;/dashboard&#x27;]);
+                });
+            },
+            error: (error) &#x3D;&gt; {
+                this.isLoading.set(false);
+                const message &#x3D; error.error?.message || &#x27;Hubo un error al guardar tu perfil. Puedes intentarlo más tarde.&#x27;;
+
+                this.dialog.open(FeedbackModalComponent, {
+                    data: {
+                        type: &#x27;error&#x27;,
+                        title: &#x27;AUTH.PROFILE.SETUP.ERROR_TITLE&#x27;,
+                        message: message
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Skips the profile setup phase and directly navigates to the dashboard.
+     */
+    skip(): void {
+        this.router.navigate([&#x27;/dashboard&#x27;]);
+    }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;profile-setup-container&quot;&gt;
+  &lt;div class&#x3D;&quot;setup-card&quot;&gt;
+    &lt;div class&#x3D;&quot;setup-header&quot;&gt;
+      &lt;div class&#x3D;&quot;logo-text&quot;&gt;Universal&lt;span&gt;Motorsport&lt;/span&gt;&lt;/div&gt;
+      &lt;h1&gt;{{ &#x27;AUTH.PROFILE.SETUP.TITLE&#x27; | translate }}&lt;/h1&gt;
+      &lt;p&gt;{{ &#x27;AUTH.PROFILE.SETUP.SUBTITLE&#x27; | translate }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;form [formGroup]&#x3D;&quot;setupForm&quot; (ngSubmit)&#x3D;&quot;submit()&quot; class&#x3D;&quot;setup-form&quot;&gt;
+      &lt;div class&#x3D;&quot;form-grid&quot;&gt;
+        &lt;!-- Avatar Preview/Upload Placeholder --&gt;
+        &lt;!-- Avatar Preview/Upload Placeholder --&gt;
+        &lt;div class&#x3D;&quot;avatar-section&quot;&gt;
+          &lt;div class&#x3D;&quot;avatar-circle&quot; (click)&#x3D;&quot;fileInput.click()&quot;&gt;
+            &lt;img *ngIf&#x3D;&quot;avatarPreview()&quot; [src]&#x3D;&quot;avatarPreview()&quot; alt&#x3D;&quot;Avatar preview&quot; class&#x3D;&quot;avatar-img&quot;&gt;
+            &lt;i *ngIf&#x3D;&quot;!avatarPreview()&quot; class&#x3D;&quot;fas fa-user&quot;&gt;&lt;/i&gt;
+            &lt;div *ngIf&#x3D;&quot;isUploading()&quot; class&#x3D;&quot;upload-overlay&quot;&gt;
+              &lt;span class&#x3D;&quot;loader-spinner&quot;&gt;&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class&#x3D;&quot;avatar-input&quot;&gt;
+            &lt;label for&#x3D;&quot;avatar-upload&quot; class&#x3D;&quot;upload-label&quot;&gt;{{ &#x27;AUTH.PROFILE.SETUP.AVATAR_LABEL&#x27; | translate }}&lt;/label&gt;
+            &lt;input #fileInput type&#x3D;&quot;file&quot; id&#x3D;&quot;avatar-upload&quot; (change)&#x3D;&quot;onFileSelected($event)&quot; accept&#x3D;&quot;image/*&quot;
+              style&#x3D;&quot;display: none;&quot;&gt;
+            &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn-upload&quot; (click)&#x3D;&quot;fileInput.click()&quot;&gt;
+              {{ &#x27;AUTH.PROFILE.SETUP.UPLOAD_BUTTON&#x27; | translate }}
+            &lt;/button&gt;
+            &lt;input type&#x3D;&quot;hidden&quot; formControlName&#x3D;&quot;avatar&quot;&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;form-group full-width&quot;&gt;
+          &lt;label for&#x3D;&quot;bio&quot;&gt;{{ &#x27;AUTH.PROFILE.SETUP.BIO_LABEL&#x27; | translate }}&lt;/label&gt;
+          &lt;textarea id&#x3D;&quot;bio&quot; formControlName&#x3D;&quot;bio&quot;
+            [placeholder]&#x3D;&quot;&#x27;AUTH.PROFILE.SETUP.BIO_PLACEHOLDER&#x27; | translate&quot;&gt;&lt;/textarea&gt;
+          &lt;div *ngIf&#x3D;&quot;setupForm.get(&#x27;bio&#x27;)?.errors?.[&#x27;maxlength&#x27;]&quot; class&#x3D;&quot;error-msg&quot;&gt;
+            {{ &#x27;AUTH.PROFILE.SETUP.ERRORS.BIO_LENGTH&#x27; | translate }}
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;form-group&quot;&gt;
+          &lt;label for&#x3D;&quot;phone&quot;&gt;{{ &#x27;AUTH.PROFILE.SETUP.PHONE_LABEL&#x27; | translate }}&lt;/label&gt;
+          &lt;input type&#x3D;&quot;text&quot; id&#x3D;&quot;phone&quot; formControlName&#x3D;&quot;phone&quot; placeholder&#x3D;&quot;+34 600 000 000&quot;&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;form-group&quot;&gt;
+          &lt;label for&#x3D;&quot;address&quot;&gt;{{ &#x27;AUTH.PROFILE.SETUP.ADDRESS_LABEL&#x27; | translate }}&lt;/label&gt;
+          &lt;input type&#x3D;&quot;text&quot; id&#x3D;&quot;address&quot; formControlName&#x3D;&quot;address&quot; placeholder&#x3D;&quot;Calle, Ciudad, País&quot;&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;form-group&quot;&gt;
+          &lt;label for&#x3D;&quot;favoritos&quot;&gt;{{ &#x27;AUTH.PROFILE.SETUP.FAVORITE_DRIVER_LABEL&#x27; | translate }}&lt;/label&gt;
+          &lt;app-driver-selector id&#x3D;&quot;favoritos&quot; formControlName&#x3D;&quot;favoritos&quot;&gt;&lt;/app-driver-selector&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;action-buttons&quot;&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn-skip&quot; (click)&#x3D;&quot;skip()&quot; [disabled]&#x3D;&quot;isLoading()&quot;&gt;{{
+          &#x27;AUTH.PROFILE.SETUP.SKIP_BUTTON&#x27; | translate }}&lt;/button&gt;
+        &lt;button type&#x3D;&quot;submit&quot; class&#x3D;&quot;btn-submit&quot; [disabled]&#x3D;&quot;isLoading()&quot;&gt;
+          &lt;span *ngIf&#x3D;&quot;!isLoading()&quot;&gt;{{ &#x27;AUTH.PROFILE.SETUP.SAVE_BUTTON&#x27; | translate }}&lt;/span&gt;
+          &lt;span *ngIf&#x3D;&quot;isLoading()&quot; class&#x3D;&quot;loader&quot;&gt;&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="profile-setup-container">  <div class="setup-card">    <div class="setup-header">      <div class="logo-text">Universal<span>Motorsport</span></div>      <h1>{{ \'AUTH.PROFILE.SETUP.TITLE\' | translate }}</h1>      <p>{{ \'AUTH.PROFILE.SETUP.SUBTITLE\' | translate }}</p>    </div>    <form [formGroup]="setupForm" (ngSubmit)="submit()" class="setup-form">      <div class="form-grid">        <!-- Avatar Preview/Upload Placeholder -->        <!-- Avatar Preview/Upload Placeholder -->        <div class="avatar-section">          <div class="avatar-circle" (click)="fileInput.click()">            <img *ngIf="avatarPreview()" [src]="avatarPreview()" alt="Avatar preview" class="avatar-img">            <i *ngIf="!avatarPreview()" class="fas fa-user"></i>            <div *ngIf="isUploading()" class="upload-overlay">              <span class="loader-spinner"></span>            </div>          </div>          <div class="avatar-input">            <label for="avatar-upload" class="upload-label">{{ \'AUTH.PROFILE.SETUP.AVATAR_LABEL\' | translate }}</label>            <input #fileInput type="file" id="avatar-upload" (change)="onFileSelected($event)" accept="image/*"              style="display: none;">            <button type="button" class="btn-upload" (click)="fileInput.click()">              {{ \'AUTH.PROFILE.SETUP.UPLOAD_BUTTON\' | translate }}            </button>            <input type="hidden" formControlName="avatar">          </div>        </div>        <div class="form-group full-width">          <label for="bio">{{ \'AUTH.PROFILE.SETUP.BIO_LABEL\' | translate }}</label>          <textarea id="bio" formControlName="bio"            [placeholder]="\'AUTH.PROFILE.SETUP.BIO_PLACEHOLDER\' | translate"></textarea>          <div *ngIf="setupForm.get(\'bio\')?.errors?.[\'maxlength\']" class="error-msg">            {{ \'AUTH.PROFILE.SETUP.ERRORS.BIO_LENGTH\' | translate }}          </div>        </div>        <div class="form-group">          <label for="phone">{{ \'AUTH.PROFILE.SETUP.PHONE_LABEL\' | translate }}</label>          <input type="text" id="phone" formControlName="phone" placeholder="+34 600 000 000">        </div>        <div class="form-group">          <label for="address">{{ \'AUTH.PROFILE.SETUP.ADDRESS_LABEL\' | translate }}</label>          <input type="text" id="address" formControlName="address" placeholder="Calle, Ciudad, País">        </div>        <div class="form-group">          <label for="favoritos">{{ \'AUTH.PROFILE.SETUP.FAVORITE_DRIVER_LABEL\' | translate }}</label>          <app-driver-selector id="favoritos" formControlName="favoritos"></app-driver-selector>        </div>      </div>      <div class="action-buttons">        <button type="button" class="btn-skip" (click)="skip()" [disabled]="isLoading()">{{          \'AUTH.PROFILE.SETUP.SKIP_BUTTON\' | translate }}</button>        <button type="submit" class="btn-submit" [disabled]="isLoading()">          <span *ngIf="!isLoading()">{{ \'AUTH.PROFILE.SETUP.SAVE_BUTTON\' | translate }}</span>          <span *ngIf="isLoading()" class="loader"></span>        </button>      </div>    </form>  </div></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'CalendarComponent', 'selector': 'app-calendar'},{'name': 'CalendarDetailComponent', 'selector': 'app-calendar-detail'},{'name': 'CircuitMapComponent', 'selector': 'app-circuit-map'},{'name': 'ConfirmModalComponent', 'selector': 'app-confirm-modal'},{'name': 'DriverRadiosComponent', 'selector': 'app-driver-radios'},{'name': 'DriverSectorsComponent', 'selector': 'app-driver-sectors'},{'name': 'DriverSelectorComponent', 'selector': 'app-driver-selector'},{'name': 'FeedbackModalComponent', 'selector': 'app-feedback-modal'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MotoGPTimingComponent', 'selector': 'app-motogp-timing'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'ProfileSetupComponent', 'selector': 'app-profile-setup'},{'name': 'ProfileViewComponent', 'selector': 'app-profile-view'},{'name': 'RegisterComponent', 'selector': 'app-register-page'},{'name': 'TimingTableComponent', 'selector': 'app-timing-table'}];
+    var DIRECTIVES = [{'name': 'ImageFallbackDirective', 'selector': 'img[appImageFallback]'}];
+    var ACTUAL_COMPONENT = {'name': 'ProfileSetupComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ProfileSetupComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

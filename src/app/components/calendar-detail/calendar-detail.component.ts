@@ -5,6 +5,10 @@ import { F1CalendarService, Race, Session } from '../../services/f1-calendar.ser
 import { Observable, map, switchMap } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
+/**
+ * Component that displays the detailed information and session schedule
+ * for a specific Formula 1 Grand Prix weekend.
+ */
 @Component({
   selector: 'app-calendar-detail',
   standalone: true,
@@ -13,19 +17,31 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   styleUrl: './calendar-detail.component.scss'
 })
 export class CalendarDetailComponent implements OnInit {
+  /** Observable containing the fetched race details */
   race$: Observable<Race | undefined> | undefined;
+  /** The user's local timezone used for formatting dates */
   userTimezone: string = '';
+  /** Injected translation service */
   private translate = inject(TranslateService);
 
+  /**
+   * Initializes the CalendarDetailComponent.
+   * @param route ActivatedRoute instance
+   * @param calendarService Calendar service instance
+   */
   constructor(
     private route: ActivatedRoute,
     private calendarService: F1CalendarService
   ) { }
 
+  /** Retrieves the current active language code */
   get currentLang(): string {
     return this.translate.currentLang;
   }
 
+  /**
+   * Lifecycle hook to retrieve route parameters and fetch race details.
+   */
   ngOnInit(): void {
     this.userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -40,6 +56,11 @@ export class CalendarDetailComponent implements OnInit {
     );
   }
 
+  /**
+   * Formats the session date and time into a local Date object.
+   * @param session The Session object
+   * @returns Date object or null if session is undefined
+   */
   getSessionDate(session: Session | undefined): Date | null {
     if (!session) return null;
     // Append 'Z' to ensure it's treated as UTC if the API returns ISO string without it, 

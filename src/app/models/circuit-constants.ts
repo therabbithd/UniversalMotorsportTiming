@@ -1,3 +1,7 @@
+/**
+ * Global mapping of Formula 1 circuit keys to their details.
+ * Contains circuit name, country, historical years used, and various identifiers.
+ */
 export const CIRCUIT_MAPPING: { [key: string]: any } = {
     "2": {
         "name": "Silverstone",

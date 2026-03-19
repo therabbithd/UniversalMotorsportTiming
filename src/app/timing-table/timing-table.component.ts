@@ -42,7 +42,9 @@ import { TyreLetterPipe } from '../pipes/tyre-letter.pipe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimingTableComponent implements OnInit, OnDestroy {
+  /** Array of driver timing information for the current session */
   public timingData: DriverTiming[] = [];
+  /** Column definitions for the Material Table */
   public displayedColumns: string[] = [
     'position',
     'driverCode',
@@ -54,10 +56,15 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     'sectors'
   ];
 
+  /** The unique key identifying the current circuit */
   public circuitKey: string | number = '';
+  /** The championship year */
   public year: number = 2025;
+  /** Current session path identifier for the stream */
   public sessionPath: string = '';
+  /** Indicates if the WebSocket connection is active */
   public isConnected: boolean = false;
+  /** Code of the user's favorite driver for UI highlighting */
   public favoriteDriverCode: string | null = null;
 
   /** @ignore */
@@ -113,6 +120,10 @@ export class TimingTableComponent implements OnInit, OnDestroy {
   }
 
 
+  /**
+   * Finaliza el componente, cancelando la suscripción al stream y desconectando
+   * del WebSocket para liberar recursos.
+   */
   ngOnDestroy(): void {
     // Desconectar y limpiar
     if (this.subscription) {
@@ -122,6 +133,12 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     this.isConnected = false;
   }
 
+  /**
+   * Actualiza la información interna de la sesión (como la clave del circuito)
+   * basándose en los metadatos recibidos del objeto SessionInfo.
+   * 
+   * @param sessionInfo El objeto de información de sesión proveniente del stream.
+   */
   private updateSessionInfo(sessionInfo: any): void {
     // Actualizar información de sesión si es necesaria
     // Puedes extraer datos como circuito, año, etc.

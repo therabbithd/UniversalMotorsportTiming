@@ -5,13 +5,23 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 
+/**
+ * Data structure passed to the feedback modal.
+ */
 export interface FeedbackData {
+    /** Type of feedback determining icon and colors */
     type: 'success' | 'error' | 'info';
+    /** Modal title */
     title: string;
+    /** Main feedback message */
     message: string;
+    /** Optional custom text for the dismissal button */
     buttonText?: string;
 }
 
+/**
+ * A reusable modal component to display success, error, or informational messages.
+ */
 @Component({
     selector: 'app-feedback-modal',
     standalone: true,
@@ -99,11 +109,20 @@ export interface FeedbackData {
   `]
 })
 export class FeedbackModalComponent {
+    /**
+     * Initializes the FeedbackModalComponent.
+     * @param dialogRef Reference to the dialog instance
+     * @param data The configuration data passed into the modal
+     */
     constructor(
         public dialogRef: MatDialogRef<FeedbackModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data: FeedbackData
     ) { }
 
+    /**
+     * Returns the name of the Material icon to display based on the feedback type.
+     * @returns Icon name string
+     */
     getIcon(): string {
         switch (this.data.type) {
             case 'success': return 'check_circle';

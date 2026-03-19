@@ -4,14 +4,26 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 
+/**
+ * Data structure passed to the confirmation modal.
+ */
 export interface ConfirmationData {
+    /** Title of the modal dialogue */
     title: string;
+    /** Main message body to display */
     message: string;
+    /** Optional custom text for the confirm button */
     confirmText?: string;
+    /** Optional custom text for the cancel button */
     cancelText?: string;
+    /** If true, the confirm button uses a warning/danger color scheme */
     danger?: boolean;
 }
 
+/**
+ * A reusable confirmation modal component using Angular Material Dialog.
+ * Prompts the user to accept or cancel an action.
+ */
 @Component({
     selector: 'app-confirm-modal',
     standalone: true,
@@ -55,15 +67,26 @@ export interface ConfirmationData {
   `]
 })
 export class ConfirmModalComponent {
+    /**
+     * Initializes the ConfirmModalComponent.
+     * @param dialogRef Reference to the dialog opened
+     * @param data Configuration data passed into the modal
+     */
     constructor(
         public dialogRef: MatDialogRef<ConfirmModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data: ConfirmationData
     ) { }
 
+    /**
+     * Closes the dialog and returns false to the caller.
+     */
     onCancel(): void {
         this.dialogRef.close(false);
     }
 
+    /**
+     * Closes the dialog and returns true to the caller.
+     */
     onConfirm(): void {
         this.dialogRef.close(true);
     }

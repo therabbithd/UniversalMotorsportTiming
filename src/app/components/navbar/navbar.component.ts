@@ -32,13 +32,13 @@ export class NavbarComponent {
     /** @ignore */
     private readonly dialog = inject(MatDialog);
 
-    /** Señal que indica quién es el usuario autenticado actualmente (o nulo). */
+    /** Current authenticated user details signal */
     readonly user = this.authService.currentUser;
     
-    /** Estado que indica si el menú desplegable en pantallas pequeñas está expandido. */
+    /** Indicates if the mobile navigation menu is currently open */
     isMenuOpen = false;
 
-    /** Alterna el estado de apertura/cierre del menú de navegación en vistas de móvil. */
+    /** Alternates the visibility of the mobile navigation menu */
     toggleMenu() {
         this.isMenuOpen = !this.isMenuOpen;
     }

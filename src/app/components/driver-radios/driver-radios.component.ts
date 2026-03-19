@@ -14,13 +14,21 @@ import { TranslateModule } from '@ngx-translate/core';
  * el estado temporal y de control de su reproductor de audio ("Team Radio").
  */
 interface DriverRadio {
+  /** Número de carrera del piloto. */
   racingNumber: string;
+  /** Código de tres letras (TLA) del piloto (ej: VER). */
   driverCode: string;
+  /** Nombre completo o nombre de emisión del piloto. */
   fullName: string;
+  /** Nombre del equipo al que pertenece. */
   teamName: string;
+  /** Color hexadecimal representativo del equipo. */
   teamColor?: string;
+  /** URL de la imagen de perfil (headshot) del piloto. */
   headshotUrl: string;
+  /** Última captura de radio recibida para este piloto. */
   latestCapture: TeamRadioCapture;
+  /** URL absoluta del archivo de audio .mp3. */
   audioUrl: string;
   /**  Indica si el audio de este piloto está en reproducción. */
   playing: boolean;
@@ -50,11 +58,19 @@ export class DriverRadiosComponent implements OnInit, OnDestroy {
   /** @ignore */
   private subscription?: Subscription;
 
+  /**
+   * Crea una instancia de DriverRadiosComponent.
+   * @param streamService Servicio de stream de telemetría F1.
+   * @param cdr Referencia para disparar la detección de cambios manual.
+   */
   constructor(
     private streamService: F1LiveTimingStreamService,
     private cdr: ChangeDetectorRef
   ) { }
 
+  /**
+   * Se suscribe al estado del stream al inicializar el componente.
+   */
   ngOnInit(): void {
     this.subscription = this.streamService.state$.subscribe(() => {
       this.buildRadios();
@@ -62,10 +78,17 @@ export class DriverRadiosComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Limpia las suscripciones al destruir el componente.
+   */
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
   }
 
+  /**
+   * Construye y actualiza la lista de radios baseándose en la información 
+   * de pilotos y capturas más recientes del stream.
+   */
   private buildRadios(): void {
     const driversInfo: DriverInfo[] = this.streamService.getDriversInfo();
     const latestByDriver = this.streamService.getLatestRadioByDriver();
@@ -106,7 +129,12 @@ export class DriverRadiosComponent implements OnInit, OnDestroy {
     );
   }
 
-  // === helpers de tiempo (equivalente a secondsToMinutes) ===
+  /**
+   * Formatea una cantidad de segundos en un string legible de minutos y segundos (MM:SS).
+   * 
+   * @param seconds Segundos totales.
+   * @returns Tiempo formateado como "MM:SS".
+   */
   formatTime(seconds: number): string {
     if (!seconds || isNaN(seconds)) return '00:00';
     const m = Math.floor(seconds / 60);
@@ -117,16 +145,35 @@ export class DriverRadiosComponent implements OnInit, OnDestroy {
 
   // === control de audio como en Radio.js, pero en Angular ===
 
+  /**
+   * Maneja el evento de metadatos cargados del elemento de audio para obtener la duración total.
+   * 
+   * @param driver Objeto DriverRadio asociado.
+   * @param audio Elemento HTML de audio.
+   */
   onLoadedMetadata(driver: DriverRadio, audio: HTMLAudioElement): void {
     driver.duration = audio.duration || 0;
     this.cdr.markForCheck();
   }
 
+  /**
+   * Actualiza el progreso de reproducción conforme avanza el audio.
+   * 
+   * @param driver Objeto DriverRadio asociado.
+   * @param audio Elemento HTML de audio.
+   */
   onTimeUpdate(driver: DriverRadio, audio: HTMLAudioElement): void {
     driver.progress = audio.currentTime || 0;
     this.cdr.markForCheck();
   }
 
+  /**
+   * Alterna entre reproducción y pausa del audio del piloto.
+   * Detiene automáticamente cualquier otra radio que se esté reproduciendo.
+   * 
+   * @param driver Objeto DriverRadio asociado.
+   * @param audio Elemento HTML de audio.
+   */
   togglePlay(driver: DriverRadio, audio: HTMLAudioElement): void {
     if (!audio) return;
 
@@ -149,12 +196,24 @@ export class DriverRadiosComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Maneja el final de la reproducción del audio, reseteando el estado visual.
+   * 
+   * @param driver Objeto DriverRadio asociado.
+   */
   onEnded(driver: DriverRadio): void {
     driver.playing = false;
     driver.progress = 0;
     this.cdr.markForCheck();
   }
 
+  /**
+   * Permite al usuario saltar a un punto específico del audio mediante el slider.
+   * 
+   * @param driver Objeto DriverRadio asociado.
+   * @param audio Elemento HTML de audio.
+   * @param value Nuevo tiempo en segundos.
+   */
   onSeek(driver: DriverRadio, audio: HTMLAudioElement, value: number): void {
     driver.progress = value;
     audio.currentTime = value;
