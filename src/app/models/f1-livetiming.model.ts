@@ -19,7 +19,6 @@ export interface F1IndexResponse {
 }
 
 /** 
- * Segmento individual dentro de un sector.
  * Individual segment within a sector.
  */
 export interface Segment {
@@ -28,18 +27,16 @@ export interface Segment {
 }
 
 /** 
- * Sector de la vuelta con sus segmentos.
  * Lap sector with its segments.
  */
 export interface Sector {
   /** Segments making up the sector */
   Segments?: Segment[] | { [key: string]: Segment };
-  /** Tiempo del sector (Sector time as a string) */
+  /** Sector time as a string (e.g., "34.123") */
   Value?: string; 
 }
 
 /** 
- * Datos completos de sectores de un piloto.
  * Complete sector data for a driver.
  */
 export interface SectorData {
@@ -179,19 +176,19 @@ export interface TyreStint {
 export interface DriverTiming {
   /** Current track position */
   position: any;
-  /** Driver Code (Ej: 'VER', 'HAM') */
+  /** Driver Code (e.g., 'VER', 'HAM') */
   driverCode: string; 
-  /** Driver Name (Ej: 'Verstappen', 'Hamilton') */
+  /** Driver Name (e.g., 'Verstappen', 'Hamilton') */
   driverName: string; 
   /** Current or completed lap number */
   lapNumber: number;
-  /** Time of the last completed lap (Ej: "1:20.555") */
+  /** Time of the last completed lap (e.g., "1:20.555") */
   lastLapTime: string; 
-  /** Gap to the race leader (Ej: "+1.200") */
+  /** Gap to the race leader (e.g., "+1.200") */
   gapToLeader: string; 
-  /** Gap to the driver ahead (Ej: "Gap" o "+0.500") */
+  /** Gap to the driver ahead (e.g., "Gap" or "+0.500") */
   gapToAhead: string; 
-  /** Si está en el pit lane (If true, driver is in pit lane) */
+  /** If true, driver is in pit lane */
   isPit: boolean; 
   /** Status color for highlighting times ('personal-best' | 'session-best' | 'normal' | 'none') */
   statusColor: 'personal-best' | 'session-best' | 'normal' | 'none'; 
@@ -232,20 +229,18 @@ export interface DriverInfo {
 }
 
 /** 
- * Captura individual de TeamRadio dentro del stream de LiveTiming.
  * Individual TeamRadio capture within the LiveTiming stream.
  */
 export interface TeamRadioCapture {
-  /** Fecha/hora UTC del mensaje (UTC date/time of the message) */
+  /** UTC date/time of the message */
   Utc: string;          
-  /** Número de coche, ej: "63" (Racing number) */
+  /** Racing number (e.g., "63") */
   RacingNumber: string; 
-  /** Path a la pista de audio (Path to the audio file, Ej: "TeamRadio/GEORUS01_63...") */
+  /** Path to the audio file (e.g., "TeamRadio/GEORUS01_63...") */
   Path: string;         
 }
 
 /** 
- * Estructura del bloque TeamRadio en el estado del WebSocket.
  * Structure of the TeamRadio block in the WebSocket state.
  */
 export interface TeamRadioState {

@@ -43,11 +43,10 @@ export interface AuthResponse {
 }
 
 /**
- * Servicio centralizado para gestionar la autenticación de usuarios.
+ * Centralized service to manage user authentication.
  * 
- * Se ocupa del registro, inicio de sesión, cierre de sesión y la
- * gestión reactiva del usuario actual, además de almacenar y retrieving 
- * el token JWT en `localStorage`.
+ * Handles registration, login, logout, and reactive management of the 
+ * current user, as well as storing and retrieving the JWT token in `localStorage`.
  */
 @Injectable({
   providedIn: 'root',
@@ -60,16 +59,16 @@ export class AuthService {
   private readonly router = inject(Router);
 
   /** 
-   * Señal reactiva (Angular Signals) que retiene el estado global del usuario logueado en toda la App.
+   * Reactive signal (Angular Signals) that holds the global state of the logged-in user.
    */
   readonly currentUser = signal<User | null>(this.getUserFromStorage());
 
   /**
-   * Registra una cuenta nueva enviando los datos a la API.
-   * Modifica el estado de autenticación al tener éxito.
+   * Registers a new account by sending data to the API.
+   * Updates the authentication state upon success.
    * 
-   * @param data Datos de registro (`RegisterInput`).
-   * @returns Un `Observable` con la respuesta (`AuthResponse`).
+   * @param data Registration data (`RegisterInput`).
+   * @returns An `Observable` with the response (`AuthResponse`).
    */
   register(data: RegisterInput): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
@@ -81,11 +80,11 @@ export class AuthService {
   }
 
   /**
-   * Inicia sesión en la plataforma con email y contraseña.
+   * Logs into the platform with email and password.
    * 
-   * @param data Credenciales (`LoginInput`).
-   * @returns Un `Observable` con la respuesta (`AuthResponse`), desencadenando
-   * el login interno vía `tap()`.
+   * @param data Credentials (`LoginInput`).
+   * @returns An `Observable` with the response (`AuthResponse`), triggering
+   * internal login via `tap()`.
    */
   login(data: LoginInput): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
@@ -97,8 +96,8 @@ export class AuthService {
   }
 
   /**
-   * Finaliza la sesión actual.
-   * Elimina tokens y datos de `localStorage`, actualiza y vacía la señal y navega a la pantalla de login.
+   * Ends the current session.
+   * Removes tokens and data from `localStorage`, clears the signal, and navigates to the login screen.
    */
   logout(): void {
     localStorage.removeItem('token');
@@ -108,9 +107,9 @@ export class AuthService {
   }
 
   /**
-   * Comprueba de manera síncrona y rápida si existe una sesión válida localmente.
+   * Synchronously checks if a valid local session exists.
    * 
-   * @returns `true` si hay token en `localStorage`, de lo contrario `false`.
+   * @returns `true` if a token exists in `localStorage`, otherwise `false`.
    */
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');

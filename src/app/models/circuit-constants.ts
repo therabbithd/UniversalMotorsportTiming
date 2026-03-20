@@ -1,8 +1,26 @@
 /**
+ * Details of a Formula 1 circuit.
+ */
+export interface F1CircuitDetails {
+    /** Common name of the circuit */
+    name: string;
+    /** Country where the circuit is located */
+    country: string;
+    /** Years when the circuit was featured in the calendar */
+    years: number[];
+    /** Unique key identifying the circuit in external APIs */
+    circuitKey: number;
+    /** Unique key identifying the country in external APIs */
+    countryKey: number;
+    /** International Olympic Committee (IOC) 3-letter country code */
+    iocCountryCode: string;
+}
+
+/**
  * Global mapping of Formula 1 circuit keys to their details.
  * Contains circuit name, country, historical years used, and various identifiers.
  */
-export const CIRCUIT_MAPPING: { [key: string]: any } = {
+export const CIRCUIT_MAPPING: { [key: string]: F1CircuitDetails } = {
     "2": {
         "name": "Silverstone",
         "country": "Great Britain",
