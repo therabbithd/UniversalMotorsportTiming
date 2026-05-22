@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DriverTiming, DriverInfo, TyreStint, TeamRadioCapture, TeamRadioState } from '../models/f1-livetiming.model';
+import { DriverTiming, DriverInfo, TyreStint, TeamRadioCapture, TeamRadioState, TrackStatus } from '../models/f1-livetiming.model';
+import { resolveTrackFlagDisplay } from '../utils/flag-gradient.util';
+import { TrackFlagDisplay } from '../constants/flag-colors.constants';
 
 /**
  * Represents the complete live timing state of the F1 session.
@@ -135,7 +137,7 @@ interface LiveTimingState {
   /** Additional session data and events */
   SessionData?: any;
   /** Overall track status codes (Flags, Safety Car, etc) */
-  TrackStatus?: any;
+  TrackStatus?: TrackStatus;
   /** Current weather parameters */
   WeatherData?: any;
   /** Messages from Race Control */
@@ -401,6 +403,15 @@ export class F1LiveTimingStreamService {
    */
   getCurrentState(): LiveTimingState {
     return this.liveState.value;
+  }
+
+  /**
+   * Returns the current track flag display (color + label) from TrackStatus.
+   */
+  getTrackFlagDisplay(): TrackFlagDisplay | null {
+    const trackStatus = this.liveState.value.TrackStatus;
+    if (!trackStatus?.Status && !trackStatus?.Message) return null;
+    return resolveTrackFlagDisplay(trackStatus.Status, trackStatus.Message);
   }
 
   /**

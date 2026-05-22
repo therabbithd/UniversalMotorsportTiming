@@ -125,6 +125,17 @@
                 "GAP": "GAP",
                 "INT": "INT",
                 "SECTORS": "SECTORS"
+            },
+            "FLAG": {
+                "GREEN": "Track clear",
+                "YELLOW": "Yellow flag",
+                "DOUBLE_YELLOW": "Double yellow flag",
+                "RED": "Red flag",
+                "SAFETY_CAR": "Safety Car",
+                "VSC": "Virtual Safety Car",
+                "VSC_ENDING": "VSC ending",
+                "CHEQUERED": "Chequered flag",
+                "UNKNOWN": "Track status"
             }
         },
         "MAP": {

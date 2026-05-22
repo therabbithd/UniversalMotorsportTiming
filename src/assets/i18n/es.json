@@ -127,6 +127,17 @@
                 "GAP": "GAP",
                 "INT": "INT",
                 "SECTORS": "SECTORES"
+            },
+            "FLAG": {
+                "GREEN": "Pista libre",
+                "YELLOW": "Bandera amarilla",
+                "DOUBLE_YELLOW": "Doble bandera amarilla",
+                "RED": "Bandera roja",
+                "SAFETY_CAR": "Safety Car",
+                "VSC": "Virtual Safety Car",
+                "VSC_ENDING": "Fin del VSC",
+                "CHEQUERED": "Bandera a cuadros",
+                "UNKNOWN": "Estado de pista"
             }
         },
         "MAP": {

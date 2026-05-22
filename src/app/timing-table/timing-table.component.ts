@@ -14,6 +14,7 @@ import { ProfileService } from '../services/profile.service';
 import { AuthService } from '../services/auth.service';
 import { TyreClassPipe } from '../pipes/tyre-class.pipe';
 import { TyreLetterPipe } from '../pipes/tyre-letter.pipe';
+import { TrackFlagDisplay } from '../constants/flag-colors.constants';
 
 /**
  * Componente principal para mostrar la tabla de tiempos en directo (Live Timing).
@@ -66,6 +67,8 @@ export class TimingTableComponent implements OnInit, OnDestroy {
   public isConnected: boolean = false;
   /** Code of the user's favorite driver for UI highlighting */
   public favoriteDriverCode: string | null = null;
+  /** Current race track flag indicator (green, yellow, red, etc.) */
+  public trackFlag: TrackFlagDisplay | null = null;
 
   /** @ignore */
   private subscription?: Subscription;
@@ -107,6 +110,7 @@ export class TimingTableComponent implements OnInit, OnDestroy {
       console.log('[Timing Table] State updated:', state);
 
       this.timingData = this.streamService.getDriversTiming();
+      this.trackFlag = this.streamService.getTrackFlagDisplay();
       console.log('[Timing Table] Timing data:', this.timingData);
 
       // Obtener información de sesión si está disponible

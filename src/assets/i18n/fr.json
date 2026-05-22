@@ -125,6 +125,17 @@
                 "GAP": "ÉCART",
                 "INT": "INT",
                 "SECTORS": "SECTEURS"
+            },
+            "FLAG": {
+                "GREEN": "Piste libre",
+                "YELLOW": "Drapeau jaune",
+                "DOUBLE_YELLOW": "Double drapeau jaune",
+                "RED": "Drapeau rouge",
+                "SAFETY_CAR": "Safety Car",
+                "VSC": "Virtual Safety Car",
+                "VSC_ENDING": "Fin du VSC",
+                "CHEQUERED": "Drapeau à damier",
+                "UNKNOWN": "État de la piste"
             }
         },
         "MAP": {

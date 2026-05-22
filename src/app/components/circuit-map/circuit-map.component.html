@@ -4,16 +4,22 @@
 
     <div class="map-wrapper" [class.hidden]="isLoading || error">
         <svg [attr.viewBox]="viewBox" class="f1-svg" preserveAspectRatio="xMidYMid meet">
-            <!-- Track Line -->
-            <path [attr.d]="circuitPath" class="track-line"></path>
+            <!-- Full Track Outline (Background) -->
+            <path [attr.d]="circuitPath" class="track-line-bg"></path>
+
+            <!-- Marshal Sectors (Status Coloring) -->
+            <path *ngFor="let sector of sectorPaths" 
+                  [attr.d]="sector.path" 
+                  [style.stroke]="sector.color" 
+                  class="track-sector"></path>
 
             <!-- Drivers -->
             <g *ngFor="let d of processedDrivers" class="driver-marker"
                 [attr.transform]="'translate(' + d.x + ',' + d.y + ')'" [class.off-track]="!d.onTrack">
 
-                <circle r="150" [attr.fill]="d.teamColor" class="driver-circle"></circle>
+                <circle r="180" [attr.fill]="d.teamColor" class="driver-circle"></circle>
 
-                <text y="-250" class="driver-label" [attr.fill]="d.teamColor">
+                <text [attr.y]="d.labelOffsetY" class="driver-label" [attr.fill]="d.teamColor">
                     {{ d.driverCode }}
                 </text>
             </g>

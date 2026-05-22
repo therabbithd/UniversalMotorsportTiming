@@ -247,3 +247,13 @@ export interface TeamRadioState {
   /** Array of radio message captures */
   Captures?: TeamRadioCapture[];
 }
+
+/**
+ * Track status from the F1 live timing feed (flags, SC, VSC, etc.).
+ */
+export interface TrackStatus {
+  /** Status code: 1=clear, 2=yellow, 4=SC, 5=red, 6=VSC, 7=VSC ending */
+  Status?: string;
+  /** Message identifier, e.g. AllClear, Yellow, Red, VSCDeployed */
+  Message?: string;
+}

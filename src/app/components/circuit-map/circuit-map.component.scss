@@ -1,11 +1,11 @@
 .circuit-map-container {
     width: 100%;
-    height: 450px;
+    height: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #1a1a1a;
+    background-color: #121212;
     border-radius: 12px;
     margin-bottom: 16px;
     position: relative;
@@ -14,11 +14,11 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
 
     @media (max-width: 768px) {
-        height: 350px;
+        height: 450px;
     }
 
     @media (max-width: 480px) {
-        height: 280px;
+        height: 350px;
     }
 }
 
@@ -39,7 +39,7 @@
     width: 100%;
     height: 100%;
     position: relative;
-    padding: 20px;
+    padding: 30px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -54,43 +54,51 @@
 .f1-svg {
     width: 100%;
     height: 100%;
-    max-height: 400px;
+    max-height: 540px;
     filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
 }
 
-.track-line {
+.track-line-bg {
     fill: none;
-    stroke: #444;
-    stroke-width: 80;
+    stroke: #222;
+    stroke-width: 120;
     stroke-linejoin: round;
     stroke-linecap: round;
-    opacity: 0.8;
+}
+
+.track-sector {
+    fill: none;
+    stroke-width: 90;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    transition: stroke 0.3s ease;
 }
 
 .driver-marker {
     transition: transform 0.5s linear;
     will-change: transform;
+    z-index: 5;
 
     &.off-track {
-        opacity: 0.4;
+        opacity: 0.3;
         filter: grayscale(1);
     }
 }
 
 .driver-circle {
     stroke: #000;
-    stroke-width: 30;
+    stroke-width: 35;
     filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.8));
 }
 
 .driver-label {
-    font-size: 240px;
+    font-size: 280px;
     font-weight: 900;
     font-family: 'Inter', sans-serif;
     text-anchor: middle;
     paint-order: stroke;
     stroke: #000;
-    stroke-width: 40px;
+    stroke-width: 50px;
     stroke-linecap: round;
     stroke-linejoin: round;
 }

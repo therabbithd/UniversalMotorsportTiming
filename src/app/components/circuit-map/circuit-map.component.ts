@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, of, Subscription } from 'rxjs';
 import { F1LiveTimingStreamService } from '../../services/f1-livetiming.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { TRACK_FLAG_BY_STATUS } from '../../constants/flag-colors.constants';
 
 /**
  * Interface representing the calculated position of a driver on the track map.
@@ -25,6 +26,18 @@ interface DriverPosition {
   driverCode: string;
   /** Indicates whether the driver is currently tracked as on track */
   onTrack: boolean;
+  /** Vertical offset for the label to avoid overlap */
+  labelOffsetY: number;
+}
+
+/**
+ * Interface representing a sector of the track for coloring.
+ */
+interface TrackSector {
+  /** SVG path for this sector */
+  path: string;
+  /** Current status color */
+  color: string;
 }
 
 /**
@@ -59,12 +72,16 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
   // Track rendering
   /** The SVG path definition for rendering the track shape */
   circuitPath: string = '';
+  /** Array of paths for each marshal sector */
+  sectorPaths: TrackSector[] = [];
   /** ViewBox definition to auto-scale the SVG */
   viewBox: string = "-1000 -1000 2000 2000";
 
   // Rotation state
   /** Standard rotation degree applied to the track points */
   rotation: number = 0;
+  /** Fix to align with F1 coordinates standard */
+  private readonly ROTATION_FIX = 90;
 
   // Drivers
   /** Array of active processed drivers to render on the SVG */
@@ -133,7 +150,7 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
       this.isLoading = false;
       if (data) {
         this.trackData = data;
-        this.rotation = data.rotation || 0;
+        this.rotation = (data.rotation || 0) + this.ROTATION_FIX;
         this.generateCircuitPath();
         this.subscribeToPositions();
       }
@@ -164,27 +181,83 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
       this.totalTrackLength += Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
     }
 
-    // Generate SVG path string "M x1,y1 L x2,y2 ..."
-    let path = `M ${transformedPoints[0].x},${transformedPoints[0].y}`;
+    // Generate full SVG path
+    let pathStr = `M ${transformedPoints[0].x},${transformedPoints[0].y}`;
     for (let i = 1; i < transformedPoints.length; i++) {
-      path += ` L ${transformedPoints[i].x},${transformedPoints[i].y}`;
+      pathStr += ` L ${transformedPoints[i].x},${transformedPoints[i].y}`;
     }
-    path += ' Z'; // Close the path
+    pathStr += ' Z';
+    this.circuitPath = pathStr;
 
-    this.circuitPath = path;
+    // Generate sector paths
+    this.generateSectorPaths(transformedPoints);
 
-    // Store start line position (first point of the track)
+    // Store start line position
     this.startLinePos = transformedPoints[0] || null;
 
-    // Update ViewBox to fit the track
+    // Update ViewBox
     this.updateViewBox(transformedPoints);
+  }
 
-    // DEBUG: Track data range
-    const minX = Math.min(...transformedPoints.map(p => p.x));
-    const maxX = Math.max(...transformedPoints.map(p => p.x));
-    const minY = Math.min(...transformedPoints.map(p => p.y));
-    const maxY = Math.max(...transformedPoints.map(p => p.y));
-    console.log(`[Circuit Map] Track Range: X[${minX.toFixed(0)}, ${maxX.toFixed(0)}], Y[${minY.toFixed(0)}, ${maxY.toFixed(0)}], Total Length: ${this.totalTrackLength.toFixed(0)}`);
+  /**
+   * Generates separate SVG paths for each marshal sector based on marshal points.
+   */
+  private generateSectorPaths(points: { x: number, y: number }[]) {
+    if (!this.trackData.marshalSectors || this.trackData.marshalSectors.length === 0) {
+      this.sectorPaths = [{ path: this.circuitPath, color: '#444' }];
+      return;
+    }
+
+    const sectors: TrackSector[] = [];
+    const marshalSectors = this.trackData.marshalSectors;
+
+    for (let i = 0; i < marshalSectors.length; i++) {
+      const currentMarshal = marshalSectors[i];
+      const nextMarshal = marshalSectors[(i + 1) % marshalSectors.length];
+
+      // Find indices in the points array closest to these marshal points
+      const startIndex = this.findClosestPointIndex(currentMarshal.x, currentMarshal.y, points);
+      const endIndex = this.findClosestPointIndex(nextMarshal.x, nextMarshal.y, points);
+
+      let sectorPoints: { x: number, y: number }[] = [];
+      
+      if (startIndex <= endIndex) {
+        sectorPoints = points.slice(startIndex, endIndex + 1);
+      } else {
+        // Wrap around the circuit
+        sectorPoints = [...points.slice(startIndex), ...points.slice(0, endIndex + 1)];
+      }
+
+      if (sectorPoints.length > 1) {
+        let path = `M ${sectorPoints[0].x},${sectorPoints[0].y}`;
+        for (let j = 1; j < sectorPoints.length; j++) {
+          path += ` L ${sectorPoints[j].x},${sectorPoints[j].y}`;
+        }
+        sectors.push({ path, color: '#444' });
+      }
+    }
+
+    this.sectorPaths = sectors;
+  }
+
+  /**
+   * Finds the index of the point closest to a given X,Y coordinate.
+   */
+  private findClosestPointIndex(x: number, y: number, points: { x: number, y: number }[]): number {
+    // Note: Input x,y from marshal sectors are original, need to rotate them to match points
+    const [rx, ry] = this.rotate(x, y, this.rotation);
+    
+    let minDistance = Infinity;
+    let closestIndex = 0;
+
+    for (let i = 0; i < points.length; i++) {
+      const dist = Math.sqrt(Math.pow(points[i].x - rx, 2) + Math.pow(points[i].y - ry, 2));
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIndex = i;
+      }
+    }
+    return closestIndex;
   }
 
   /**
@@ -226,12 +299,47 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
 
     this.streamSubscription = this.streamService.state$.subscribe(() => {
       this.updateDriverPositions();
+      this.updateSectorColors();
     });
+  }
+
+  /**
+   * Actualiza los colores de los sectores basados en el estado de la pista (banderas).
+   */
+  private updateSectorColors() {
+    const state = this.streamService.getCurrentState();
+    const trackStatus = state.TrackStatus?.Status || '1';
+    
+    // Default color logic
+    let globalColor = '#444'; // Standard dark gray
+    const statusConfig = TRACK_FLAG_BY_STATUS[trackStatus];
+    if (statusConfig) {
+      globalColor = statusConfig.background;
+    }
+
+    // Special handling for yellow sectors
+    const yellowSectors: number[] = [];
+    if (state.RaceControlMessages?.Messages) {
+      const messages = state.RaceControlMessages.Messages;
+      const latestMessage = Object.values(messages).pop() as any;
+      if (latestMessage?.Category === 'Flag' && latestMessage?.Flag === 'YELLOW') {
+        // This is a simplified logic, real F1 data specifies sectors in the message
+        // For now, if there is a recent yellow flag message, we can't easily map it to marshal sectors
+        // without complex parsing. We'll use global status for now.
+      }
+    }
+
+    this.sectorPaths = this.sectorPaths.map(sector => ({
+      ...sector,
+      color: globalColor
+    }));
   }
 
   /**
    * Actualiza las posiciones (X, Y) calculadas para los pilotos basándose en los 
    * datos telemétricos recuperados del servicio de Timing.
+   * 
+   * Sigue la lógica de interpolación por mini-segmentos documentada en mapa.md
    */
   updateDriverPositions() {
     const state = this.streamService.getCurrentState();
@@ -239,19 +347,9 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
       return;
     }
 
-    // After interface simplification, Position is the driver map
-    console.warn('[Circuit Map] State Keys:', Object.keys(state));
-    const positionData = state.Position || {};
     const driverList = state.DriverList;
     const timingData = state.TimingData?.Lines || {};
-
-    if (Object.keys(positionData).length > 0) {
-      console.warn(`[Circuit Map] OK: Data for ${Object.keys(positionData).length} drivers`);
-      const sampleKey = Object.keys(positionData)[0];
-      console.log(`[Circuit Map] Sample Driver ${sampleKey}:`, positionData[sampleKey]);
-    } else {
-      console.warn('[Circuit Map] Waiting for position data...');
-    }
+    const positionData = state.Position || {}; // Fallback GPS data
 
     const newProcessedDrivers: DriverPosition[] = [];
 
@@ -259,39 +357,32 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
     for (const [driverNumber, driver] of Object.entries(driverList)) {
       if (!driver) continue;
 
-      const posData = positionData[driverNumber];
+      const timing = timingData[driverNumber];
       let rx = 0;
       let ry = 0;
       let rz = 0;
+      let onTrack = true;
 
-      if (posData && typeof posData === 'object') {
-        const pos = posData as any;
+      // Method 1: Synthetic position from mini-segments (Preferred per mapa.md)
+      if (timing && timing.Sectors && this.trackPoints.length > 0) {
+        const pos = this.getDriverPositionFromSegments(timing);
+        rx = pos.x;
+        ry = pos.y;
+        onTrack = !timing.InPit && !timing.Retired && !timing.Stopped;
+      } 
+      // Method 2: Fallback to raw Position.z (GPS)
+      else if (positionData[driverNumber]) {
+        const pos = positionData[driverNumber] as any;
+        [rx, ry] = this.rotate(pos.X, pos.Y, this.rotation);
         rz = pos.Z || 0;
-
-        // F1 Z is often altitude. 
-        // Heuristic: If Z is much larger than typical altitude (e.g. > 100m) 
-        // and doesn't match X or Y, it might be track progress.
-        const isZTrackProgress = rz > 500 && rz !== pos.X && rz !== pos.Y;
-
-        if (this.trackPoints.length > 0 && isZTrackProgress) {
-          const interpolated = this.getPositionFromZ(rz);
-          rx = interpolated.x;
-          ry = interpolated.y;
-        } else {
-          // Fallback to X, Y. 
-          // Both raw coords and track data seem to be in decimeters, so no scaling needed.
-          [rx, ry] = this.rotate(pos.X, pos.Y, this.rotation);
-        }
-      } else if (this.startLinePos) {
+      }
+      // Method 3: Fallback to start line
+      else if (this.startLinePos) {
         rx = this.startLinePos.x;
         ry = this.startLinePos.y;
-        rz = 0;
       } else {
         continue;
       }
-
-      const timing = timingData[driverNumber];
-      const onTrack = timing ? (!timing.InPit && !timing.Retired && !timing.Stopped) : true;
 
       newProcessedDrivers.push({
         racingNumber: driver.RacingNumber || driverNumber,
@@ -300,52 +391,107 @@ export class CircuitMapComponent implements OnChanges, OnDestroy {
         z: rz,
         teamColor: driver.TeamColour ? `#${driver.TeamColour}` : '#ffffff',
         driverCode: driver.Tla || '',
-        onTrack: onTrack
+        onTrack: onTrack,
+        labelOffsetY: -320 // Base offset
       });
     }
+
+    // Pass 2: Adjust labels to avoid overlap
+    this.avoidLabelOverlap(newProcessedDrivers);
 
     this.processedDrivers = newProcessedDrivers;
     this.cdr.markForCheck();
   }
 
   /**
-   * Calcula una posición X,Y en el SVG interpolando el valor de progreso Z 
-   * sobre los puntos conocidos del trazado.
+   * Detecta colisiones entre las etiquetas de los pilotos y aplica un desplazamiento
+   * vertical para evitar que se superpongan.
+   */
+  private avoidLabelOverlap(drivers: DriverPosition[]) {
+    // Threshold distance (X and Y) to consider overlap
+    // Circular radius is 180, label is ~300 units above.
+    const COLLISION_THRESHOLD = 350;
+    const OFFSET_STEP = 300;
+
+    // We sort drivers by Y position to handle clusters more predictably
+    const sortedDrivers = [...drivers].sort((a, b) => a.y - b.y);
+
+    for (let i = 0; i < sortedDrivers.length; i++) {
+      const d1 = sortedDrivers[i];
+      
+      for (let j = i + 1; j < sortedDrivers.length; j++) {
+        const d2 = sortedDrivers[j];
+
+        const dx = Math.abs(d1.x - d2.x);
+        const dy = Math.abs(d1.y - d2.y);
+
+        // If cars are very close
+        if (dx < COLLISION_THRESHOLD && dy < COLLISION_THRESHOLD) {
+          // If labels are at the same offset level, push one up
+          if (Math.abs(d1.labelOffsetY - d2.labelOffsetY) < 100) {
+            d2.labelOffsetY -= OFFSET_STEP;
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Calcula una posición X,Y en el SVG interpolando el progreso de los mini-segmentos
+   * sobre la polilínea del circuito.
    * 
-   * @param z Valor de progreso o distancia recorrida en el circuito.
+   * @param timingDriver Datos de timing del piloto incluyendo sectores y segmentos.
    * @returns Coordenadas X e Y interpoladas.
    */
-  private getPositionFromZ(z: number): { x: number, y: number } {
-    // console.log('[Circuit Map] Interpolating Z:', z);
-    let normalizedZ = 0;
+  private getDriverPositionFromSegments(timingDriver: any): { x: number, y: number } {
+    if (!timingDriver || !timingDriver.Sectors) return this.startLinePos || { x: 0, y: 0 };
 
-    // F1 Z is cumulative distance. 
-    // We can try to normalize it using the total track length from Multiviewer.
-    // However, Multiviewer track points might not be perfectly scaled to meters.
-    // Let's assume z is meters and we need a scale factor.
-
-    // For now, let's try assuming z is already the point index progress if it's small,
-    // or normalized if it's 0-1.
-
-    if (z > 32767) {
-      // Very large Z, might be millimeters?
-      normalizedZ = (z / 1000) / (this.totalTrackLength || 5000);
-    } else if (z > 1) {
-      // Could be meters or 0-32767. 
-      // F1 standard for track progress in some feeds is 0-32767.
-      // If z is much larger than typical track length (~6000), it's likely 0-32767.
-      if (z > 10000) {
-        normalizedZ = z / 32767;
-      } else {
-        // Assume meters
-        normalizedZ = z / (this.totalTrackLength || 5000);
-      }
-    } else {
-      normalizedZ = z;
+    let sectors = timingDriver.Sectors;
+    if (!Array.isArray(sectors)) {
+      sectors = Object.values(sectors);
     }
 
-    // Find the point on the track points array
-    const pointIndex = normalizedZ * (this.trackPoints.length - 1);
+    const allSegments: any[] = [];
+    for (const sector of sectors) {
+      if (sector.Segments) {
+        let segments = sector.Segments;
+        if (!Array.isArray(segments)) {
+          segments = Object.values(segments);
+        }
+        allSegments.push(...segments);
+      }
+    }
+
+    if (allSegments.length === 0) return this.startLinePos || { x: 0, y: 0 };
+
+    // Find furthest segment with status > 0
+    let furthestSegmentIndex = -1;
+    let currentSegmentStatus = 0;
+
+    for (let i = allSegments.length - 1; i >= 0; i--) {
+      const status = allSegments[i]?.Status;
+      if (status !== undefined && status > 0) {
+        furthestSegmentIndex = i;
+        currentSegmentStatus = status;
+        break;
+      }
+    }
+
+    // If no segment has started, use the first one
+    if (furthestSegmentIndex === -1) {
+      furthestSegmentIndex = 0;
+      currentSegmentStatus = allSegments[0]?.Status || 0;
+    }
+
+    const baseRatio = furthestSegmentIndex / Math.max(allSegments.length - 1, 1);
+    const segmentProgress = currentSegmentStatus === 1 ? 0.5 : 0; // 1 = In progress
+    const segmentSize = 1 / Math.max(allSegments.length, 1);
+    const adjustedRatio = baseRatio + (segmentProgress * segmentSize);
+    
+    // Clamp ratio between 0 and 1
+    const clampedRatio = Math.min(Math.max(adjustedRatio, 0), 1);
+    
+    const pointIndex = clampedRatio * (this.trackPoints.length - 1);
     const index = Math.floor(pointIndex);
     const fraction = pointIndex - index;
 
