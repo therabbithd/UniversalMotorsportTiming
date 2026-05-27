@@ -46,3 +46,6 @@ Thumbs.db
 .netlify
 .vercel
 .env*.local
+.agents/
+.md/
+.documentation/
