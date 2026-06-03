@@ -1,8 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_CONFIG } from '../config/api.config';
 import { Profile, ProfileInput } from '../models/profile.model';
+import { isPlatformBrowser } from '@angular/common';
 
 /**
  * Servicio para la gestión del perfil del usuario autenticado.
@@ -17,13 +18,16 @@ export class ProfileService {
     /** Injected HttpClient for API requests */
     private readonly http = inject(HttpClient);
 
+    /** Injected PLATFORM_ID for SSR safety checks */
+    private readonly platformId = inject(PLATFORM_ID);
+
     /**
      * Construye las cabeceras HTTP incluyendo el token de autorización JWT.
      * 
      * @returns Un objeto `HttpHeaders` listo para usar en las peticiones HttpClient.
      */
     private getHeaders(): HttpHeaders {
-        const token = localStorage.getItem('token');
+        const token = isPlatformBrowser(this.platformId) ? localStorage.getItem('token') : null;
         return new HttpHeaders({
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,

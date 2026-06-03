@@ -1,8 +1,9 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { API_CONFIG } from '../config/api.config';
 import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 /** Data structure for user registration (account creation). */
 export interface RegisterInput {
@@ -58,10 +59,22 @@ export class AuthService {
   /** @ignore */
   private readonly router = inject(Router);
 
+  /** @ignore */
+  private readonly platformId = inject(PLATFORM_ID);
+
   /** 
    * Reactive signal (Angular Signals) that holds the global state of the logged-in user.
    */
-  readonly currentUser = signal<User | null>(this.getUserFromStorage());
+  readonly currentUser = signal<User | null>(null);
+
+  /**
+   * Initializes the AuthService, checking if a user exists in storage (browser only).
+   */
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentUser.set(this.getUserFromStorage());
+    }
+  }
 
   /**
    * Registers a new account by sending data to the API.
@@ -100,8 +113,10 @@ export class AuthService {
    * Removes tokens and data from `localStorage`, clears the signal, and navigates to the login screen.
    */
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
     this.currentUser.set(null);
     this.router.navigate(['/login']);
   }
@@ -112,6 +127,9 @@ export class AuthService {
    * @returns `true` if a token exists in `localStorage`, otherwise `false`.
    */
   isLoggedIn(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      return false;
+    }
     return !!localStorage.getItem('token');
   }
 
@@ -120,8 +138,10 @@ export class AuthService {
    * @param response The auth response containing user and token
    */
   private setAuthState(response: AuthResponse): void {
-    localStorage.setItem('token', response.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+    }
     this.currentUser.set(response.user);
   }
 
@@ -130,6 +150,9 @@ export class AuthService {
    * @returns The User object or null if not found/invalid
    */
   private getUserFromStorage(): User | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
     const userJson = localStorage.getItem('user');
     if (!userJson) return null;
     try {

@@ -11,6 +11,7 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import localeFr from '@angular/common/locales/fr';
 import localeIt from '@angular/common/locales/it';
+import { provideClientHydration } from '@angular/platform-browser';
 
 registerLocaleData(localeEs);
 registerLocaleData(localeFr);
@@ -80,6 +81,6 @@ export const appConfig: ApplicationConfig = {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }), provideClientHydration()
   ]
 };
