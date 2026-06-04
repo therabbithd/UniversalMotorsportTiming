@@ -64,7 +64,7 @@ export class ProfileService {
      * @returns Un `Observable` que emite el perfil resultante tras la actualización.
      */
     updateProfile(data: ProfileInput): Observable<Profile> {
-        return this.http.patch<Profile>(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.profile}/me`, data, {
+        return this.http.put<Profile>(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.profile}/me`, data, {
             headers: this.getHeaders(),
         });
     }

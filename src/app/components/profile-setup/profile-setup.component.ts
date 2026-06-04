@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FeedbackModalComponent } from '../shared/feedback-modal/feedback-modal.component';
 import { CommonModule } from '@angular/common';
@@ -20,7 +20,7 @@ import { DriverSelectorComponent } from '../shared/driver-selector/driver-select
     templateUrl: './profile-setup.component.html',
     styleUrl: './profile-setup.component.scss'
 })
-export class ProfileSetupComponent {
+export class ProfileSetupComponent implements OnInit {
     /** Injected form builder */
     private readonly fb = inject(FormBuilder);
     /** Injected profile service */
@@ -50,6 +50,40 @@ export class ProfileSetupComponent {
     readonly isUploading = signal(false);
     /** State signal containing the preview URL of the avatar */
     readonly avatarPreview = signal<string | null>(null);
+    /** State signal indicating if the profile is in edit mode */
+    readonly isEditMode = signal(false);
+
+    /**
+     * Lifecycle hook to initialize the component.
+     * Attempts to load the existing profile to pre-populate the form for editing.
+     */
+    ngOnInit(): void {
+        this.isLoading.set(true);
+        this.profileService.getProfile().subscribe({
+            next: (profile) => {
+                this.isLoading.set(false);
+                if (profile) {
+                    this.isEditMode.set(true);
+                    this.setupForm.patchValue({
+                        bio: profile.bio || '',
+                        phone: profile.phone || '',
+                        address: profile.address || '',
+                        avatar: profile.avatar || '',
+                        configuracion: profile.configuracion || '',
+                        favoritos: profile.favoritos || ''
+                    });
+                    if (profile.avatar) {
+                        this.avatarPreview.set(profile.avatar);
+                    }
+                }
+            },
+            error: (error) => {
+                this.isLoading.set(false);
+                console.log('No profile found or error fetching profile, assuming create mode:', error);
+                this.isEditMode.set(false);
+            }
+        });
+    }
 
     /**
      * Handles file selection for avatar uploading.
@@ -101,7 +135,7 @@ export class ProfileSetupComponent {
     }
 
     /**
-     * Validates and submits the setup form to the backend to create the profile.
+     * Validates and submits the setup form to the backend to create or update the profile.
      */
     submit(): void {
         this.isSubmitted.set(true);
@@ -113,7 +147,11 @@ export class ProfileSetupComponent {
 
         this.isLoading.set(true);
 
-        this.profileService.createProfile(this.setupForm.value as any).subscribe({
+        const request$ = this.isEditMode()
+            ? this.profileService.updateProfile(this.setupForm.value as any)
+            : this.profileService.createProfile(this.setupForm.value as any);
+
+        request$.subscribe({
             next: () => {
                 this.isLoading.set(false);
 
@@ -126,7 +164,7 @@ export class ProfileSetupComponent {
                     },
                     disableClose: true
                 }).afterClosed().subscribe(() => {
-                    this.router.navigate(['/dashboard']);
+                    this.router.navigate([this.isEditMode() ? '/profile' : '/dashboard']);
                 });
             },
             error: (error) => {
@@ -145,9 +183,13 @@ export class ProfileSetupComponent {
     }
 
     /**
-     * Skips the profile setup phase and directly navigates to the dashboard.
+     * Skips or cancels the profile setup phase and navigates to the dashboard or profile page.
      */
     skip(): void {
-        this.router.navigate(['/dashboard']);
+        if (this.isEditMode()) {
+            this.router.navigate(['/profile']);
+        } else {
+            this.router.navigate(['/dashboard']);
+        }
     }
 }

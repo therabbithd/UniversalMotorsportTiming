@@ -2,8 +2,8 @@
   <div class="setup-card">
     <div class="setup-header">
       <div class="logo-text">Universal<span>Motorsport</span></div>
-      <h1>{{ 'AUTH.PROFILE.SETUP.TITLE' | translate }}</h1>
-      <p>{{ 'AUTH.PROFILE.SETUP.SUBTITLE' | translate }}</p>
+      <h1>{{ (isEditMode() ? 'AUTH.PROFILE.SETUP.EDIT_TITLE' : 'AUTH.PROFILE.SETUP.TITLE') | translate }}</h1>
+      <p>{{ (isEditMode() ? 'AUTH.PROFILE.SETUP.EDIT_SUBTITLE' : 'AUTH.PROFILE.SETUP.SUBTITLE') | translate }}</p>
     </div>
 
     <form [formGroup]="setupForm" (ngSubmit)="submit()" class="setup-form">
@@ -56,7 +56,7 @@
 
       <div class="action-buttons">
         <button type="button" class="btn-skip" (click)="skip()" [disabled]="isLoading()">{{
-          'AUTH.PROFILE.SETUP.SKIP_BUTTON' | translate }}</button>
+          (isEditMode() ? 'COMMON.CANCEL' : 'AUTH.PROFILE.SETUP.SKIP_BUTTON') | translate }}</button>
         <button type="submit" class="btn-submit" [disabled]="isLoading()">
           <span *ngIf="!isLoading()">{{ 'AUTH.PROFILE.SETUP.SAVE_BUTTON' | translate }}</span>
           <span *ngIf="isLoading()" class="loader"></span>

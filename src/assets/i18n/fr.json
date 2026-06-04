@@ -71,6 +71,8 @@
         "PROFILE": {
             "SETUP": {
                 "TITLE": "Complétez votre profil",
+                "EDIT_TITLE": "Modifier votre profil",
+                "EDIT_SUBTITLE": "Mettez à jour vos coordonnées, votre description et votre photo de profil.",
                 "SUCCESS_TITLE": "Profil enregistré !",
                 "SUCCESS_MESSAGE": "Votre profil a été mis à jour avec succès.",
                 "ERROR_TITLE": "Erreur d'enregistrement",

@@ -71,6 +71,8 @@
         "PROFILE": {
             "SETUP": {
                 "TITLE": "Completa tu perfil",
+                "EDIT_TITLE": "Modifica tu perfil",
+                "EDIT_SUBTITLE": "Actualiza tus datos de contacto, descripción y foto de perfil.",
                 "SUCCESS_TITLE": "¡Perfil Guardado!",
                 "SUCCESS_MESSAGE": "Tu perfil se ha actualizado correctamente.",
                 "ERROR_TITLE": "Error al Guardar",

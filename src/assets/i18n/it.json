@@ -71,6 +71,8 @@
         "PROFILE": {
             "SETUP": {
                 "TITLE": "Completa il tuo profilo",
+                "EDIT_TITLE": "Modifica il tuo profilo",
+                "EDIT_SUBTITLE": "Aggiorna le tue informazioni di contatto, la descrizione e la foto del profilo.",
                 "SUCCESS_TITLE": "Profilo Salvato!",
                 "SUCCESS_MESSAGE": "Il tuo profilo è stato aggiornato con successo.",
                 "ERROR_TITLE": "Errore durante il Salvataggio",
