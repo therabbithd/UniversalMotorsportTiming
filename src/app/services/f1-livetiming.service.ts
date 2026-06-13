@@ -526,10 +526,13 @@ export class F1LiveTimingStreamService {
    * @returns URL base (ej: `http://localhost:4200/f1-api`).
    */
   getWebSocketBaseUrl(): string {
-    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-    const host = window.location.host; // localhost:4200 en dev
+    const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-    return `${protocol}//${host}/f1-api`;
+    if (isLocalDev) {
+      return 'http://localhost:3001/f1-api';
+    } else {
+      return 'https://f1-websocket-proxy-production-9991.up.railway.app/f1-api';
+    }
   }
   // Base del evento para construir URLs de assets (TeamRadio, etc.)
 
@@ -548,6 +551,6 @@ export class F1LiveTimingStreamService {
     if (!sessionPath) return '';
 
     const clean = sessionPath.replace(/\/$/, ''); // quita "/" final
-    return `https://livetiming.formula1.com/static/${clean}`;
+    return `${this.getWebSocketBaseUrl()}/static/${clean}`;
   }
 }
