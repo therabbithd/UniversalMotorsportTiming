@@ -126,9 +126,11 @@
                 "TYRE": "NEU",
                 "LAP": "VUEL",
                 "TIME": "TIEMPO",
+                "BEST_TIME": "MEJOR TIEMPO",
                 "GAP": "GAP",
                 "INT": "INT",
-                "SECTORS": "SECTORES"
+                "SECTORS": "SECTORES",
+                "BEST_SECTORS": "SECT. MEJOR V."
             },
             "FLAG": {
                 "GREEN": "Pista libre",

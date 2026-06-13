@@ -124,9 +124,11 @@
                 "TYRE": "GOMMA",
                 "LAP": "GIRO",
                 "TIME": "TEMPO",
+                "BEST_TIME": "MIGLIOR TEMPO",
                 "GAP": "GAP",
                 "INT": "INT",
-                "SECTORS": "SETTORI"
+                "SECTORS": "SETTORI",
+                "BEST_SECTORS": "SETT. MIGL. GIRO"
             },
             "FLAG": {
                 "GREEN": "Pista libera",

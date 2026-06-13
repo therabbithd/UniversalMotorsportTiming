@@ -66,6 +66,8 @@ interface LiveTimingState {
             Value?: string;
           }
         };
+        /** Sector times for the best lap */
+        BestLapSectors?: any;
         /** Supplementary statistics */
         Stats?: {
           [key: string]: {
@@ -255,10 +257,12 @@ export class F1LiveTimingStreamService {
         // Multi-message update
         for (const update of updates) {
           newState = this.deepObjectMerge(newState, update);
+          this.captureBestSectors(newState, update);
         }
       } else {
         // Single message update (or full state)
         newState = this.deepObjectMerge(newState, updates);
+        this.captureBestSectors(newState, updates);
       }
 
       this.liveState.next(newState);
@@ -270,6 +274,29 @@ export class F1LiveTimingStreamService {
       this.messageCount++;
     } catch (e) {
       console.error(`[F1 Stream] Could not update data: ${e}`);
+    }
+  }
+
+  /**
+   * Captures and caches the sectors of the driver's best lap when they set a new personal fastest lap.
+   * This provides the data for the best lap microsectors column.
+   */
+  private captureBestSectors(state: any, update: any) {
+    if (update.TimingData?.Lines) {
+      for (const driverNumber in update.TimingData.Lines) {
+        const lineUpdate = update.TimingData.Lines[driverNumber];
+        
+        // If the update indicates this lap was the driver's personal fastest
+        if (lineUpdate.LastLapTime?.PersonalFastest || lineUpdate.LastLapTime?.OverallFastest) {
+          if (state.TimingData?.Lines?.[driverNumber]) {
+            // Save a deep copy of the current sectors (which correspond to this just-completed best lap)
+            const currentSectors = state.TimingData.Lines[driverNumber].Sectors;
+            if (currentSectors) {
+              state.TimingData.Lines[driverNumber].BestLapSectors = JSON.parse(JSON.stringify(currentSectors));
+            }
+          }
+        }
+      }
     }
   }
 
@@ -353,6 +380,7 @@ export class F1LiveTimingStreamService {
         driverName: driverInfo?.LastName || driverInfo?.BroadcastName || '',
         lapNumber: timing.NumberOfLaps || 0,
         lastLapTime: timing.LastLapTime?.Value || '--',
+        bestLapTime: timing.BestLapTime?.Value || '--',
         gapToLeader: timing.GapToLeader || (timing.Position === '1' ? '--' : ''),
         gapToAhead: timing.IntervalToPositionAhead?.Value || 'Gap',
         isPit: timing.InPit || timing.PitOut || false,

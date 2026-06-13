@@ -184,6 +184,8 @@ export interface DriverTiming {
   lapNumber: number;
   /** Time of the last completed lap (e.g., "1:20.555") */
   lastLapTime: string; 
+  /** Best lap time of the driver */
+  bestLapTime: string;
   /** Gap to the race leader (e.g., "+1.200") */
   gapToLeader: string; 
   /** Gap to the driver ahead (e.g., "Gap" or "+0.500") */

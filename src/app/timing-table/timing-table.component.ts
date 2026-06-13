@@ -52,8 +52,10 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     'tyre',
     'lapNumber',
     'lastLapTime',
+    'bestLapTime',
     'gapToLeader',
     'gapToAhead',
+    'bestSectors',
     'sectors'
   ];
 
@@ -208,6 +210,28 @@ export class TimingTableComponent implements OnInit, OnDestroy {
     if (!driverEntry) return undefined;
 
     return driverEntry[1].Sectors;
+  }
+
+  /**
+   * Obtiene los datos detallados de los sectores de la mejor vuelta para un piloto específico basándose en su posición.
+   * 
+   * @param position La posición en pista del piloto (como string).
+   * @returns Los sectores registrados de la mejor vuelta (`BestLapSectors`) u `undefined` si no se encuentran.
+   */
+  getDriverBestSectorsData(position: string): any {
+    const state = this.streamService.getCurrentState();
+    const lines = state.TimingData?.Lines;
+
+    if (!lines) return undefined;
+
+    // Buscar el piloto por posición
+    const driverEntry = Object.entries(lines).find(
+      ([_, line]: [string, any]) => line.Position === position
+    );
+
+    if (!driverEntry) return undefined;
+
+    return driverEntry[1].BestLapSectors;
   }
 
 }

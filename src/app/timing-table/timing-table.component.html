@@ -83,6 +83,12 @@
             </td>
           </ng-container>
 
+          <!-- Columna de Mejor Tiempo de Vuelta -->
+          <ng-container matColumnDef="bestLapTime">
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.BEST_TIME' | translate }}</th>
+            <td mat-cell *matCellDef="let driver">{{ driver.bestLapTime }}</td>
+          </ng-container>
+
           <!-- Columna de Gap al Líder -->
           <ng-container matColumnDef="gapToLeader">
             <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.GAP' | translate }}</th>
@@ -100,6 +106,15 @@
             <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.SECTORS' | translate }}</th>
             <td mat-cell *matCellDef="let driver">
               <app-driver-sectors [sectors]="getDriverSectorsData(driver.position)">
+              </app-driver-sectors>
+            </td>
+          </ng-container>
+
+          <!-- NUEVA COLUMNA: Microsectores Mejor Vuelta -->
+          <ng-container matColumnDef="bestSectors">
+            <th mat-header-cell *matHeaderCellDef>{{ 'RACE.LIVE_TIMING.COLUMNS.BEST_SECTORS' | translate }}</th>
+            <td mat-cell *matCellDef="let driver">
+              <app-driver-sectors [sectors]="getDriverBestSectorsData(driver.position)">
               </app-driver-sectors>
             </td>
           </ng-container>
